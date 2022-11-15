@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using static System.Console;
 using Newtonsoft.Json;
@@ -10,7 +10,7 @@ namespace World_Scramble
         public static Dictionary<string, string[]> ReadTxtToJSON(string path)
         {
             //read the json file and store it in a string
-            string json = File.ReadAllText(path);
+            string[] lines = File.ReadAllLines(path);
             //create arrays of odd elements in lines (keys)
             string[] Key = lines.Where((x, i) => i % 2 == 0).ToArray();
             //create arrays of even elements in lines (values)
