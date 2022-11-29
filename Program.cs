@@ -8,7 +8,7 @@ namespace Word_Scramble
 
         public static void Main(string[] args)
         {
-            Dictionary<string, string[]> dict = DictionaryMethod.ReadTxtToJSON("dataDictionary/MotsPossiblesFR.txt", "data.json");
+            Dictionary<int, string[]> dict = Dictionary.ReadTxtToJSON("dataDictionary/MotsPossiblesFR.txt", "data.json");
         }
     }
 }
