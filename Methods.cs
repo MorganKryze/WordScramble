@@ -23,47 +23,48 @@ namespace Word_Scramble
             }
             else CursorVisible = true;
         }
+
         /// <summary>This method is used to pause the program.</summary>
         public static void Pause()
         {
             WriteLine("\nPress [ENTER] to continue...");
-            ReadLine();
+            while(ReadKey(true).Key!=ConsoleKey.Enter)Sleep(5);
         }
         
         /// <summary>This method is used to display a loading screen.</summary>
+        /// <param name="text"> The text to display. </param>
         public static void LoadingScreen(string text)
         {
-            for (int i = 1; i < text.Length-1; i++)
+            for (int i = 0; i < text.Length; i++)
             {
                 Clear();
                 WriteLine($"{text}\n");
-                int t_interval = 2000/text.Length;
-                ForegroundColor = ConsoleColor.Red;
+                int t_interval = (int) 2000/text.Length;
                 char[]loadingBar = new char[text.Length];
-                for (int k = 0; k <= loadingBar.Length-1; k++)
-                {
-                    if (k == 0)loadingBar[0] = '[';
-                    else if(k <=i)loadingBar[k]='-';
-                    else if (k == loadingBar.Length-1)loadingBar[k] = ']';
-                    else loadingBar[k]= ' ';
-                }
-                if (i == loadingBar.Length-2)
+                for (int j = 0; j < loadingBar.Length; j++)loadingBar[j]= '█';
+                
+                if (i == text.Length-1)
                 {
                     ForegroundColor = ConsoleColor.Green;
                     for (int l = 0; l < loadingBar.Length; l++)Write(loadingBar[l]);
-                    decimal percentage = (ToDecimal(i+2)/ToDecimal(text.Length))*100;
+                    decimal percentage = (ToDecimal(i+1)/ToDecimal(text.Length))*100;
                     Write($" {(int)percentage} %\n");
-                    Sleep(800);
+                    Sleep(1000);
                 }
                 else
                 {
-                    for (int l = 0; l < loadingBar.Length; l++)Write(loadingBar[l]);
-                    decimal percentage = (ToDecimal(i+2)/ToDecimal(text.Length))*100;
+                    ForegroundColor = ConsoleColor.Green;
+                    for (int l = 0; l < i; l++)Write(loadingBar[l]);
+                    ForegroundColor = ConsoleColor.Red;
+                    for (int l = i; l < text.Length; l++)Write(loadingBar[l]);
+                    decimal percentage = (ToDecimal(i+1)/ToDecimal(text.Length))*100;
                     Write($" {(int)percentage} %\n");
                     Sleep(t_interval);
                 }
                 ConsoleConfig();
             }
+            
+
             Clear();
         }
         
@@ -155,9 +156,7 @@ namespace Word_Scramble
         /// <summary>This method is used to exit the game.</summary>
         public static void FinalExit()
         {
-            Clear();
             LoadingScreen("-- Shutting off --");
-            Clear();
             ConsoleConfig(false);
             Exit(0);
         }
