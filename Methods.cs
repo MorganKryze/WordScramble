@@ -10,6 +10,94 @@ namespace Word_Scramble
 {
     abstract class Methods
     {
+
+        #region Core Methods
+        /// <summary>This method is used to select multiple characters.</summary>
+        /// <param name="matrix">The grill from wich the user chooses the characters.</param>
+        /// <returns>A string as the sum of the characters.</returns>
+        public static string SelectWord(char[,] matrix)
+        {
+            Position currentPosition = new Position(0, 0);
+            List<Position> selectedPositions = new List<Position>();
+            string word = "";
+            bool choiceMade = false;
+            while (!choiceMade)
+            {
+                Clear();
+                for (int i = 0; i < matrix.GetLength(0); i++)
+                {
+                    for (int j = 0; j < matrix.GetLength(1); j++)
+                    {
+                        Position temporary = new Position(i,j);
+                        if (currentPosition.Equals(new Position(i, j)))
+                        {
+                            BackgroundColor = ConsoleColor.Green;
+                            ForegroundColor = ConsoleColor.Black;
+                            Write(matrix[i,j]);
+                        }
+                        else if (ListContains(selectedPositions, new Position(i, j)))
+                        //else if (selectedPositions.Contains(temporary))
+                        {
+                            
+                            BackgroundColor = ConsoleColor.Yellow;
+                            ForegroundColor = ConsoleColor.Black;
+                            Write(matrix[i,j]);
+                        }
+                        else Write(matrix[i,j]);
+                        ConsoleConfig();
+                        Write(" ");
+                    }
+                    WriteLine();
+                }
+                switch(ReadKey(false).Key)
+                {
+                    case ConsoleKey.UpArrow : case ConsoleKey.Z :
+                      if(currentPosition.X == 0)currentPosition.X = matrix.GetLength(0) - 1;
+                      else currentPosition.X--;
+                    break;
+                    case ConsoleKey.DownArrow : case ConsoleKey.S :
+                      if(currentPosition.X == matrix.GetLength(0) - 1)currentPosition.X = 0;
+                      else currentPosition.X++;
+                    break;
+                    case ConsoleKey.LeftArrow :case ConsoleKey.Q :
+                      if(currentPosition.Y == 0)currentPosition.Y = matrix.GetLength(1) - 1;
+                      else currentPosition.Y--;
+                    break;
+                    case ConsoleKey.RightArrow : case ConsoleKey.D :
+                      if(currentPosition.Y == matrix.GetLength(1) - 1)currentPosition.Y = 0;
+                      else currentPosition.Y++;
+                    break;
+                    case ConsoleKey.Spacebar : 
+                        //if(!ListContains(selectedPositions, currentPosition))
+                        if(!selectedPositions.Contains(currentPosition))
+                        {
+                            word+=matrix[currentPosition.X,currentPosition.Y];
+                            selectedPositions.Add(new Position(currentPosition.X, currentPosition.Y));
+                        }
+                        break;
+                    case ConsoleKey.Enter : 
+                        choiceMade = true;
+                        if(word.Length == 0) word = "No word selected";
+                        break;
+                    case ConsoleKey.Escape : 
+                        choiceMade = true;
+                        word = "No word selected";
+                        break;
+                }
+            }
+            return word;
+        }
+        /// <summary>This method is used to check if a position is contained into a List.</summary>
+        /// <param name="list">The list reference.</param>
+        /// <param name="position">The position to check.</param>
+        /// <returns>True if the position is contained into the list, false otherwise.</returns>
+        public static bool ListContains(List<Position> list, Position position)
+        {
+            foreach(Position p in list)if(p.Equals(position))return true;
+            return false;
+        }
+        #endregion
+        
         #region Utility Methods
         /// <summary> This method is used to set the console configuration. </summary>
         /// <param name="state"> Wether the config is used as the default config (true) or for the end of the program (false). </param>
