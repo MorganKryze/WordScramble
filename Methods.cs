@@ -12,6 +12,9 @@ namespace Word_Scramble
     {
 
         #region Core Methods
+        #endregion
+        #region Utility Methods
+        
         /// <summary>This method is used to select multiple characters.</summary>
         /// <param name="matrix">The grill from wich the user chooses the characters.</param>
         /// <returns>A string as the sum of the characters.</returns>
@@ -87,6 +90,52 @@ namespace Word_Scramble
             }
             return word;
         }
+        
+        /// <summary>This method is used to display a scrolling menu.</summary>
+        /// <param name= "choices"> The choices of the menu.</param>
+        /// <param name= "text"> The content of the title.</param>
+        /// <param name= "additionalText"> The subtitle of the title.</param>
+        /// <param name= "specialText"> Special text as a font.</param>
+        /// <returns> The position of the choice selected.</returns>
+        public static int ScrollingMenu (string[] choices, string text, string additionalText = "", string specialText = "")
+        {
+            int position = 0;
+            bool choiceMade = false;
+            int recurrence = 0;
+            while (!choiceMade)
+            {
+                Clear();
+                Title(text,additionalText,specialText,recurrence);
+                string[]currentChoice = new string[choices.Length];
+                for (int i = 0; i < choices.Length; i++)
+                {
+                    if (i == position)
+                    {
+                        currentChoice[i] = $" > {choices[i]}";
+                        BackgroundColor = ConsoleColor.Green;
+                        ForegroundColor = ConsoleColor.Black;
+                        WriteLine(currentChoice[i]);
+                        ConsoleConfig();
+                    }
+                    else 
+                    {
+                        
+                        currentChoice [i]= $"   {choices[i]}";
+                        WriteLine(currentChoice[i]);
+                    }
+                }
+                switch(ReadKey().Key)
+                {
+                    case ConsoleKey.UpArrow : case ConsoleKey.Z : if(position == 0)position = choices.Length-1; else if(position > 0) position--;break;
+                    case ConsoleKey.DownArrow : case ConsoleKey.S : if(position == choices.Length-1)position = 0; else if(position < choices.Length-1)position++;break;
+                    case ConsoleKey.Enter : return position;
+                    case ConsoleKey.Escape : return -1;
+                }
+                recurrence++;
+            }
+            return position;
+        }
+        
         /// <summary>This method is used to check if a position is contained into a List.</summary>
         /// <param name="list">The list reference.</param>
         /// <param name="position">The position to check.</param>
@@ -96,20 +145,22 @@ namespace Word_Scramble
             foreach(Position p in list)if(p.Equals(position))return true;
             return false;
         }
-        #endregion
         
-        #region Utility Methods
-        /// <summary> This method is used to set the console configuration. </summary>
-        /// <param name="state"> Wether the config is used as the default config (true) or for the end of the program (false). </param>
-        public static void ConsoleConfig(bool state = true)
+        /// <summary>This method is used to convert a CSV file into a char matrix.</summary>
+        /// <param name="path">The path of the CSV file.</param>
+        /// <returns>The generated matrix.</returns>
+        public static char[,] CsvToMatrix(string path)
         {
-            if (state)
+            string[] lines = File.ReadAllLines(path);
+            char[,] matrix = new char[lines.Length,(lines[0].Length/2)+1];
+            for (int i = 0; i < lines.Length; i++)
             {
-                CursorVisible = false;
-                BackgroundColor = ConsoleColor.Black;
-                ForegroundColor = ConsoleColor.White;
+                string[] s = lines[i].Split(';'); 
+                char[] c = new char[s.Length];
+                for (int j = 0; j < s.Length; j++)c[j] = s[j][0];
+                for (int j = 0; j < matrix.GetLength(1); j++)matrix[i,j] = c[j];
             }
-            else CursorVisible = true;
+            return matrix;
         }
 
         /// <summary>This method is used to pause the program.</summary>
@@ -196,51 +247,19 @@ namespace Word_Scramble
             
         }
         
-        /// <summary>This method is used to display a scrolling menu.</summary>
-        /// <param name= "choices"> The choices of the menu.</param>
-        /// <param name= "text"> The content of the title.</param>
-        /// <param name= "additionalText"> The subtitle of the title.</param>
-        /// <param name= "specialText"> Special text as a font.</param>
-        /// <returns> The position of the choice selected.</returns>
-        public static int ScrollingMenu (string[] choices, string text, string additionalText = "", string specialText = "")
+        /// <summary> This method is used to set the console configuration. </summary>
+        /// <param name="state"> Wether the config is used as the default config (true) or for the end of the program (false). </param>
+        public static void ConsoleConfig(bool state = true)
         {
-            int position = 0;
-            bool choiceMade = false;
-            int recurrence = 0;
-            while (!choiceMade)
+            if (state)
             {
-                Clear();
-                Title(text,additionalText,specialText,recurrence);
-                string[]currentChoice = new string[choices.Length];
-                for (int i = 0; i < choices.Length; i++)
-                {
-                    if (i == position)
-                    {
-                        currentChoice[i] = $" > {choices[i]}";
-                        BackgroundColor = ConsoleColor.Green;
-                        ForegroundColor = ConsoleColor.Black;
-                        WriteLine(currentChoice[i]);
-                        ConsoleConfig();
-                    }
-                    else 
-                    {
-                        
-                        currentChoice [i]= $"   {choices[i]}";
-                        WriteLine(currentChoice[i]);
-                    }
-                }
-                switch(ReadKey().Key)
-                {
-                    case ConsoleKey.UpArrow : case ConsoleKey.Z : if(position == 0)position = choices.Length-1; else if(position > 0) position--;break;
-                    case ConsoleKey.DownArrow : case ConsoleKey.S : if(position == choices.Length-1)position = 0; else if(position < choices.Length-1)position++;break;
-                    case ConsoleKey.Enter : return position;
-                    case ConsoleKey.Escape : return -1;
-                }
-                recurrence++;
+                CursorVisible = false;
+                BackgroundColor = ConsoleColor.Black;
+                ForegroundColor = ConsoleColor.White;
             }
-            return position;
+            else CursorVisible = true;
         }
-        
+
         /// <summary>This method is used to exit the game.</summary>
         public static void FinalExit()
         {
@@ -248,6 +267,7 @@ namespace Word_Scramble
             ConsoleConfig(false);
             Exit(0);
         }
+        
         #endregion
     }
 }
