@@ -8,10 +8,28 @@ using static System.IO.File;
 
 namespace Word_Scramble
 {
+    /// <summary>The methods class where the core methods of the program are.</summary>
     abstract class Methods
     {
 
         #region Core Methods
+        /// <summary>This method is used to display the main menu.</summary>
+        public static void MainMenu()
+        {
+            string title = @" __        __            _    ____                           _     _      
+ \ \      / /__  _ __ __| |  / ___|  ___ _ __ __ _ _ __ ___ | |__ | | ___ 
+  \ \ /\ / / _ \| '__/ _` |  \___ \ / __| '__/ _` | '_ ` _ \| '_ \| |/ _ \
+   \ V  V / (_) | | | (_| |   ___) | (__| | | (_| | | | | | | |_) | |  __/
+    \_/\_/ \___/|_|  \__,_|  |____/ \___|_|  \__,_|_| |_| |_|_.__/|_|\___|
+                                                                          ";
+            switch(ScrollingMenu(new string[]{"Play      ","Options   ","Exit      "},"", "Welcome Adventurer! Use the arrow keys to move and press [ENTER] to confirm.",title))
+            {
+                case 1 : MainMenu(); break;
+                case 2 : case -1: FinalExit();break;
+                default: break;
+            }
+            LoadingScreen("-- Launching the game --");
+        }
         #endregion
         #region Utility Methods
         
