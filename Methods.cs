@@ -162,5 +162,108 @@ namespace Word_Scramble
             Exit(0);
         }
         #endregion
+
+                //define function that compare two char array if second array feet in first array
+        public static bool CompareArray(char[] line, char[] word)
+        {
+            //if wod is longer than line return false
+            if (word.Length > line.Length)
+            {
+                return(false);
+            }
+            //compare line and wod
+            for (int i = 0; i < word.Length; i++)
+            {
+                if (line[i] != word[i] && line[i] != '_')
+                {
+                    return(false);
+                }
+            }
+            return(true);
+        }
+    
+        //fill a list of (int,int) position along line between 2 position x,y and x2,y2
+        public static List<(int,int)> FillPosition(int x, int y, int x2, int y2)
+        {
+            List<(int,int)> line = new List<(int,int)>();
+            //if line is vertical
+            if (x == x2)
+            {
+                //if line is going down
+                if (y < y2)
+                {
+                    for (int i = y; i <= y2; i++)
+                    {
+                        line.Add((x,i));
+                    }
+                }
+                //if line is going up
+                else
+                {
+                    for (int i = y; i >= y2; i--)
+                    {
+                        line.Add((x,i));
+                    }
+                }
+            }
+            //if line is horizontal
+            else if (y == y2)
+            {
+                //if line is going right
+                if (x < x2)
+                {
+                    for (int i = x; i <= x2; i++)
+                    {
+                        line.Add((i,y));
+                    }
+                }
+                //if line is going left
+                else
+                {
+                    for (int i = x; i >= x2; i--)
+                    {
+                        line.Add((i,y));
+                    }
+                }
+            }
+            //if line is diagonal
+            else
+            {
+                //if line is going down right
+                if (x < x2 && y < y2)
+                {
+                    for (int i = 0; i <= x2-x; i++)
+                    {
+                        line.Add((x+i,y+i));
+                    }
+                }
+                //if line is going down left
+                else if (x > x2 && y < y2)
+                {
+                    for (int i = 0; i <= x-x2; i++)
+                    {
+                        line.Add((x-i,y+i));
+                    }
+                }
+                //if line is going up right
+                else if (x < x2 && y > y2)
+                {
+                    for (int i = 0; i <= x2-x; i++)
+                    {
+                        line.Add((x+i,y-i));
+                    }
+                }
+                //if line is going up left
+                else if (x > x2 && y > y2)
+                {
+                    for (int i = 0; i <= x-x2; i++)
+                    {
+                        line.Add((x-i,y-i));
+                    }
+                }
+            }
+            return(line);
+
+        }
     }
 }
