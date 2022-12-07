@@ -3,3 +3,4 @@ obj
 *.dib
 *.log
 .vscode
+.Ds_Store
