@@ -1,4 +1,2 @@
-player1;false;3;0;word1;word2;word3
-player2;false;4;0;word1;word2;word3;word4
 player3;true;8;8;word1;word2;word3;word4;word5;word6;word7;word8
 player4;true;9;9;word1;word2;word3;word4;word5;word6;word7;word8;word9

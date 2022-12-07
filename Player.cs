@@ -19,7 +19,7 @@ namespace Word_Scramble
         /// <summary>The maximum number of words found by the player.</summary>
         public int MaxScore { get; set; }
         /// <summary>The words found by the player.</summary>
-        public List<string>? Words { get; set; }
+        public List<string> Words { get; set; }
         #endregion
 
         #region Constructor
@@ -30,7 +30,7 @@ namespace Word_Scramble
         /// <param name="maxScore">The maximum score of the player.</param>
         /// <param name="words">The list of words found by the player.</param>
         /// <returns>A new player.</returns>
-        public Player(string name = "", bool inGame = false, int score = 0, int maxScore = 0,List<string>? words = null)
+        public Player(string name = "", bool inGame = false, int score = 0, int maxScore = 0,List<string> words = null)
         {
             Name = name;
             InGame = inGame;
