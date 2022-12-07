@@ -28,6 +28,7 @@ namespace Word_Scramble
         /// <summary>This method is used to convert the position to a string.</summary>
         /// <returns>The position as a string.</returns>
         public override string ToString() => $"Line : {X} ; Column {Y}";
+        
         /// <summary>This method is used to chck if the position is equal to another position.</summary>
         /// <param name="obj">The position to compare to.</param>
         /// <returns>True if the positions are equal, false otherwise.</returns>
