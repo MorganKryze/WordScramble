@@ -19,7 +19,7 @@ namespace Word_Scramble
             #endregion
 
             //ligne de test
-            Write(Methods.SelectWord(Methods.CsvToMatrix("dataGrills/CasComplexe.csv")));
+            Write(Methods.SelectWord(Methods.CsvToMatrix("dataGrills/ComplexGrill.csv")));
             
             //Player_Creation_1 :
 

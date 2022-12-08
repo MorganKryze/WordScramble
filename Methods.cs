@@ -293,30 +293,22 @@ namespace Word_Scramble
             int t_interval = (int) 2000/text.Length;
             char[]loadingBar = new char[text.Length];
             for (int j = 0; j < loadingBar.Length; j++)loadingBar[j]= '█';
-                
             for (int i = 0; i < text.Length; i++)
             {
                 Clear();
-                CenteredWL(text);
-                string bar = "";
+                WriteLine($"\n{text}\n");
                 if (i == text.Length-1)
                 {
                     ForegroundColor = ConsoleColor.Green;
-                    
-                    for (int l = 0; l < loadingBar.Length; l++)bar += loadingBar[l];
+                    for (int l = 0; l < loadingBar.Length; l++)Write(loadingBar[l]);
                     decimal percentage = (ToDecimal(i+1)/ToDecimal(text.Length))*100;
-                    bar += $" {(int)percentage} %\n";
-                    Write(String.Format("{0," + ((WindowWidth / 2) + (bar.Length/2)) + "}", bar));
+                    Write($" {(int)percentage} %\n");
                     Sleep(1000);
                 }
                 else
                 {
-                    //écrire un message centré dans la console
-                    
-
                     ForegroundColor = ConsoleColor.Green;
-                    for (int l = 0; l < i; l++)bar += loadingBar[l];
-                    Write(String.Format("{0," + ((WindowWidth / 2) + (text.Length/2)) + "}", bar));
+                    for (int l = 0; l < i; l++)Write(loadingBar[l]);
                     ForegroundColor = ConsoleColor.Red;
                     for (int l = i; l < text.Length; l++)Write(loadingBar[l]);
                     decimal percentage = (ToDecimal(i+1)/ToDecimal(text.Length))*100;
