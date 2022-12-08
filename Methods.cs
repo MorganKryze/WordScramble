@@ -101,33 +101,27 @@ namespace Word_Scramble
                     switch(ReadKey(true).Key)
                     {
                         case ConsoleKey.UpArrow : case ConsoleKey.Z :
-                            if(ListContains(possiblePositions, new Position(currentPosition.X - 1, currentPosition.Y)))currentPosition.X--;
+                            if(possiblePositions.Contains(new Position(currentPosition.X - 1, currentPosition.Y)))currentPosition.X--;
+                            else currentPosition = new Position(NearestPosition(matrix, currentPosition, possiblePositions,"up"));
                             break;
                         case ConsoleKey.DownArrow : case ConsoleKey.S :
-                            if(ListContains(possiblePositions, new Position(currentPosition.X + 1, currentPosition.Y)))currentPosition.X++;
+                            if(possiblePositions.Contains(new Position(currentPosition.X + 1, currentPosition.Y)))currentPosition.X++;
+                            else currentPosition = new Position(NearestPosition(matrix, currentPosition, possiblePositions,"down"));
                             break;
                         case ConsoleKey.LeftArrow :case ConsoleKey.Q :
-                            if(ListContains(possiblePositions, new Position(currentPosition.X, currentPosition.Y - 1)))currentPosition.Y--;
+                            if(possiblePositions.Contains(new Position(currentPosition.X, currentPosition.Y - 1)))currentPosition.Y--;
+                            else currentPosition = new Position(NearestPosition(matrix, currentPosition, possiblePositions,"left"));
                             break;
                         case ConsoleKey.RightArrow : case ConsoleKey.D :
-                            if(ListContains(possiblePositions, new Position(currentPosition.X, currentPosition.Y + 1)))currentPosition.Y++;
+                            if(possiblePositions.Contains(new Position(currentPosition.X, currentPosition.Y + 1)))currentPosition.Y++;
+                            else currentPosition = new Position(NearestPosition(matrix, currentPosition, possiblePositions,"right"));
                             break;
                         case ConsoleKey.Enter : 
                             if(anchor1.X == -1)
                             {
+                                anchor1 = new Position(currentPosition.X, currentPosition.Y);
                                 selectedPositions.Add(new Position(currentPosition.X, currentPosition.Y));
-                                if(anchor1.Equals(new Position(-1,-1)))
-                                {
-                                    anchor1 = new Position(currentPosition.X, currentPosition.Y);
-                                    for(int i = 0; i < possiblePositions.Count; i++)
-                                    {
-                                        if(possiblePositions[i].X != anchor1.X && possiblePositions[i].Y != anchor1.Y)
-                                        {
-                                            possiblePositions.RemoveAt(i);
-                                            i--;
-                                        }
-                                    }
-                                }
+                                possiblePositions = ValidPositions(matrix, anchor1, possiblePositions);
                             }
                             else if (!anchor1.Equals(currentPosition))
                             {
@@ -155,9 +149,81 @@ namespace Word_Scramble
                     }
                 }
             }
-            
         }
-        public static void PrintMatrix(char[,] matrix, List<Position> selectedPositions, List<Position> rightPositions, Position currentPosition, bool displayCursor = true)
+
+        /// <summary>This method is used to find the nearest position in a direction.</summary>
+        /// <param name="matrix">The grill from wich the user chooses the characters.</param>
+        /// <param name="currentPosition">The current position of the cursor.</param>
+        /// <param name="possiblePositions">The list of possible positions.</param>
+        /// <param name="direction">The direction in wich the user wants to go.</param>
+        /// <returns>The nearest position in the direction.</returns>
+        public static Position NearestPosition(char[,] matrix, Position currentPosition, List<Position> possiblePositions, string direction)
+        {
+            switch (direction)
+            {
+                case "up":
+                    for(int i = currentPosition.X-1; i >= 0; i--)
+                    {
+                        if(possiblePositions.Contains(new Position(i, currentPosition.Y)))return new Position(i, currentPosition.Y);
+                    }
+                    break;
+                case "down":
+                    for(int i = currentPosition.X+1; i < matrix.GetLength(0); i++)
+                    {
+                        if(possiblePositions.Contains(new Position(i, currentPosition.Y)))return new Position(i, currentPosition.Y);
+                    }
+                    break;
+                case "left":
+                    for(int i = currentPosition.Y-1; i >= 0; i--)
+                    {
+                        if(possiblePositions.Contains(new Position(currentPosition.X, i)))return new Position(currentPosition.X, i);
+                    }
+                    break;
+                case "right":
+                    for(int i = currentPosition.Y+1; i < matrix.GetLength(1); i++)
+                    {
+                        if(possiblePositions.Contains(new Position(currentPosition.X, i)))return new Position(currentPosition.X, i);
+                    }
+                    break;
+            }
+            return currentPosition;
+        }
+
+        /// <summary>This method is used to find the valid positions.</summary>
+        /// <param name="matrix">The grill from wich the user chooses the characters.</param>
+        /// <param name="anchor1">The first anchor.</param>
+        /// <param name="possiblePositions">The list of possible positions.</param>
+        /// <returns>The list of valid positions.</returns>
+        public static List<Position> ValidPositions(char[,] matrix, Position anchor1, List<Position> possiblePositions)
+        {
+            List<Position> validPositions = new List<Position>();
+            for(int i = 0; i < possiblePositions.Count; i++)
+            {
+                if(possiblePositions[i].X == anchor1.X || possiblePositions[i].Y == anchor1.Y)
+                {
+                    validPositions.Add(new Position(possiblePositions[i].X, possiblePositions[i].Y));
+                }else
+                {
+                    if(possiblePositions[i].X - anchor1.X == possiblePositions[i].Y - anchor1.Y)
+                    {
+                        validPositions.Add(new Position(possiblePositions[i].X, possiblePositions[i].Y));
+                    }
+                    else if(possiblePositions[i].X - anchor1.X == anchor1.Y - possiblePositions[i].Y)
+                    {
+                        validPositions.Add(new Position(possiblePositions[i].X, possiblePositions[i].Y));
+                    }
+                }
+            }
+            return validPositions;
+        }
+        
+        /// <summary>This method is used to print the matrix.</summary>
+        /// <param name="matrix">The grill from wich the user chooses the characters.</param>
+        /// <param name="selectedPositions">The list of selected positions.</param>
+        /// <param name="correctPositions">The list of right positions.</param>
+        /// <param name="currentPosition">The current position of the cursor.</param>
+        /// <param name="displayCursor">A boolean that indicates if the cursor should be displayed.</param>
+        public static void PrintMatrix(char[,] matrix, List<Position> selectedPositions, List<Position> correctPositions, Position currentPosition, bool displayCursor = true)
         {
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
@@ -169,14 +235,14 @@ namespace Word_Scramble
                         ForegroundColor = ConsoleColor.Black;
                         Write(matrix[i, j]);
                     }
-                    else if (ListContains(rightPositions, new Position(i, j)))
+                    else if (correctPositions.Contains(new Position(i, j)))
                     {
 
                         BackgroundColor = ConsoleColor.Blue;
                         ForegroundColor = ConsoleColor.Black;
                         Write(matrix[i, j]);
                     }
-                    else if (ListContains(selectedPositions, new Position(i, j)))
+                    else if (selectedPositions.Contains(new Position(i, j)))
                     {
 
                         BackgroundColor = ConsoleColor.Yellow;
@@ -239,16 +305,6 @@ namespace Word_Scramble
                 recurrence++;
             }
             return position;
-        }
-        
-        /// <summary>This method is used to check if a position is contained into a List.</summary>
-        /// <param name="list">The list reference.</param>
-        /// <param name="position">The position to check.</param>
-        /// <returns>True if the position is contained into the list, false otherwise.</returns>
-        public static bool ListContains(List<Position> list, Position position)
-        {
-            foreach(Position p in list)if(p.Equals(position))return true;
-            return false;
         }
         
         /// <summary>This method is used to convert a CSV file into a char matrix.</summary>
@@ -357,10 +413,14 @@ namespace Word_Scramble
             foreach(string line in specialText)WriteLine(String.Format("{0," + ((WindowWidth / 2) + (line.Length / 2)) + "}", line));
             WriteLine("\n");
         }
+        
+        /// <summary>This method is used to display a centered text and come back to line.</summary>
         public static void CenteredWL(string text)
         {
             WriteLine(String.Format("{0," + ((WindowWidth / 2) + (text.Length / 2)) + "}", text));
         }
+
+        /// <summary>This method is used to display a centered text.</summary>
         public static void CenteredW(string text)
         {
             Write(String.Format("{0," + ((WindowWidth / 2) + (text.Length / 2)) + "}", text));

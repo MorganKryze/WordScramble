@@ -17,10 +17,19 @@ namespace Word_Scramble
 
         #region Constructor
         /// <summary>Initializes a new instance of the <see cref="T:Labyrinth.Position"/> class.</summary>
+        /// <param name="x">The x coordinate of the position.</param>
+        /// <param name="y">The y coordinate of the position.</param>
         public Position (int x, int y)
         {
             X = x;
             Y = y;
+        }
+        /// <summary>Initializes a new instance of the <see cref="T:Labyrinth.Position"/> class.</summary>
+        /// <param name="pos">The position to copy.</param>
+        public Position (Position pos)
+        {
+            X = pos.X;
+            Y = pos.Y;
         }
         #endregion
 
