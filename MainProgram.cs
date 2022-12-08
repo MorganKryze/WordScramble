@@ -19,8 +19,8 @@ namespace Word_Scramble
             #endregion
 
             //ligne de test
-            Write(Methods.SelectWord(Methods.CsvToMatrix("dataGrills/ComplexGrill.csv")));
-            
+            foreach(string word in Methods.SelectWord(Methods.CsvToMatrix("dataGrills/ComplexGrill.csv")))Write(word);
+
             //Player_Creation_1 :
 
             #region Setting up the player 1

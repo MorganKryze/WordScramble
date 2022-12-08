@@ -79,17 +79,18 @@ namespace Word_Scramble
         /// <summary>This method is used to select multiple characters.</summary>
         /// <param name="matrix">The grill from wich the user chooses the characters.</param>
         /// <returns>A string as the sum of the characters.</returns>
-        public static string SelectWord(char[,] matrix)
+        public static List<string> SelectWord(char[,] matrix)
         {
+            List<string> words = new List<string>();
             Position currentPosition = new Position(0, 0);
             Position anchor1 = new Position(-1, -1);
             Position anchor2 = new Position(-1, -1);
             List<Position> rightPositions = new List<Position>();
             List<Position> selectedPositions = new List<Position>();
+
             List<Position> possiblePositions = new List<Position>();
             for(int i = 0; i< matrix.GetLength(0); i++)for(int j = 0; j < matrix.GetLength(1); j++)possiblePositions.Add(new Position(i, j));
-            string word = "";
-            //bool choiceMade = false;
+
             while(anchor2.X == -1)
             {
                 Clear();
@@ -157,6 +158,7 @@ namespace Word_Scramble
                             else 
                                 {
                                     anchor2 = new Position(currentPosition.X, currentPosition.Y);
+                                    string word = "";
                                     if(anchor1.X == anchor2.X)
                                     {
                                         if(anchor1.Y < anchor2.Y)
@@ -195,18 +197,16 @@ namespace Word_Scramble
                                             }
                                         }
                                     }
+                                    words.Add(word);
                                 }
                             break;
                         case ConsoleKey.Escape :
-                            return "No word selected";
+                            break;
                     }
-                    
                 }
-                return word;
+                return words;
             }
-            
-        
-        
+
         /// <summary>This method is used to display a scrolling menu.</summary>
         /// <param name= "choices"> The choices of the menu.</param>
         /// <param name= "text"> The content of the title.</param>
