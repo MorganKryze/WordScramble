@@ -18,8 +18,8 @@ namespace Word_Scramble
             Methods.MainMenu();
             #endregion
 
-            //ligne de test
-            Methods.SelectWords(Methods.CsvToMatrix("dataGrills/ComplexGrill.csv"), new List<string>{"TERRE","FERME"});
+            //lignes de test
+            Methods.SelectWords(Methods.CsvToMatrix("dataGrills/ComplexGrill.csv"), new List<string>{"TERRE","FERME","RN","RAI"});
             //Methods.SelectWords(Methods.CsvToMatrix("dataGrills/ComplexGrill.csv"), new List<string>{"AGRICULTURE","BREBIS","CANARD","CHEVRES","CIDRE","CONFITURE","ELEVEUR","ESCARGOT","ESTIVE","FERME","FROMAGE"});
 
             //Player_Creation_1 :
@@ -32,8 +32,7 @@ namespace Word_Scramble
             #region Setting up the player 2
             #endregion
             
-            Methods.Pause();
-            Methods.FinalExit();
+            Methods.MainMenu();
         }
     }
 }
