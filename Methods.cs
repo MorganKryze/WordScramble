@@ -82,10 +82,11 @@ namespace Word_Scramble
         public static void SelectWords(char[,] matrix, List<string> wordsToFind)
         {
             
-            List<Position> rightPositions = new List<Position>();
-            while(wordsToFind.Count != 0)
+            List<string> wordsLeft = wordsToFind;
+            List<Position> correctPositions = new List<Position>();
+            while(wordsLeft.Count != 0)
             {
-                Position currentPosition = new Position(0, 0);
+                Position currentPosition = new Position(matrix.GetLength(0)/2,matrix.GetLength(1)/2);
                 Position anchor1 = new Position(-1, -1);
                 Position anchor2 = new Position(-1, -1);
                 List<Position> selectedPositions = new List<Position>();
@@ -93,10 +94,10 @@ namespace Word_Scramble
                 List<Position> possiblePositions = new List<Position>();
                 for(int i = 0; i< matrix.GetLength(0); i++)for(int j = 0; j < matrix.GetLength(1); j++)possiblePositions.Add(new Position(i, j));
 
-                while(anchor2.X == -1)
+                while(anchor2.X == -1&&wordsLeft.Count != 0)
                 {
                     Clear();
-                    PrintMatrix(matrix, selectedPositions,rightPositions, currentPosition);
+                    PrintMatrix(matrix, selectedPositions,correctPositions, currentPosition);
                     switch(ReadKey(true).Key)
                     {
                         case ConsoleKey.UpArrow : case ConsoleKey.Z :
@@ -138,21 +139,23 @@ namespace Word_Scramble
                                 {
                                     word += matrix[selectedPositions[i].X, selectedPositions[i].Y];
                                 }
-                                if(wordsToFind.Contains(word))
+                                if(wordsLeft.Contains(word))
                                 {
-                                    rightPositions.AddRange(selectedPositions);
-                                    wordsToFind.Remove(word);
+                                    correctPositions.AddRange(selectedPositions);
+                                    wordsLeft.Remove(word);
                                 }
                                 Clear();
-                                PrintMatrix(matrix, selectedPositions, rightPositions, currentPosition, false);
+                                PrintMatrix(matrix, selectedPositions, correctPositions, currentPosition, false);
                                 Pause();
                             }
                             break;
                         case ConsoleKey.Escape :
+                            wordsLeft.Clear();
                             break;
                     }
                 }
             }
+            
         }
         public static void PrintMatrix(char[,] matrix, List<Position> selectedPositions, List<Position> rightPositions, Position currentPosition, bool displayCursor = true)
         {
@@ -166,17 +169,17 @@ namespace Word_Scramble
                         ForegroundColor = ConsoleColor.Black;
                         Write(matrix[i, j]);
                     }
-                    else if (ListContains(selectedPositions, new Position(i, j)))
-                    {
-
-                        BackgroundColor = ConsoleColor.Yellow;
-                        ForegroundColor = ConsoleColor.Black;
-                        Write(matrix[i, j]);
-                    }
                     else if (ListContains(rightPositions, new Position(i, j)))
                     {
 
                         BackgroundColor = ConsoleColor.Blue;
+                        ForegroundColor = ConsoleColor.Black;
+                        Write(matrix[i, j]);
+                    }
+                    else if (ListContains(selectedPositions, new Position(i, j)))
+                    {
+
+                        BackgroundColor = ConsoleColor.Yellow;
                         ForegroundColor = ConsoleColor.Black;
                         Write(matrix[i, j]);
                     }
