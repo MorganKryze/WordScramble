@@ -232,11 +232,85 @@ namespace Word_Scramble
         {
             
             //foreach (int a, int b) in FillPosition (x,y,x2,y2))
-            List<(int,int)> positon=Methods.FillPosition (x,y,x2,y2);
+            List<Position> positon = GetPositionsBetween (new Position(x,y),new Position(x2,y2));
             for (int i = 0; i < positon.Count-1; i++)
             {
-                this.board[positon[i].Item1,positon[i].Item2]=word[i];
+                this.board[positon[i].X,positon[i].Y]=word[i];
             }
+        }
+        /// <summary>This method is used to create a list of positions between two positions.</summary>
+        /// <param name="obj1"> The first position. </param>
+        /// <param name="obj2"> The second position. </param>
+        /// <returns> A list of positions between the two positions. </returns>
+        public static List<Position> GetPositionsBetween (Position obj1, Position obj2)
+        {
+            List<Position> line = new List<Position>();
+            if (obj1.X == obj2.X)
+            {
+                if (obj1.Y < obj2.Y)
+                {
+                    for (int i = obj1.Y; i <= obj2.Y; i++)
+                    {
+                        line.Add(new Position (obj1.X,i));
+                    }
+                }
+                else
+                {
+                    for (int i = obj1.Y; i >= obj2.Y; i--)
+                    {
+                        line.Add(new Position (obj1.X,i));
+                    }
+                }
+            }
+            else if (obj1.Y == obj2.Y)
+            {
+                if (obj1.X < obj2.X)
+                {
+                    for (int i = obj1.X; i <= obj2.X; i++)
+                    {
+                        line.Add(new Position (i,obj1.Y));
+                    }
+                }
+                else
+                {
+                    for (int i = obj1.X; i >= obj2.X; i--)
+                    {
+                        line.Add(new Position (i,obj1.Y));
+                    }
+                }
+            }
+            else
+            {
+                if (obj1.X < obj2.X && obj1.Y < obj2.Y)
+                {
+                    for (int i = 0; i <= obj2.X-obj1.X; i++)
+                    {
+                        line.Add(new Position (obj1.X+i,obj1.Y+i));
+                    }
+                }
+                else if (obj1.X > obj2.X && obj1.Y < obj2.Y)
+                {
+                    for (int i = 0; i <= obj1.X-obj2.X; i++)
+                    {
+                        line.Add(new Position (obj1.X-i,obj1.Y+i));
+                    }
+                }
+                else if (obj1.X < obj2.X && obj1.Y > obj2.Y)
+                {
+                    for (int i = 0; i <= obj2.X-obj1.X; i++)
+                    {
+                        line.Add(new Position (obj1.X+i,obj1.Y-i));
+                    }
+                }
+                else if (obj1.X > obj2.X && obj1.Y > obj2.Y)
+                {
+                    for (int i = 0; i <= obj1.X-obj2.X; i++)
+                    {
+                        line.Add(new Position(obj1.X-i,obj1.Y-i));
+                    }
+                }
+            }
+            return line;
         }
 
     }

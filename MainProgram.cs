@@ -19,7 +19,8 @@ namespace Word_Scramble
             #endregion
 
             //ligne de test
-            foreach(string word in Methods.SelectWord(Methods.CsvToMatrix("dataGrills/ComplexGrill.csv")))Write(word);
+            Methods.SelectWords(Methods.CsvToMatrix("dataGrills/ComplexGrill.csv"), new List<string>{"TERRE","FERME"});
+            //Methods.SelectWords(Methods.CsvToMatrix("dataGrills/ComplexGrill.csv"), new List<string>{"AGRICULTURE","BREBIS","CANARD","CHEVRES","CIDRE","CONFITURE","ELEVEUR","ESCARGOT","ESTIVE","FERME","FROMAGE"});
 
             //Player_Creation_1 :
 

@@ -79,51 +79,24 @@ namespace Word_Scramble
         /// <summary>This method is used to select multiple characters.</summary>
         /// <param name="matrix">The grill from wich the user chooses the characters.</param>
         /// <returns>A string as the sum of the characters.</returns>
-        public static List<string> SelectWord(char[,] matrix)
+        public static void SelectWords(char[,] matrix, List<string> wordsToFind)
         {
-            List<string> words = new List<string>();
-            Position currentPosition = new Position(0, 0);
-            Position anchor1 = new Position(-1, -1);
-            Position anchor2 = new Position(-1, -1);
+            
             List<Position> rightPositions = new List<Position>();
-            List<Position> selectedPositions = new List<Position>();
-
-            List<Position> possiblePositions = new List<Position>();
-            for(int i = 0; i< matrix.GetLength(0); i++)for(int j = 0; j < matrix.GetLength(1); j++)possiblePositions.Add(new Position(i, j));
-
-            while(anchor2.X == -1)
+            while(wordsToFind.Count != 0)
             {
-                Clear();
-                for (int i = 0; i < matrix.GetLength(0); i++)
+                Position currentPosition = new Position(0, 0);
+                Position anchor1 = new Position(-1, -1);
+                Position anchor2 = new Position(-1, -1);
+                List<Position> selectedPositions = new List<Position>();
+
+                List<Position> possiblePositions = new List<Position>();
+                for(int i = 0; i< matrix.GetLength(0); i++)for(int j = 0; j < matrix.GetLength(1); j++)possiblePositions.Add(new Position(i, j));
+
+                while(anchor2.X == -1)
                 {
-                    for (int j = 0; j < matrix.GetLength(1); j++)
-                    {
-                        if (currentPosition.Equals(new Position(i, j)))
-                        {
-                            BackgroundColor = ConsoleColor.Green;
-                            ForegroundColor = ConsoleColor.Black;
-                            Write(matrix[i,j]);
-                        }
-                        else if (ListContains(selectedPositions, new Position(i, j)))
-                        {
-                            
-                            BackgroundColor = ConsoleColor.Yellow;
-                            ForegroundColor = ConsoleColor.Black;
-                            Write(matrix[i,j]);
-                        }
-                        else if (ListContains(rightPositions, new Position(i, j)))
-                        {
-                            
-                            BackgroundColor = ConsoleColor.Red;
-                            ForegroundColor = ConsoleColor.Black;
-                            Write(matrix[i,j]);
-                        }
-                        else Write(matrix[i,j]);
-                        ConsoleConfig();
-                        Write(" ");
-                    }
-                    WriteLine();
-                }
+                    Clear();
+                    PrintMatrix(matrix, selectedPositions,rightPositions, currentPosition);
                     switch(ReadKey(true).Key)
                     {
                         case ConsoleKey.UpArrow : case ConsoleKey.Z :
@@ -155,57 +128,70 @@ namespace Word_Scramble
                                     }
                                 }
                             }
-                            else 
+                            else if (!anchor1.Equals(currentPosition))
+                            {
+                                anchor2 = new Position(currentPosition.X, currentPosition.Y);
+                                selectedPositions.Clear();
+                                selectedPositions = Board.GetPositionsBetween(anchor1, anchor2);
+                                string word = "";
+                                for(int i = 0; i < selectedPositions.Count; i++)
                                 {
-                                    anchor2 = new Position(currentPosition.X, currentPosition.Y);
-                                    string word = "";
-                                    if(anchor1.X == anchor2.X)
-                                    {
-                                        if(anchor1.Y < anchor2.Y)
-                                        {
-                                            for(int i = anchor1.Y; i <= anchor2.Y; i++)
-                                            {
-                                                word+=matrix[anchor1.X, i];
-                                                selectedPositions.Add(new Position(anchor1.X, i));
-                                            }
-                                        }
-                                        else
-                                        {
-                                            for(int i = anchor1.Y; i >= anchor2.Y; i--)
-                                            {
-                                                word+=matrix[anchor1.X, i];
-                                                selectedPositions.Add(new Position(anchor1.X, i));
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if(anchor1.X < anchor2.X)
-                                        {
-                                            for(int i = anchor1.X; i <= anchor2.X; i++)
-                                            {
-                                                word+=matrix[i, anchor1.Y];
-                                                selectedPositions.Add(new Position(i, anchor1.Y));
-                                            }
-                                        }
-                                        else
-                                        {
-                                            for(int i = anchor1.X ; i >= anchor2.X; i--)
-                                            {
-                                                word+=matrix[i, anchor1.Y];
-                                                selectedPositions.Add(new Position(i, anchor1.Y));
-                                            }
-                                        }
-                                    }
-                                    words.Add(word);
+                                    word += matrix[selectedPositions[i].X, selectedPositions[i].Y];
                                 }
+                                if(wordsToFind.Contains(word))
+                                {
+                                    rightPositions.AddRange(selectedPositions);
+                                    wordsToFind.Remove(word);
+                                }
+                                Clear();
+                                PrintMatrix(matrix, selectedPositions, rightPositions, currentPosition, false);
+                                Pause();
+                            }
                             break;
                         case ConsoleKey.Escape :
                             break;
                     }
                 }
-                return words;
             }
+        }
+        public static void PrintMatrix(char[,] matrix, List<Position> selectedPositions, List<Position> rightPositions, Position currentPosition, bool displayCursor = true)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    if (currentPosition.Equals(new Position(i, j)) && displayCursor)
+                    {
+                        BackgroundColor = ConsoleColor.Green;
+                        ForegroundColor = ConsoleColor.Black;
+                        Write(matrix[i, j]);
+                    }
+                    else if (ListContains(selectedPositions, new Position(i, j)))
+                    {
+
+                        BackgroundColor = ConsoleColor.Yellow;
+                        ForegroundColor = ConsoleColor.Black;
+                        Write(matrix[i, j]);
+                    }
+                    else if (ListContains(rightPositions, new Position(i, j)))
+                    {
+
+                        BackgroundColor = ConsoleColor.Blue;
+                        ForegroundColor = ConsoleColor.Black;
+                        Write(matrix[i, j]);
+                    }
+                    else
+                    {
+                        BackgroundColor = ConsoleColor.Black;
+                        ForegroundColor = ConsoleColor.White;
+                        Write(matrix[i, j]);
+                    }
+                    ConsoleConfig();
+                    Write(" ");
+                }
+                WriteLine();
+            }
+        }
 
         /// <summary>This method is used to display a scrolling menu.</summary>
         /// <param name= "choices"> The choices of the menu.</param>
@@ -317,8 +303,6 @@ namespace Word_Scramble
                 }
                 ConsoleConfig();
             }
-            
-
             Clear();
         }
         
@@ -402,111 +386,5 @@ namespace Word_Scramble
         }
         
         #endregion
-        
-        /// <summary>This method is used to exit the game.</summary>
-
-                //define function that compare two char array if second array feet in first array
-        public static bool CompareArray(char[] line, char[] word)
-        {
-            //if wod is longer than line return false
-            if (word.Length > line.Length)
-            {
-                return(false);
-            }
-            //compare line and wod
-            for (int i = 0; i < word.Length; i++)
-            {
-                if (line[i] != word[i] && line[i] != '_')
-                {
-                    return(false);
-                }
-            }
-            return(true);
-        }
-    
-        //fill a list of (int,int) position along line between 2 position x,y and x2,y2
-        public static List<(int,int)> FillPosition(int x, int y, int x2, int y2)
-        {
-            List<(int,int)> line = new List<(int,int)>();
-            //if line is vertical
-            if (x == x2)
-            {
-                //if line is going down
-                if (y < y2)
-                {
-                    for (int i = y; i <= y2; i++)
-                    {
-                        line.Add((x,i));
-                    }
-                }
-                //if line is going up
-                else
-                {
-                    for (int i = y; i >= y2; i--)
-                    {
-                        line.Add((x,i));
-                    }
-                }
-            }
-            //if line is horizontal
-            else if (y == y2)
-            {
-                //if line is going right
-                if (x < x2)
-                {
-                    for (int i = x; i <= x2; i++)
-                    {
-                        line.Add((i,y));
-                    }
-                }
-                //if line is going left
-                else
-                {
-                    for (int i = x; i >= x2; i--)
-                    {
-                        line.Add((i,y));
-                    }
-                }
-            }
-            //if line is diagonal
-            else
-            {
-                //if line is going down right
-                if (x < x2 && y < y2)
-                {
-                    for (int i = 0; i <= x2-x; i++)
-                    {
-                        line.Add((x+i,y+i));
-                    }
-                }
-                //if line is going down left
-                else if (x > x2 && y < y2)
-                {
-                    for (int i = 0; i <= x-x2; i++)
-                    {
-                        line.Add((x-i,y+i));
-                    }
-                }
-                //if line is going up right
-                else if (x < x2 && y > y2)
-                {
-                    for (int i = 0; i <= x2-x; i++)
-                    {
-                        line.Add((x+i,y-i));
-                    }
-                }
-                //if line is going up left
-                else if (x > x2 && y > y2)
-                {
-                    for (int i = 0; i <= x-x2; i++)
-                    {
-                        line.Add((x-i,y-i));
-                    }
-                }
-            }
-            return(line);
-
-        }
-    
     }
 }
