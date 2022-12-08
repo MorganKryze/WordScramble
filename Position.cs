@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Word_Scramble
 {
     /// <summary>A class that stores the position into X and Y parameters.</summary>
-    public struct Position
+    public struct Position : IEquatable<Position>
     {
         #region Attributes
         /// <summary>The x coordinate of the position.</summary>
