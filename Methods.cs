@@ -17,73 +17,53 @@ namespace Word_Scramble
         /// <summary>This method is used to display the main menu.</summary>
         public static void MainMenu()
         {
-            switch(ScrollingMenu("", new string[]{"Play    ","Options ","Exit    "}, "Welcome Adventurer! Use the arrow keys to move and press [ENTER] to confirm.","Title.txt"))
+            switch(ScrollingMenu("Welcome Adventurer! Use the arrow keys to move and press [ENTER] to confirm.", new string[]{"Play    ","Options ","Exit    "}, "Title.txt"))
             {
-                case 0 : LoadingScreen("[ Launching the game ]\n");break;  
+                case 0 : break;  
                 case 1 : MainMenu(); break;
                 case 2 : case -1: FinalExit();break;
             }
         }
-        
-         /*
-        /// <summary>This method is used to define the current session.</summary>
-        /// <param name= "ranking"> Display the choices among all of the sessions.</param>
-        /// <param name= "player"> The player who is playing the game.</param>
-        /// <returns> Wether or not the client chose to step back.</returns>
-        public static bool DefineSession(Ranking ranking,Player player)
-        {
-            string[]sessionChoices = new string[ranking.PlayersList.Count+1];
-            for(int i = 0; i < sessionChoices.Length; i++)
-            {
-                if(i == 0)sessionChoices[0]= "New player...       ";
-                else sessionChoices[i]= ranking.PlayersList[i-1].Name;
-            }
-            int position = ScrollingMenu(sessionChoices, "-- Game session selection --","Please choose your game session wisely, or create one if yours is missing from the list:");
-            if (position == -1)return true;
-            else if (position == 0)
-            {
-                do
-                {
-                    Clear();
-                    Title("-- Game session selection --","Please write a new session name: ");
-                    player.Name = ReadLine()+String.Empty;
-                    if (player.Name.Length<21&&player.Name!=String.Empty)
-                    {
-                        while(player.Name.Length<20)
-                        {
-                            player.Name+=" ";
-                        }
-                        if(!player.IsNewPlayer())
-                        {
-                            WriteLine("\nThis session already exists, please choose another name.");
-                            player.Name = String.Empty;
-                            Pause();
-                        }
-                    }
-                }while (player.Name == "");
-                Player.CutName = player.Name;
-            }else
-            {
-                player.Name = ranking.PlayersList[position-1].Name;
-                player.Scores = ranking.PlayersList[position-1].Scores;
-                Player.CutName = player.Name;
-            }
-            ConsoleConfig();
-            Clear();
-            return false;
-        }
-        */
 
         /// <summary>This method is used to define the current session.</summary>
-        public static bool DefinePlayers(Player player)
+        /// <param name="player1">The first player.</param>
+        /// <param name="player2">The second player.</param>
+        /// <returns>A boolean to know whether the user wants to go back or not.</returns>
+        public static bool DefinePlayers(Player player1, Player player2)
         {
-           //switch(ScrollingMenu())
-           // TODO : Add the option to create a new player.
+           switch(ScrollingMenu("Would you like to play a new game or load a previous one?", new string[]{"New Game  ","Load Game ","Back      "}, "Title.txt"))
+           {
+               case 0 :
+                    player1.Name = TypePlayerName(player1, "Please write the first player's name below :");
+                    player2.Name = TypePlayerName(player2, "Please write the second player's name below :");
+                    break;
+               case 1 : 
+               
+                    break;
+               case 2 : case -1 : return false;
+           }
            return true;
         }
         #endregion
+
         #region Utility Methods
-        
+        /// <summary>This method is used to define the name of a player.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="message">The message to display.</param>
+        /// <returns>The name of the player.</returns>
+        public static string TypePlayerName(Player player, string message)
+        {
+            do 
+            {
+                Title(message, "Title.txt");
+                Write("{0,"+((WindowWidth / 2) - (message.Length / 2)) + "}","");
+                Write("> ");
+                ConsoleConfig(false);
+                player.Name = ReadLine();
+                ConsoleConfig();
+            }while(player.Name == "");
+            return player.Name;
+        }
         /// <summary>This method is used to select multiple characters.</summary>
         /// <param name="matrix">The grill from wich the user chooses the characters.</param>
         /// <returns>A string as the sum of the characters.</returns>
@@ -276,7 +256,7 @@ namespace Word_Scramble
         /// <param name= "additionalText"> The subtitle of the title.</param>
         /// <param name= "specialText"> Special text as a font.</param>
         /// <returns> The position of the choice selected.</returns>
-        public static int ScrollingMenu (string question, string[] choices, string additionalText = "", string specialText = "Title.txt")
+        public static int ScrollingMenu (string question, string[] choices, string specialText = "Title.txt")
         {
             int position = 0;
             bool choiceMade = false;
@@ -284,7 +264,7 @@ namespace Word_Scramble
             while (!choiceMade)
             {
                 Clear();
-                Title(question,additionalText,specialText,recurrence);
+                Title(question,specialText,recurrence);
                 string[]currentChoice = new string[choices.Length];
                 for (int i = 0; i < choices.Length; i++)
                 {
@@ -293,7 +273,7 @@ namespace Word_Scramble
                         currentChoice[i] = $" > {choices[i]}";
                         BackgroundColor = ConsoleColor.Green;
                         ForegroundColor = ConsoleColor.Black;
-                        CenteredWL(currentChoice[i], Black, Black, Green, Black);
+                        CenteredWL(currentChoice[i], Black, Green);
                         ConsoleConfig();
                     }
                     else 
@@ -341,72 +321,62 @@ namespace Word_Scramble
         
         /// <summary>This method is used to display a loading screen.</summary>
         /// <param name="text"> The text to display. </param>
+        /// <param name="clear"> A boolean that indicates if the screen should be cleared. </param>
         public static void LoadingScreen(string text)
         {
-            int t_interval = (int) 2000/text.Length;
+            Clear();
+            int t_interval = (int) 1500/text.Length;
             char[]loadingBar = new char[text.Length];
             for (int j = 0; j < loadingBar.Length; j++)loadingBar[j]= '█';
-            for (int i = 0; i < text.Length; i++)
+            int recurrence = 0;
+            for (int i = 0; i <= text.Length; i++, recurrence++)
             {
-                Clear();
+                
                 CenteredWL(text);
+                WriteLine("\n");
                 string bar = "";
-                if (i == text.Length-1)
+                for (int l = 0; l < i; l++) bar += loadingBar[l];
+                Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
+                ForegroundColor = Green;
+                Write(bar);
+                bar = ""; 
+                if (i != text.Length)
                 {
-                    
-                    for (int l = 0; l < loadingBar.Length; l++) bar += loadingBar[l];
-                    bar += $" {(int)((ToDecimal(i+1)/ToDecimal(text.Length))*100)} %\n";
-                    Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
-                    ForegroundColor = Green;
-                    Write(bar);
-                    //CenteredWL(bar, Black, Black, Black, Green);
-                    Sleep(1000);
-                }
-                else
-                {
-                    Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
-                    for (int l = 0; l < i; l++) bar += loadingBar[l];
-                    ForegroundColor = Green;
-                    Write(bar);
-                    bar = ""; 
                     for (int l = i; l < text.Length; l++)bar += loadingBar[l];
-                    bar += $"  {(int)((ToDecimal(i+1)/ToDecimal(text.Length))*100)} %\n";
                     ForegroundColor = Red;
                     Write(bar);
-                    ConsoleConfig();
                     Sleep(t_interval);
                 }
+                else Sleep(1000);
                 ConsoleConfig();
+                Clear();
             }
-            Clear();
         }
         
         /// <summary>This method is used to display a title.</summary>
         /// <param name= "text"> The content of the title.</param>
-        /// <param name= "additionalText"> The subtitle of the title.</param>
-        /// <param name= "pathSpecialText"> Special text as a font.</param>
+        /// <param name= "pathSpecialText"> A special text stored in a file.</param>
         /// <param name= "recurrence"> Whether the title has been displayed yet or not.</param>
-        public static void Title (string text,  string additionalText = "",string pathSpecialText = "", int recurrence = 0)
+        public static void Title (string text = "",string pathSpecialText = "", int recurrence = 0)
         {
             Clear();
-            if (text != "")CenteredWL($"\n{text}\n");
             if (pathSpecialText != "")PrintSpecialText(pathSpecialText);
-            if(additionalText != "")
+            if(text != "")
             {
-                if (recurrence != 0)CenteredWL(additionalText+"\n");
+                if (recurrence != 0)CenteredWL(text+"\n");
                 else
                 {
-                    Write("{0,"+((WindowWidth / 2) - (additionalText.Length / 2)) + "}","");
-                    for(int i = 0; i < additionalText.Length; i++)
+                    Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
+                    for(int i = 0; i < text.Length; i++)
                     {
-                        Write(additionalText[i]);
+                        Write(text[i]);
                         Sleep(50);
                         if(KeyAvailable)
                         {
                             ConsoleKeyInfo keyPressed = ReadKey(true);
                             if(keyPressed.Key == ConsoleKey.Enter||keyPressed.Key == ConsoleKey.Escape)
                             {
-                                Write(additionalText.Substring(i+1));
+                                Write(text.Substring(i+1));
                                 break;
                             }
                         }
@@ -429,17 +399,30 @@ namespace Word_Scramble
         
         /// <summary>This method is used to display a centered text and come back to line.</summary>
         /// <param name="text"> The text to display. </param>
-        public static void CenteredWL(string text, ConsoleColor back1 = Black, ConsoleColor fore1 = White, ConsoleColor back2 = Black, ConsoleColor fore2 = White)
+        /// <param name="fore"> The foreground color of the text. </param>
+        /// <param name="back"> The background color of the text. </param>
+        public static void CenteredWL(string text, ConsoleColor fore = White, ConsoleColor back = Black)
         {
-            
-            BackgroundColor = back1;
-            ForegroundColor = fore1;
+            ConsoleConfig();
             Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
-            BackgroundColor = back2;
-            ForegroundColor = fore2;
+            ForegroundColor = fore;
+            BackgroundColor = back;
             WriteLine(text);
             ConsoleConfig();
-            
+        }
+
+        /// <summary>This method is used to display a centered text.</summary>
+        /// <param name="text"> The text to display. </param>
+        /// <param name="fore"> The foreground color of the text. </param>
+        /// <param name="back"> The background color of the text. </param>
+        public static void CenteredW(string text, ConsoleColor fore = White, ConsoleColor back = Black)
+        {
+            ConsoleConfig();
+            Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
+            ForegroundColor = fore;
+            BackgroundColor = back;
+            Write(text);
+            ConsoleConfig();
         }   
 
         /// <summary> This method is used to set the console configuration. </summary>
@@ -458,7 +441,7 @@ namespace Word_Scramble
         /// <summary>This method is used to exit the game.</summary>
         public static void FinalExit()
         {
-            LoadingScreen("[ Shutting off ]\n");
+            LoadingScreen("[ Shutting down ]");
             ConsoleConfig(false);
             Exit(0);
         }
