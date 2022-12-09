@@ -6,11 +6,18 @@ using System.Threading.Tasks;
 namespace Word_Scramble
 {
     /// <summary>The ranking class.</summary>
-    public class Ranking
+    public class Ranking : IEquatable<Ranking>
     {
+        #region Properties
+        /// <summary>The players that finished the game.</summary>
         public List<Player> Finished { get; set; }
+        /// <summary>The players that didn't finish the game.</summary>
         public List<Player> NotFinished { get; set; }
+        #endregion
 
+        #region Constructors
+        /// <summary>Initializes a new instance of the <see cref="Ranking"/> class.</summary>
+        /// <param name="finished">if set to <c>true</c> [finished].</param>
         public Ranking(bool finished = false)
         {
             if (finished)
@@ -50,5 +57,18 @@ namespace Word_Scramble
                 }
             }
         }
+        #endregion
+
+        #region Methods
+        /// <summary>this method is used to check the equality between two lists.</summary>
+        public bool Equals(Ranking other)
+        {
+            foreach (Player p in Finished)
+            {
+                if (!other.Finished.Contains(p))
+                    return false;
+            }return true;
+        }
+        #endregion
     }
 }
