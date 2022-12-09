@@ -30,6 +30,14 @@ namespace Word_Scramble
         #endregion
 
         #region Methods
+        /// <summary>This method is used to display the dimensions of the dictionary.</summary>
+        public static void Dimensions()
+        {
+            foreach (KeyValuePair<int, string[]> entry in s_Dict)
+            {
+                Console.WriteLine("Key = {0}, Value = {1}", entry.Key, entry.Value.Length);
+            }
+        }
         /// <summary> Function to redefine the dictionary to the size of the Dictionnary</summary>
         /// <param name="data">Dictionary to redefine</param name>
         public static Dictionary<int, string[]> redefineDictionary(Dictionary<int,string[]> data,int size)
