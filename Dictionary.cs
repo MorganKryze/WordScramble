@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace AUTRE
+namespace Word_Scramble
 {
     /// <summary>The dictionnary creation class.</summary>
     class Dictionary
@@ -36,26 +36,34 @@ namespace AUTRE
         {
             return data.Where(x => (x.Key<= size)).ToDictionary(x => x.Key, x => x.Value);
         }
-        /*
-        public static bool Recherche(string mot)
+        /// <summary>This method is used to check whether a word is in the dictionary or not.</summary>
+        /// <param name="mot">The word to search.</param>
+        /// <returns>A boolean indicating if the word is in the dictionary.</returns>
+        public static bool SearchInDictionary(string mot)
         {
-            return RechercheDicho(mot,s_Dictionary[mot.Length],0,s_Dictionary[mot.Length].Length-1);
+            int size = mot.Length;
+            return IsInDictionary(mot, s_Dict[size], 0, s_Dict[size].Length - 1, (s_Dict[size].Length - 1) / 2);
+
         }
-        public static bool RechercheDicho(string mot, string[]liste, int départ, int arrivée)
+        /// <summary>This method is used to check whether a word is in the dictionary or not.</summary>
+        /// <param name="mot">The word to search.</param>
+        /// <param name="taille">The list of words of the same size as the word to search.</param>
+        /// <param name="min">The minimum index of the list.</param>
+        /// <param name="max">The maximum index of the list.</param>
+        /// <param name="milieu">The middle index of the list.</param>
+        /// <returns>A boolean indicating if the word is in the dictionary.</returns>
+        public static bool IsInDictionary(string mot, string[]taille, int min, int max, int milieu)
         {
-            int milieu = (int)arrivée/2;
-            if (mot.Equals(liste[milieu]))return true;
-            else if(mot.CompareTo(liste[milieu])>0)return RechercheDicho(mot,s_Dictionary[mot.Length],départ,milieu);
-            else return RechercheDicho(mot,s_Dictionary[mot.Length],milieu,arrivée);
+            if (mot == taille[milieu]) return true;
+            else if (mot != taille[milieu] && min == max) return false;
+            else if (mot != taille[milieu] && min != max)
+            {
+                if (mot.CompareTo(taille[milieu]) < 0) return IsInDictionary(mot, taille, min, milieu - 1, (min + milieu - 1) / 2);
+                else return IsInDictionary(mot, taille, milieu + 1, max, (milieu + 1 + max) / 2);
+            }
+            else return false;
         }
-        public static bool RechercheDicho(string mot, string[]liste, int départ, int arrivée)
-        {
-            if(départ>arrivée)return false;
-            int milieu = (int)arrivée/2;
-            if (mot.Equals(liste[milieu]))return true;
-            else if(mot.CompareTo(liste[milieu])>0)return RechercheDicho(mot,s_Dictionary[mot.Length],départ,milieu);
-            else return RechercheDicho(mot,s_Dictionary[mot.Length],milieu,arrivée);
-        }*/
+        
         #endregion
 
     }
