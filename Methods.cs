@@ -38,11 +38,16 @@ namespace Word_Scramble
                     player2.Name = TypePlayerName(player2, "Please write the second player's name below :");
                     break;
                case 1 : 
-               
+                    Ranking ranking = new Ranking();
+                    int position1 = ScrollingMenu("Please choose the first player in the list below :", ranking.NotFinished.Select(p => p.Name).ToArray(), "Title.txt");
+                    if(position1==-1) return DefinePlayers(player1, player2);
+                    else player1 = new Player(ranking.NotFinished[position1]);
+                    int position2 = ScrollingMenu("Please choose the second player in the list below :", ranking.NotFinished.Select(p => p.Name).ToArray(), "Title.txt");
+                    if(position2==-1) return DefinePlayers(player1, player2);
+                    else player2 = new Player(ranking.NotFinished[position2]);
                     break;
                case 2 : case -1 : return false;
-           }
-           return true;
+           }return true;
         }
         #endregion
 
