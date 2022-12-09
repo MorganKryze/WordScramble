@@ -38,6 +38,18 @@ namespace Word_Scramble
             MaxScore = maxScore;
             Words = words;
         }
+        
+        /// <summary>Initializes a new instance of the <see cref="Player"/> class.</summary>
+        /// <param name="p">The player to copy.</param>
+        /// <returns>A new player.</returns>
+        public Player (Player p)
+        {
+            Name = p.Name;
+            InGame = p.InGame;
+            Score = p.Score;
+            MaxScore = p.MaxScore;
+            Words = p.Words;
+        }
         #endregion
 
         #region Methods
