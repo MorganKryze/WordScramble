@@ -5,6 +5,7 @@ using static System.Environment;
 using static System.Threading.Thread;
 using static System.Convert;
 using static System.IO.File;
+using static System.ConsoleColor;
 
 namespace Word_Scramble
 {
@@ -16,15 +17,15 @@ namespace Word_Scramble
         /// <summary>This method is used to display the main menu.</summary>
         public static void MainMenu()
         {
-            switch(ScrollingMenu(new string[]{"Play      ","Options   ","Exit      "},"", "Welcome Adventurer! Use the arrow keys to move and press [ENTER] to confirm.",true))
+            switch(ScrollingMenu("", new string[]{"Play    ","Options ","Exit    "}, "Welcome Adventurer! Use the arrow keys to move and press [ENTER] to confirm.","Title.txt"))
             {
+                case 0 : LoadingScreen("[ Launching the game ]\n");break;  
                 case 1 : MainMenu(); break;
                 case 2 : case -1: FinalExit();break;
-                default: break;
             }
-            LoadingScreen("[ Launching the game ]\n");
         }
-        /*
+        
+         /*
         /// <summary>This method is used to define the current session.</summary>
         /// <param name= "ranking"> Display the choices among all of the sessions.</param>
         /// <param name= "player"> The player who is playing the game.</param>
@@ -70,9 +71,16 @@ namespace Word_Scramble
             ConsoleConfig();
             Clear();
             return false;
-        }*/
-        
+        }
+        */
 
+        /// <summary>This method is used to define the current session.</summary>
+        public static bool DefinePlayers(Player player)
+        {
+           //switch(ScrollingMenu())
+           // TODO : Add the option to create a new player.
+           return true;
+        }
         #endregion
         #region Utility Methods
         
@@ -268,7 +276,7 @@ namespace Word_Scramble
         /// <param name= "additionalText"> The subtitle of the title.</param>
         /// <param name= "specialText"> Special text as a font.</param>
         /// <returns> The position of the choice selected.</returns>
-        public static int ScrollingMenu (string[] choices, string text, string additionalText = "", bool specialText = false)
+        public static int ScrollingMenu (string question, string[] choices, string additionalText = "", string specialText = "Title.txt")
         {
             int position = 0;
             bool choiceMade = false;
@@ -276,7 +284,7 @@ namespace Word_Scramble
             while (!choiceMade)
             {
                 Clear();
-                Title(text,additionalText,specialText,recurrence);
+                Title(question,additionalText,specialText,recurrence);
                 string[]currentChoice = new string[choices.Length];
                 for (int i = 0; i < choices.Length; i++)
                 {
@@ -285,14 +293,14 @@ namespace Word_Scramble
                         currentChoice[i] = $" > {choices[i]}";
                         BackgroundColor = ConsoleColor.Green;
                         ForegroundColor = ConsoleColor.Black;
-                        WriteLine(currentChoice[i]);
+                        CenteredWL(currentChoice[i], Black, Black, Green, Black);
                         ConsoleConfig();
                     }
                     else 
                     {
                         
                         currentChoice [i]= $"   {choices[i]}";
-                        WriteLine(currentChoice[i]);
+                        CenteredWL(currentChoice[i]);
                     }
                 }
                 switch(ReadKey().Key)
@@ -341,23 +349,31 @@ namespace Word_Scramble
             for (int i = 0; i < text.Length; i++)
             {
                 Clear();
-                WriteLine($"\n{text}\n");
+                CenteredWL(text);
+                string bar = "";
                 if (i == text.Length-1)
                 {
-                    ForegroundColor = ConsoleColor.Green;
-                    for (int l = 0; l < loadingBar.Length; l++)Write(loadingBar[l]);
-                    decimal percentage = (ToDecimal(i+1)/ToDecimal(text.Length))*100;
-                    Write($" {(int)percentage} %\n");
+                    
+                    for (int l = 0; l < loadingBar.Length; l++) bar += loadingBar[l];
+                    bar += $" {(int)((ToDecimal(i+1)/ToDecimal(text.Length))*100)} %\n";
+                    Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
+                    ForegroundColor = Green;
+                    Write(bar);
+                    //CenteredWL(bar, Black, Black, Black, Green);
                     Sleep(1000);
                 }
                 else
                 {
-                    ForegroundColor = ConsoleColor.Green;
-                    for (int l = 0; l < i; l++)Write(loadingBar[l]);
-                    ForegroundColor = ConsoleColor.Red;
-                    for (int l = i; l < text.Length; l++)Write(loadingBar[l]);
-                    decimal percentage = (ToDecimal(i+1)/ToDecimal(text.Length))*100;
-                    Write($" {(int)percentage} %\n");
+                    Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
+                    for (int l = 0; l < i; l++) bar += loadingBar[l];
+                    ForegroundColor = Green;
+                    Write(bar);
+                    bar = ""; 
+                    for (int l = i; l < text.Length; l++)bar += loadingBar[l];
+                    bar += $"  {(int)((ToDecimal(i+1)/ToDecimal(text.Length))*100)} %\n";
+                    ForegroundColor = Red;
+                    Write(bar);
+                    ConsoleConfig();
                     Sleep(t_interval);
                 }
                 ConsoleConfig();
@@ -368,23 +384,19 @@ namespace Word_Scramble
         /// <summary>This method is used to display a title.</summary>
         /// <param name= "text"> The content of the title.</param>
         /// <param name= "additionalText"> The subtitle of the title.</param>
-        /// <param name= "specialText"> Special text as a font.</param>
+        /// <param name= "pathSpecialText"> Special text as a font.</param>
         /// <param name= "recurrence"> Whether the title has been displayed yet or not.</param>
-        public static void Title (string text,  string additionalText = "",bool specialText = false, int recurrence = 0)
+        public static void Title (string text,  string additionalText = "",string pathSpecialText = "", int recurrence = 0)
         {
             Clear();
-            if (recurrence != 0)
+            if (text != "")CenteredWL($"\n{text}\n");
+            if (pathSpecialText != "")PrintSpecialText(pathSpecialText);
+            if(additionalText != "")
             {
-                if (text != "")WriteLine($"\n{text}\n");
-                if (specialText)PrintSpecialText("Title.txt");
-                if (additionalText != "")WriteLine($"\n{additionalText}\n");
-            }else
-            {
-                if (text != "")WriteLine($"\n{text}\n");
-                if (specialText)PrintSpecialText("Title.txt");
-                if (additionalText != "") 
+                if (recurrence != 0)CenteredWL(additionalText+"\n");
+                else
                 {
-                    WriteLine("");
+                    Write("{0,"+((WindowWidth / 2) - (additionalText.Length / 2)) + "}","");
                     for(int i = 0; i < additionalText.Length; i++)
                     {
                         Write(additionalText[i]);
@@ -401,6 +413,7 @@ namespace Word_Scramble
                     }
                     WriteLine("\n");
                 }
+                
             }
             
         }
@@ -410,22 +423,24 @@ namespace Word_Scramble
         public static void PrintSpecialText(string path)
         {
             string[] specialText = File.ReadAllLines(path);
-            foreach(string line in specialText)WriteLine(String.Format("{0," + ((WindowWidth / 2) + (line.Length / 2)) + "}", line));
+            foreach(string line in specialText)WriteLine("{0," + ((WindowWidth / 2) + (line.Length / 2)) + "}", line);
             WriteLine("\n");
         }
         
         /// <summary>This method is used to display a centered text and come back to line.</summary>
-        public static void CenteredWL(string text)
+        /// <param name="text"> The text to display. </param>
+        public static void CenteredWL(string text, ConsoleColor back1 = Black, ConsoleColor fore1 = White, ConsoleColor back2 = Black, ConsoleColor fore2 = White)
         {
-            WriteLine(String.Format("{0," + ((WindowWidth / 2) + (text.Length / 2)) + "}", text));
-        }
-
-        /// <summary>This method is used to display a centered text.</summary>
-        public static void CenteredW(string text)
-        {
-            Write(String.Format("{0," + ((WindowWidth / 2) + (text.Length / 2)) + "}", text));
-        }
-        
+            
+            BackgroundColor = back1;
+            ForegroundColor = fore1;
+            Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
+            BackgroundColor = back2;
+            ForegroundColor = fore2;
+            WriteLine(text);
+            ConsoleConfig();
+            
+        }   
 
         /// <summary> This method is used to set the console configuration. </summary>
         /// <param name="state"> Wether the config is used as the default config (true) or for the end of the program (false). </param>
