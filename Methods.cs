@@ -10,7 +10,7 @@ using static System.ConsoleColor;
 namespace Word_Scramble
 {
     /// <summary>The methods class where the core methods of the program are.</summary>
-    abstract class Methods
+    public static class Methods
     {
 
         #region Core Methods
@@ -323,7 +323,7 @@ namespace Word_Scramble
         /// <summary>This method is used to exit the game.</summary>
         public static void FinalExit()
         {
-            LoadingScreen("[ Shutting down ]");
+            LoadingScreen("[  Shutting down ...  ]");
             ConsoleConfig(false);
             Exit(0);
         } 

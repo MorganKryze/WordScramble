@@ -30,7 +30,7 @@ namespace Word_Scramble
         /// <param name="maxScore">The maximum score of the player.</param>
         /// <param name="words">The list of words found by the player.</param>
         /// <returns>A new player.</returns>
-        public Player(string name = "", bool inGame = false, int score = 0, int maxScore = 0,List<string> words = null)
+        public Player (string name = "", bool inGame = false, int score = 0, int maxScore = 0,List<string> words = null)
         {
             Name = name;
             InGame = inGame;
@@ -53,9 +53,33 @@ namespace Word_Scramble
         #endregion
 
         #region Methods
+        /// <summary>Adds a word and its score to the player's list of words and score.</summary>
+        /// <param name="word">The word to add.</param>
+        public void AddWord(string word)
+        {
+            if (Words == null) Words = new List<string>();
+            Words.Add(word);
+            Score += word.Length;
+        }
+        /// <summary>Adds a bonus to the player's score.</summary>
+        /// <param name="bonus">The bonus to add.</param>
+        public void AddBonus(int bonus)
+        {
+            Score += bonus;
+        } 
+        /// <summary>Compares two players.</summary>
+        /// <param name="obj">The player to compare.</param>
+        /// <returns>Whether the two players are equal or not.</returns>
+        public bool Equals(Player obj) => Name == obj.Name && InGame == obj.InGame && Score == obj.Score && MaxScore == obj.MaxScore && Words == obj.Words;
         /// <summary>This method is used to display every data about the player.</summary>
         /// <returns>A string with every data.</returns>
-        public override string ToString() => $"Name: {Name}, InGame: {InGame}, Score: {Score}, MaxScore: {MaxScore}, Words: {Words}";
+        public override string ToString() 
+        {
+            string s = $"Name: {Name}, InGame: {InGame}, Score: {Score}, MaxScore: {MaxScore}, Words:";
+            if (Words != null) foreach (string w in Words) s += $" {w},";
+            else s += " \"vide\"";
+            return s;
+        }
 
         #endregion
     }

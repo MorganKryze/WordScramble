@@ -1,2 +1,2 @@
-player3;true;8;8;word1;word2;word3;word4;word5;word6;word7;word8
-player4;true;9;9;word1;word2;word3;word4;word5;word6;word7;word8;word9
+player3;true;8;8;word1,word2,word3,word4,word5,word6,word7,word8
+player4;true;9;9;word1,word2,word3,word4word5,word6,word7,word8,word9
