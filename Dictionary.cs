@@ -6,30 +6,33 @@ namespace Word_Scramble
     class Dictionary
     {
         #region Attributes
+        /// <summary>The language of the dictionnary.</summary>
         public static string s_Language = "FR";
         /// <summary>The dictionnary itself.</summary>
         public static Dictionary<int, string[]> s_Dict = new Dictionary<int, string[]>();
-        public static Dictionary<int, List<string>> s_DictList = new Dictionary<int, List<string>>();
+        /// <summary>The dynamic dictionary.</summary>
+        public Dictionary<int, List<string>> DictList = new Dictionary<int, List<string>>();
         #endregion
         
         #region Constructor
         /// <summary>The constructor of the class.</summary>
-        public Dictionary()
+        public Dictionary(Dictionary<int, string[]> dictionary)
+        {
+            DictList = dictionary.ToDictionary(x => x.Key, x => x.Value.ToList());
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>The constructor of the class.</summary>
+        public static void CreateDictionary()
         {
             string[] lines = File.ReadAllLines("dataDictionary/MotsPossiblesFR.txt");
             int[] Key = lines.Where((x, i) => i % 2 == 0).Select(x => int.Parse(x)).ToArray();
             string[][] Value = lines.Where((x, i) => i % 2 != 0).Select(x => x.Split(' ')).ToArray();
 
             s_Dict = Key.Zip(Value, (s, i) => new { s, i }).ToDictionary(item => item.s, item => item.i);
-        }
-        public Dictionary(Dictionary<int, string[]> dictionary)
-        {
             
-            s_DictList = dictionary.ToDictionary(x => x.Key, x => x.Value.ToList());
         }
-        #endregion
-
-        #region Methods
         /// <summary>This method is used to display the dimensions of the dictionary.</summary>
         public static void Dimensions()
         {
@@ -40,7 +43,9 @@ namespace Word_Scramble
         }
         /// <summary> Function to redefine the dictionary to the size of the Dictionnary</summary>
         /// <param name="data">Dictionary to redefine</param name>
-        public static Dictionary<int, string[]> redefineDictionary(Dictionary<int,string[]> data,int size)
+        /// <param name="size">Size of the new dictionary</param name>
+        /// <returns>Dictionary with the new size</returns>
+        public static Dictionary<int, string[]> ResizeDictionary(Dictionary<int,string[]> data,int size)
         {
             return data.Where(x => (x.Key<= size)).ToDictionary(x => x.Key, x => x.Value);
         }
@@ -71,7 +76,6 @@ namespace Word_Scramble
             }
             else return false;
         }
-        
         #endregion
 
     }

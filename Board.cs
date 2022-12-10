@@ -26,26 +26,38 @@ namespace Word_Scramble
             return( Enumerable.Range(0, this.board.GetLength(1)-1).Select(x => this.board[x, row]).ToArray());
         }
 
+
         /// <summary> Function that return a Column</summary>
         public char[] getColumn(int column)
         {
             return( Enumerable.Range(0, this.board.GetLength(0)-1).Select(y => this.board[column, y]).ToArray());
         }
 
+
         /// <summary> Function that return a Diagonal</summary>
         public char[] getDiagonal1(int x,int y) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
         {
-            return(Enumerable.Range(0, x+y+1).Select(i => this.board[i,x+y-i]).ToArray());
+            return(x+y+1<=Math.Min(board.GetLength(0),board.GetLength(1))?
+            Enumerable.Range(0, x+y+1).Select(i => this.board[x+y-i,i]).ToArray():
+            Enumerable.Range(0, board.GetLength(0)+board.GetLength(1)-x-y-1).Select(i => this.board[Math.Min(x+y, this.board.GetLength(0)-1)-i,Math.Max(x+y+1 - this.board.GetLength(0), 0)+i]).ToArray());
         }
+
+
+
 
         /// <summary> Function that return a Diagonal</summary>
         public char[] getDiagonal2(int x,int y) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
         {
             int abs=Math.Abs(x-y);
-            return(x>y?Enumerable.Range(0, Math.Min(this.board.GetLength(0) - Math.Abs(x-y),this.board.GetLength(1))).Select(i => this.board[Math.Abs(x-y)+i,+i]).ToArray():Enumerable.Range(0, Math.Min(this.board.GetLength(0),this.board.GetLength(1)- Math.Abs(x-y))).Select(i => this.board[i,Math.Abs(x-y)+i]).ToArray());
+            return(x>y?
+            Enumerable.Range(0, Math.Min(this.board.GetLength(0) - Math.Abs(x-y),this.board.GetLength(1))-1).Select(i => this.board[Math.Abs(x-y)+i,+i]).ToArray():
+            Enumerable.Range(0, Math.Min(this.board.GetLength(0),this.board.GetLength(1)- Math.Abs(x-y))).Select(i => this.board[i,Math.Abs(x-y)+i]).ToArray());
         }
         #endregion
-    
+
+
+
+        
         //fill board with '_' character
         /// <summary> Function that fill the board with '_' character</summary>
         public void fillBoard()
@@ -61,13 +73,14 @@ namespace Word_Scramble
         /// <summary> Function that draw the board</summary>
         public void draw()
         {
-            for (int j=0; j<this.board.GetLength(1);j++){
-                for (int i=0; i<this.board.GetLength(0);i++){
-                    Write(this.board[i,j]== '_' ?"_ ":this.board[i,j]);
+            for (int i=0; i<this.board.GetLength(0);i++){
+                for (int j=0; j<this.board.GetLength(1);j++){
+                    Write(this.board[i,j]== '_' ?"_ ":$"{this.board[i,j]} ");
                 }
-                WriteLine($" {j} ");
+                WriteLine($" {i} ");
             }
         }
+
 
         public static bool CompareArray(char[] line, char[] word)
         {
@@ -87,7 +100,46 @@ namespace Word_Scramble
             return(true);
         }
 
-        public (int,int) CheckRow(int x, int y, string word, Random rnd)
+
+        public bool NewWord(Position position, int difficulty, Random rnd, string word){
+
+            int[] choose = Enumerable.Range(1,difficulty *2).OrderBy(x => rnd.Next()).Take(difficulty*2).ToArray();
+
+            foreach (int i in choose)
+            {
+                switch (i)
+                {
+                    case 1:
+                        if (CheckRow(position.X, position.Y, word, rnd)) {
+                            return(true);
+                        }
+                        break;
+                    case 2: 
+                        if (CheckColumn(position.X, position.Y, word, rnd)) {
+                            return(true);
+                        }                        
+                        break;
+                    case 3: 
+                        WriteLine("1Diagonal1");
+                        if (CheckDiagonal1(position.X, position.Y, word, rnd)) {
+                            return(true);
+                        }
+                        break;
+                    case 4: 
+                        Write("2Diagonal2");
+                        if (CheckDiagonal2(position.X, position.Y, word, rnd)) {
+                            return(true);
+                        }                        
+                        break;
+                }
+            }
+
+            return(false);
+        }
+
+
+        #region checkDirection
+        public bool CheckRow(int x, int y, string word, Random rnd)
         {
             //get row at position y
             char[] row = getRow(y);
@@ -108,21 +160,21 @@ namespace Word_Scramble
                     case 1:
                         if (CompareArray(row2,word2)) {
                             PasteWord(word2,x,y,x+word.Length,y);
-                            return(x+word.Length,y);
+                            return(true);
                         }
                         break;
                     case 2: 
                     if (CompareArray(row3,word2)) {
                         PasteWord(word2,x,y,x-word.Length,y);
-                        return(x-word.Length,y);
+                        return(true);
                     }
                     break;
                 }
             }
-            return((-1,-1));
+            return(false);
         }
 
-        public (int,int) CheckColumn(int x, int y, string word, Random rnd)
+        public bool CheckColumn(int x, int y, string word, Random rnd)
         {
             //get column at position y
             char[] column = getColumn(x);
@@ -143,28 +195,28 @@ namespace Word_Scramble
                     case 1:
                         if (CompareArray(column2,word2)) {
                             PasteWord(word2,x,y,x,y+word.Length);
-                            return(x,y+word.Length);
+                            return(true);
                         };
                         break;
                     case 2: 
                         if (CompareArray(column3,word2)) {
                             PasteWord(word2,x,y,x,y-word.Length);
-                            return(x,y-word.Length);
+                            return(false);
                         }
                         break;
                 }
             }
-            return(-1,-1);
+            return(false);
         }
 
-        public (int,int) CheckDiagonal1(int x, int y, string word, Random rnd)
+        public bool CheckDiagonal1(int x, int y, string word, Random rnd)
         {
             //get column at position y
             char[] diagonal = getDiagonal1(x,y);
             //get char column that start at position x
-            char[] diagonal2 = diagonal.Skip(x).ToArray();
+            char[] diagonal2 = diagonal.Where((p, i) => i >= (x<y?x:x-Math.Abs(x-y))).ToArray();
             //get char from positio x to start
-            char[] diagonal3 = diagonal.Where((p, i) => i <= x).Reverse().ToArray();
+            char[] diagonal3 = diagonal.Where((p, i) => i <= (x<y?x:x-Math.Abs(x-y))).Reverse().ToArray();
 
             //foreach element between 1 and 2 randomly choose number
             int[] choose = Enumerable.Range(1,2).OrderBy(x => rnd.Next()).Take(2).ToArray();
@@ -176,32 +228,30 @@ namespace Word_Scramble
                 switch (i)
                 {
                     case 1:
-                        WriteLine("diagonal1");
                         if (CompareArray(diagonal2,word2)) {
                             PasteWord(word2,x,y,x+word.Length,y-word.Length);
-                            return(1,1);
+                            return(true);
                         }
                         break;
                     case 2: 
-                        WriteLine("diagonal2");
                         if (CompareArray(diagonal3,word2)) {
                             PasteWord(word2,x,y,x-word.Length,y+word.Length);
-                            return(2,2);
+                            return(true);
                         }
                         break;
                 }
             }
-            return(0,0);
+            return(false);
         }
 
-        public (int,int) CheckDiagonal2(int x,int y, string word, Random rnd)
+        public bool CheckDiagonal2(int x,int y, string word, Random rnd)
         {
             //get column at position y
             char[] diagonal = getDiagonal2(x,y);
             //get char column that start at position x
-            char[] diagonal2 = diagonal.Skip(x).ToArray();
+            char[] diagonal2 = diagonal.Where((p, i) => i >= (x<y?x:x-Math.Abs(x-y))).ToArray();
             //get char from positio x to start
-            char[] diagonal3 = diagonal.Where((p, i) => i <= x).Reverse().ToArray();
+            char[] diagonal3 = diagonal.Where((p, i) => i <= (x<y?x:x-Math.Abs(x-y))).Reverse().ToArray();
 
             //foreach element between 1 and 2 randomly choose number
             int[] choose = Enumerable.Range(1,2).OrderBy(x => rnd.Next()).Take(2).ToArray();
@@ -215,18 +265,20 @@ namespace Word_Scramble
                     case 1:
                         if (CompareArray(diagonal2,word2)){ 
                             PasteWord(word2,x,y,x+word.Length,y+word.Length);
-                            return(1,1);}
+                            return(true);}
                         break;
                     case 2: 
-                    if (CompareArray(diagonal3,word2)) {
-                        PasteWord(word2,x,y,x-word.Length,y-word.Length);
-                        return(2,2);
+                        if (CompareArray(diagonal3,word2)) {
+                            PasteWord(word2,x,y,x-word.Length,y-word.Length);
+                            return(true);
                         }
                         break;
                 }
             }
-            return(0,0);
+            return(false);
         }
+
+        #endregion
 
         public void PasteWord(char[] word, int x, int y, int x2, int y2)
         {
