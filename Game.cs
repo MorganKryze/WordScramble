@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static System.Console;
+using static System.ConsoleColor;
+using static System.ConsoleKey;
+using static Word_Scramble.Methods;
 
 namespace Word_Scramble
 {
     /// <summary>This class is used to define the course of the game .</summary>
-    public abstract class Game
+    public static class Game
     {
         /// <summary>This method is used to display the main menu.</summary>
         public static void MainMenu()
         {
-            switch(Methods.ScrollingMenu("Welcome Adventurer! Use the arrow keys to move and press [ENTER] to confirm.", new string[]{"Play    ","Options ","Exit    "}, "Title.txt"))
+            switch(Methods.ScrollingMenu("Welcome Adventurer! Use the arrow keys to move and press [ENTER] to confirm.", new string[]{"Play    ","Options ","Quit    "}, "Title.txt"))
             {
                 case 0 : break;  
                 case 1 : MainMenu(); break;
@@ -23,30 +26,44 @@ namespace Word_Scramble
         /// <param name="player1">The first player.</param>
         /// <param name="player2">The second player.</param>
         /// <returns>A boolean to know whether the user wants to go back or not.</returns>
-        public static bool DefinePlayers(Player player1, Player player2)
+        public static bool DefinePlayers(Player player1, Player player2, Ranking ranking)
         {
-           switch(Methods.ScrollingMenu("Would you like to play a new game or load a previous one?", new string[]{"New Game  ","Load Game ","Back      "}, "Title.txt"))
+           switch(ScrollingMenu("Would you like to play a new game or load a previous one?", new string[]{" New     "," Load    "," Back    "}, "Title.txt"))
            {
                case 0 :
-                    player1.Name = Methods.TypePlayerName(player1, "Please write the first player's name below :");
-                    player2.Name = Methods.TypePlayerName(player2, "Please write the second player's name below :");
+                    player1.Name = TypePlayerName(player1, "Please write the first player's name below :");
+                    player2.Name = TypePlayerName(player2, "Please write the second player's name below :");
                     break;
                case 1 : 
-                    Ranking ranking = new Ranking();
-                    int position1 = Methods.ScrollingMenu("Please choose the first player in the list below :", ranking.NotFinished.Select(p => p.Name).ToArray(), "Title.txt");
-                    if(position1==-1) return DefinePlayers(player1, player2);
-                    else player1 = new Player(ranking.NotFinished[position1]);
-                    int position2 = Methods.ScrollingMenu("Please choose the second player in the list below :", ranking.NotFinished.Select(p => p.Name).ToArray(), "Title.txt");
-                    if(position2==-1) return DefinePlayers(player1, player2);
-                    else player2 = new Player(ranking.NotFinished[position2]);
+                    int position1 = ScrollingMenu("Please choose the first player in the list below :", ranking.NotFinished.Select(p => p.Name).ToArray(), "Title.txt");
+                    if(position1==-1) return DefinePlayers(player1, player2, ranking);
+                    else 
+                    {
+                        player1.Name = ranking.NotFinished[position1].Name;
+                        player1.InGame = false;
+                        player1.Score = ranking.NotFinished[position1].Score;
+                        player1.MaxScore = ranking.NotFinished[position1].MaxScore;
+                        player1.Words = ranking.NotFinished[position1].Words;
+                    }
+
+                    int position2 = ScrollingMenu("Please choose the second player in the list below :", ranking.NotFinished.Select(p => p.Name).ToArray(), "Title.txt");
+                    if(position2==-1) return DefinePlayers(player1, player2, ranking);
+                    else
+                    {
+                        player2.Name = ranking.NotFinished[position2].Name;
+                        player2.InGame = false;
+                        player2.Score = ranking.NotFinished[position2].Score;
+                        player2.MaxScore = ranking.NotFinished[position2].MaxScore;
+                        player2.Words = ranking.NotFinished[position2].Words;
+                    }
                     break;
                case 2 : case -1 : return false;
            }return true;
         }
-        /// <summary>This method is used to select multiple characters.</summary>
+        /// <summary>This method is used to select words and check if they are in the list.</summary>
         /// <param name="matrix">The grill from wich the user chooses the characters.</param>
         /// <returns>A string as the sum of the characters.</returns>
-        public static void SelectWords(char[,] matrix, List<string> wordsToFind)
+        public static void SelectWords(char[,] matrix, List<string> wordsToFind, Player player)
         {
             
             List<string> wordsLeft = wordsToFind;
@@ -64,31 +81,31 @@ namespace Word_Scramble
                 while(anchor2.X == -1&&wordsLeft.Count != 0)
                 {
                     Clear();
-                    Methods.PrintMatrix(matrix, selectedPositions,correctPositions, currentPosition);
+                    PrintMatrix(matrix, selectedPositions,correctPositions, currentPosition);
                     switch(ReadKey(true).Key)
                     {
-                        case ConsoleKey.UpArrow : case ConsoleKey.Z :
+                        case UpArrow : case Z :
                             if(possiblePositions.Contains(new Position(currentPosition.X - 1, currentPosition.Y)))currentPosition.X--;
-                            else currentPosition = new Position(Methods.NearestPosition(matrix, currentPosition, possiblePositions,"up"));
+                            else currentPosition = new Position(NearestPosition(matrix, currentPosition, possiblePositions,"up"));
                             break;
-                        case ConsoleKey.DownArrow : case ConsoleKey.S :
+                        case DownArrow : case S :
                             if(possiblePositions.Contains(new Position(currentPosition.X + 1, currentPosition.Y)))currentPosition.X++;
-                            else currentPosition = new Position(Methods.NearestPosition(matrix, currentPosition, possiblePositions,"down"));
+                            else currentPosition = new Position(NearestPosition(matrix, currentPosition, possiblePositions,"down"));
                             break;
-                        case ConsoleKey.LeftArrow :case ConsoleKey.Q :
+                        case LeftArrow :case Q :
                             if(possiblePositions.Contains(new Position(currentPosition.X, currentPosition.Y - 1)))currentPosition.Y--;
-                            else currentPosition = new Position(Methods.NearestPosition(matrix, currentPosition, possiblePositions,"left"));
+                            else currentPosition = new Position(NearestPosition(matrix, currentPosition, possiblePositions,"left"));
                             break;
-                        case ConsoleKey.RightArrow : case ConsoleKey.D :
+                        case RightArrow : case D :
                             if(possiblePositions.Contains(new Position(currentPosition.X, currentPosition.Y + 1)))currentPosition.Y++;
-                            else currentPosition = new Position(Methods.NearestPosition(matrix, currentPosition, possiblePositions,"right"));
+                            else currentPosition = new Position(NearestPosition(matrix, currentPosition, possiblePositions,"right"));
                             break;
-                        case ConsoleKey.Enter : 
+                        case Enter : 
                             if(anchor1.X == -1)
                             {
                                 anchor1 = new Position(currentPosition.X, currentPosition.Y);
                                 selectedPositions.Add(new Position(currentPosition.X, currentPosition.Y));
-                                possiblePositions = Methods.ValidPositions(matrix, anchor1, possiblePositions);
+                                possiblePositions = ValidPositions(matrix, anchor1, possiblePositions);
                             }
                             else if (!anchor1.Equals(currentPosition))
                             {
@@ -103,14 +120,23 @@ namespace Word_Scramble
                                 if(wordsLeft.Contains(word))
                                 {
                                     correctPositions.AddRange(selectedPositions);
+                                    player.AddWord(word);
                                     wordsLeft.Remove(word);
+                                    Clear();
+                                    CenteredWL($"Well played ! {word} is in the list of words to find.", Black, Green);
+                                    WriteLine();
+                                    PrintMatrix(matrix, selectedPositions, correctPositions, currentPosition, false);
+                                }else{
+                                    Clear();
+                                    CenteredWL($"Try again. {word} is not in the list of words to find.", Black, Red);
+                                    WriteLine();
+                                    PrintMatrix(matrix, selectedPositions, correctPositions, currentPosition, false);
                                 }
-                                Clear();
-                                Methods.PrintMatrix(matrix, selectedPositions, correctPositions, currentPosition, false);
-                                Methods.Pause();
+                                WriteLine();
+                                Pause();
                             }
                             break;
-                        case ConsoleKey.Escape :
+                        case Escape :
                             wordsLeft.Clear();
                             break;
                     }
