@@ -220,6 +220,7 @@ namespace Word_Scramble
         {
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
+                Write("{0,"+((WindowWidth / 2) - (matrix.GetLength(1))) + "}","");
                 for (int j = 0; j < matrix.GetLength(1); j++)
                 {
                     if (currentPosition.Equals(new Position(i, j)) && displayCursor)
@@ -276,14 +277,11 @@ namespace Word_Scramble
                     if (i == position)
                     {
                         currentChoice[i] = $" > {choices[i]}";
-                        BackgroundColor = ConsoleColor.Green;
-                        ForegroundColor = ConsoleColor.Black;
                         CenteredWL(currentChoice[i], Black, Green);
                         ConsoleConfig();
                     }
                     else 
                     {
-                        
                         currentChoice [i]= $"   {choices[i]}";
                         CenteredWL(currentChoice[i]);
                     }
@@ -320,7 +318,7 @@ namespace Word_Scramble
         /// <summary>This method is used to pause the program.</summary>
         public static void Pause()
         {
-            WriteLine("\nPress [ENTER] to continue...");
+            CenteredWL("Press [ENTER] to continue...");
             while(ReadKey(true).Key!=ConsoleKey.Enter)Sleep(5);
         }
         
@@ -368,7 +366,7 @@ namespace Word_Scramble
             if (pathSpecialText != "")PrintSpecialText(pathSpecialText);
             if(text != "")
             {
-                if (recurrence != 0)CenteredWL(text+"\n");
+                if (recurrence != 0)CenteredWL(text);
                 else
                 {
                     Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
@@ -386,8 +384,9 @@ namespace Word_Scramble
                             }
                         }
                     }
-                    WriteLine("\n");
+                    Write("\n");
                 }
+                Write("\n");
                 
             }
             
