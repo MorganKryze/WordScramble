@@ -15,7 +15,7 @@ namespace Word_Scramble
             Main_Menu :
 
             #region Lobby
-            Methods.MainMenu();
+            Game.MainMenu();
             #endregion
             
             //Players_Creation :
@@ -23,11 +23,11 @@ namespace Word_Scramble
             #region Setting up the players
             Player player1 = new Player();
             Player player2 = new Player();
-            if(!Methods.DefinePlayers(player1, player2))goto Main_Menu;
+            if(!Game.DefinePlayers(player1, player2))goto Main_Menu;
             #endregion
 
             #region Game loop
-            Methods.SelectWords(Methods.CsvToMatrix("dataGrills/ComplexGrill.csv"), new List<string>{"TERRE","FERME","ROCHE","ECHEC"});
+            Game.SelectWords(Methods.CsvToMatrix("dataGrills/ComplexGrill.csv"), new List<string>{"TERRE","FERME","ROCHE","ECHEC"});
             #endregion
 
             goto Main_Menu;

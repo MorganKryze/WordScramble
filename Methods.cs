@@ -14,44 +14,6 @@ namespace Word_Scramble
     {
 
         #region Core Methods
-        /// <summary>This method is used to display the main menu.</summary>
-        public static void MainMenu()
-        {
-            switch(ScrollingMenu("Welcome Adventurer! Use the arrow keys to move and press [ENTER] to confirm.", new string[]{"Play    ","Options ","Exit    "}, "Title.txt"))
-            {
-                case 0 : break;  
-                case 1 : MainMenu(); break;
-                case 2 : case -1: FinalExit();break;
-            }
-        }
-
-        /// <summary>This method is used to define the current session.</summary>
-        /// <param name="player1">The first player.</param>
-        /// <param name="player2">The second player.</param>
-        /// <returns>A boolean to know whether the user wants to go back or not.</returns>
-        public static bool DefinePlayers(Player player1, Player player2)
-        {
-           switch(ScrollingMenu("Would you like to play a new game or load a previous one?", new string[]{"New Game  ","Load Game ","Back      "}, "Title.txt"))
-           {
-               case 0 :
-                    player1.Name = TypePlayerName(player1, "Please write the first player's name below :");
-                    player2.Name = TypePlayerName(player2, "Please write the second player's name below :");
-                    break;
-               case 1 : 
-                    Ranking ranking = new Ranking();
-                    int position1 = ScrollingMenu("Please choose the first player in the list below :", ranking.NotFinished.Select(p => p.Name).ToArray(), "Title.txt");
-                    if(position1==-1) return DefinePlayers(player1, player2);
-                    else player1 = new Player(ranking.NotFinished[position1]);
-                    int position2 = ScrollingMenu("Please choose the second player in the list below :", ranking.NotFinished.Select(p => p.Name).ToArray(), "Title.txt");
-                    if(position2==-1) return DefinePlayers(player1, player2);
-                    else player2 = new Player(ranking.NotFinished[position2]);
-                    break;
-               case 2 : case -1 : return false;
-           }return true;
-        }
-        #endregion
-
-        #region Utility Methods
         /// <summary>This method is used to define the name of a player.</summary>
         /// <param name="player">The player.</param>
         /// <param name="message">The message to display.</param>
@@ -69,81 +31,6 @@ namespace Word_Scramble
             }while(player.Name == "");
             return player.Name;
         }
-        /// <summary>This method is used to select multiple characters.</summary>
-        /// <param name="matrix">The grill from wich the user chooses the characters.</param>
-        /// <returns>A string as the sum of the characters.</returns>
-        public static void SelectWords(char[,] matrix, List<string> wordsToFind)
-        {
-            
-            List<string> wordsLeft = wordsToFind;
-            List<Position> correctPositions = new List<Position>();
-            while(wordsLeft.Count != 0)
-            {
-                Position currentPosition = new Position(matrix.GetLength(0)/2,matrix.GetLength(1)/2);
-                Position anchor1 = new Position(-1, -1);
-                Position anchor2 = new Position(-1, -1);
-                List<Position> selectedPositions = new List<Position>();
-
-                List<Position> possiblePositions = new List<Position>();
-                for(int i = 0; i< matrix.GetLength(0); i++)for(int j = 0; j < matrix.GetLength(1); j++)possiblePositions.Add(new Position(i, j));
-
-                while(anchor2.X == -1&&wordsLeft.Count != 0)
-                {
-                    Clear();
-                    PrintMatrix(matrix, selectedPositions,correctPositions, currentPosition);
-                    switch(ReadKey(true).Key)
-                    {
-                        case ConsoleKey.UpArrow : case ConsoleKey.Z :
-                            if(possiblePositions.Contains(new Position(currentPosition.X - 1, currentPosition.Y)))currentPosition.X--;
-                            else currentPosition = new Position(NearestPosition(matrix, currentPosition, possiblePositions,"up"));
-                            break;
-                        case ConsoleKey.DownArrow : case ConsoleKey.S :
-                            if(possiblePositions.Contains(new Position(currentPosition.X + 1, currentPosition.Y)))currentPosition.X++;
-                            else currentPosition = new Position(NearestPosition(matrix, currentPosition, possiblePositions,"down"));
-                            break;
-                        case ConsoleKey.LeftArrow :case ConsoleKey.Q :
-                            if(possiblePositions.Contains(new Position(currentPosition.X, currentPosition.Y - 1)))currentPosition.Y--;
-                            else currentPosition = new Position(NearestPosition(matrix, currentPosition, possiblePositions,"left"));
-                            break;
-                        case ConsoleKey.RightArrow : case ConsoleKey.D :
-                            if(possiblePositions.Contains(new Position(currentPosition.X, currentPosition.Y + 1)))currentPosition.Y++;
-                            else currentPosition = new Position(NearestPosition(matrix, currentPosition, possiblePositions,"right"));
-                            break;
-                        case ConsoleKey.Enter : 
-                            if(anchor1.X == -1)
-                            {
-                                anchor1 = new Position(currentPosition.X, currentPosition.Y);
-                                selectedPositions.Add(new Position(currentPosition.X, currentPosition.Y));
-                                possiblePositions = ValidPositions(matrix, anchor1, possiblePositions);
-                            }
-                            else if (!anchor1.Equals(currentPosition))
-                            {
-                                anchor2 = new Position(currentPosition.X, currentPosition.Y);
-                                selectedPositions.Clear();
-                                selectedPositions = Board.GetPositionsBetween(anchor1, anchor2);
-                                string word = "";
-                                for(int i = 0; i < selectedPositions.Count; i++)
-                                {
-                                    word += matrix[selectedPositions[i].X, selectedPositions[i].Y];
-                                }
-                                if(wordsLeft.Contains(word))
-                                {
-                                    correctPositions.AddRange(selectedPositions);
-                                    wordsLeft.Remove(word);
-                                }
-                                Clear();
-                                PrintMatrix(matrix, selectedPositions, correctPositions, currentPosition, false);
-                                Pause();
-                            }
-                            break;
-                        case ConsoleKey.Escape :
-                            wordsLeft.Clear();
-                            break;
-                    }
-                }
-            }
-        }
-
         /// <summary>This method is used to find the nearest position in a direction.</summary>
         /// <param name="matrix">The grill from wich the user chooses the characters.</param>
         /// <param name="currentPosition">The current position of the cursor.</param>
@@ -181,7 +68,6 @@ namespace Word_Scramble
             }
             return currentPosition;
         }
-
         /// <summary>This method is used to find the valid positions.</summary>
         /// <param name="matrix">The grill from wich the user chooses the characters.</param>
         /// <param name="anchor1">The first anchor.</param>
@@ -209,7 +95,6 @@ namespace Word_Scramble
             }
             return validPositions;
         }
-        
         /// <summary>This method is used to print the matrix.</summary>
         /// <param name="matrix">The grill from wich the user chooses the characters.</param>
         /// <param name="selectedPositions">The list of selected positions.</param>
@@ -255,7 +140,72 @@ namespace Word_Scramble
                 WriteLine();
             }
         }
+        /// <summary>This method is used to convert a CSV file into a char matrix.</summary>
+        /// <param name="path">The path of the CSV file.</param>
+        /// <returns>The generated matrix.</returns>
+        public static char[,] CsvToMatrix(string path)
+        {
+            string[] lines = File.ReadAllLines(path);
+            char[,] matrix = new char[lines.Length,(lines[0].Length/2)+1];
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string[] s = lines[i].Split(';'); 
+                char[] c = new char[s.Length];
+                for (int j = 0; j < s.Length; j++)c[j] = s[j][0];
+                for (int j = 0; j < matrix.GetLength(1); j++)matrix[i,j] = c[j];
+            }
+            return matrix;
+        }
+        #endregion
 
+        #region Utility Methods
+        /// <summary> This method is used to set the console configuration. </summary>
+        /// <param name="state"> Wether the config is used as the default config (true) or for the end of the program (false). </param>
+        public static void ConsoleConfig(bool state = true)
+        {
+            if (state)
+            {
+                CursorVisible = false;
+                BackgroundColor = ConsoleColor.Black;
+                ForegroundColor = ConsoleColor.White;
+            }
+            else CursorVisible = true;
+        }
+        /// <summary>This method is used to display a title.</summary>
+        /// <param name= "text"> The content of the title.</param>
+        /// <param name= "pathSpecialText"> A special text stored in a file.</param>
+        /// <param name= "recurrence"> Whether the title has been displayed yet or not.</param>
+        public static void Title (string text = "",string pathSpecialText = "", int recurrence = 0)
+        {
+            Clear();
+            if (pathSpecialText != "")PrintSpecialText(pathSpecialText);
+            if(text != "")
+            {
+                if (recurrence != 0)CenteredWL(text);
+                else
+                {
+                    Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
+                    for(int i = 0; i < text.Length; i++)
+                    {
+                        Write(text[i]);
+                        Sleep(50);
+                        if(KeyAvailable)
+                        {
+                            ConsoleKeyInfo keyPressed = ReadKey(true);
+                            if(keyPressed.Key == ConsoleKey.Enter||keyPressed.Key == ConsoleKey.Escape)
+                            {
+                                Write(text.Substring(i+1));
+                                break;
+                            }
+                        }
+                    }
+                    Write("\n");
+                }
+                Write("\n");
+                
+            }
+            
+        }
         /// <summary>This method is used to display a scrolling menu.</summary>
         /// <param name= "choices"> The choices of the menu.</param>
         /// <param name= "text"> The content of the title.</param>
@@ -297,31 +247,40 @@ namespace Word_Scramble
             }
             return position;
         }
-        
-        /// <summary>This method is used to convert a CSV file into a char matrix.</summary>
-        /// <param name="path">The path of the CSV file.</param>
-        /// <returns>The generated matrix.</returns>
-        public static char[,] CsvToMatrix(string path)
+        /// <summary>This method is used to display a special text, stored in a txt file. </summary>
+        /// <param name="path">the relative path of the file.</param>
+        public static void PrintSpecialText(string path)
         {
-            string[] lines = File.ReadAllLines(path);
-            char[,] matrix = new char[lines.Length,(lines[0].Length/2)+1];
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string[] s = lines[i].Split(';'); 
-                char[] c = new char[s.Length];
-                for (int j = 0; j < s.Length; j++)c[j] = s[j][0];
-                for (int j = 0; j < matrix.GetLength(1); j++)matrix[i,j] = c[j];
-            }
-            return matrix;
+            string[] specialText = File.ReadAllLines(path);
+            foreach(string line in specialText)WriteLine("{0," + ((WindowWidth / 2) + (line.Length / 2)) + "}", line);
+            WriteLine("\n");
         }
-
-        /// <summary>This method is used to pause the program.</summary>
-        public static void Pause()
+        /// <summary>This method is used to display a centered text and come back to line.</summary>
+        /// <param name="text"> The text to display. </param>
+        /// <param name="fore"> The foreground color of the text. </param>
+        /// <param name="back"> The background color of the text. </param>
+        public static void CenteredWL(string text, ConsoleColor fore = White, ConsoleColor back = Black)
         {
-            CenteredWL("Press [ENTER] to continue...");
-            while(ReadKey(true).Key!=ConsoleKey.Enter)Sleep(5);
+            ConsoleConfig();
+            Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
+            ForegroundColor = fore;
+            BackgroundColor = back;
+            WriteLine(text);
+            ConsoleConfig();
         }
-        
+        /// <summary>This method is used to display a centered text.</summary>
+        /// <param name="text"> The text to display. </param>
+        /// <param name="fore"> The foreground color of the text. </param>
+        /// <param name="back"> The background color of the text. </param>
+        public static void CenteredW(string text, ConsoleColor fore = White, ConsoleColor back = Black)
+        {
+            ConsoleConfig();
+            Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
+            ForegroundColor = fore;
+            BackgroundColor = back;
+            Write(text);
+            ConsoleConfig();
+        }   
         /// <summary>This method is used to display a loading screen.</summary>
         /// <param name="text"> The text to display. </param>
         /// <param name="clear"> A boolean that indicates if the screen should be cleared. </param>
@@ -355,101 +314,19 @@ namespace Word_Scramble
                 Clear();
             }
         }
-        
-        /// <summary>This method is used to display a title.</summary>
-        /// <param name= "text"> The content of the title.</param>
-        /// <param name= "pathSpecialText"> A special text stored in a file.</param>
-        /// <param name= "recurrence"> Whether the title has been displayed yet or not.</param>
-        public static void Title (string text = "",string pathSpecialText = "", int recurrence = 0)
+        /// <summary>This method is used to pause the program.</summary>
+        public static void Pause()
         {
-            Clear();
-            if (pathSpecialText != "")PrintSpecialText(pathSpecialText);
-            if(text != "")
-            {
-                if (recurrence != 0)CenteredWL(text);
-                else
-                {
-                    Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
-                    for(int i = 0; i < text.Length; i++)
-                    {
-                        Write(text[i]);
-                        Sleep(50);
-                        if(KeyAvailable)
-                        {
-                            ConsoleKeyInfo keyPressed = ReadKey(true);
-                            if(keyPressed.Key == ConsoleKey.Enter||keyPressed.Key == ConsoleKey.Escape)
-                            {
-                                Write(text.Substring(i+1));
-                                break;
-                            }
-                        }
-                    }
-                    Write("\n");
-                }
-                Write("\n");
-                
-            }
-            
+            CenteredWL("Press [ENTER] to continue...");
+            while(ReadKey(true).Key!=ConsoleKey.Enter)Sleep(5);
         }
-
-        /// <summary>This method is used to display a special text, stored in a txt file. </summary>
-        /// <param name="path">the relative path of the file.</param>
-        public static void PrintSpecialText(string path)
-        {
-            string[] specialText = File.ReadAllLines(path);
-            foreach(string line in specialText)WriteLine("{0," + ((WindowWidth / 2) + (line.Length / 2)) + "}", line);
-            WriteLine("\n");
-        }
-        
-        /// <summary>This method is used to display a centered text and come back to line.</summary>
-        /// <param name="text"> The text to display. </param>
-        /// <param name="fore"> The foreground color of the text. </param>
-        /// <param name="back"> The background color of the text. </param>
-        public static void CenteredWL(string text, ConsoleColor fore = White, ConsoleColor back = Black)
-        {
-            ConsoleConfig();
-            Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
-            ForegroundColor = fore;
-            BackgroundColor = back;
-            WriteLine(text);
-            ConsoleConfig();
-        }
-
-        /// <summary>This method is used to display a centered text.</summary>
-        /// <param name="text"> The text to display. </param>
-        /// <param name="fore"> The foreground color of the text. </param>
-        /// <param name="back"> The background color of the text. </param>
-        public static void CenteredW(string text, ConsoleColor fore = White, ConsoleColor back = Black)
-        {
-            ConsoleConfig();
-            Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
-            ForegroundColor = fore;
-            BackgroundColor = back;
-            Write(text);
-            ConsoleConfig();
-        }   
-
-        /// <summary> This method is used to set the console configuration. </summary>
-        /// <param name="state"> Wether the config is used as the default config (true) or for the end of the program (false). </param>
-        public static void ConsoleConfig(bool state = true)
-        {
-            if (state)
-            {
-                CursorVisible = false;
-                BackgroundColor = ConsoleColor.Black;
-                ForegroundColor = ConsoleColor.White;
-            }
-            else CursorVisible = true;
-        }
-
         /// <summary>This method is used to exit the game.</summary>
         public static void FinalExit()
         {
             LoadingScreen("[ Shutting down ]");
             ConsoleConfig(false);
             Exit(0);
-        }
-        
+        } 
         #endregion
     }
 }
