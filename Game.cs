@@ -63,7 +63,7 @@ namespace Word_Scramble
         /// <summary>This method is used to select words and check if they are in the list.</summary>
         /// <param name="matrix">The grill from wich the user chooses the characters.</param>
         /// <returns>A string as the sum of the characters.</returns>
-        public static void SelectWords(char[,] matrix, List<string> wordsToFind, Player player)
+        public static bool SelectWords(char[,] matrix, List<string> wordsToFind, Player player)
         {
             
             List<string> wordsLeft = wordsToFind;
@@ -123,12 +123,14 @@ namespace Word_Scramble
                                     player.AddWord(word);
                                     wordsLeft.Remove(word);
                                     Clear();
-                                    CenteredWL($"Well played ! {word} is in the list of words to find.", Black, Green);
+                                    WriteLine();
+                                    CenteredWL($" Well played ! {word} is in the list of words to find. ", Black, Green);
                                     WriteLine();
                                     PrintMatrix(matrix, selectedPositions, correctPositions, currentPosition, false);
                                 }else{
                                     Clear();
-                                    CenteredWL($"Try again. {word} is not in the list of words to find.", Black, Red);
+                                    WriteLine();
+                                    CenteredWL($" Try again. {word} is not in the list of words to find. ", Black, Red);
                                     WriteLine();
                                     PrintMatrix(matrix, selectedPositions, correctPositions, currentPosition, false);
                                 }
@@ -137,11 +139,19 @@ namespace Word_Scramble
                             }
                             break;
                         case Escape :
-                            wordsLeft.Clear();
+                            switch(ScrollingMenu("Do you want to quit the game ?", new string[]{" Yes  ", " No  "}, "Title.txt"))
+                            {
+                                case 0 : case -1 : 
+                                    CompletedBoardMessage(player, new string[]{$" {player.Name}, you decided to quit the game. You cannot take back on this decision.",$"Your current score is {player.Score} points."}, Red);
+                                    return false;
+                                case 1 : break;
+                            }
                             break;
                     }
                 }
             }
+            CompletedBoardMessage(player,new string[]{$"Congratulations {player.Name} ! You found all the words !", $"Your current score is now : {player.Score} points !"});
+            return true;
         }
     }
 }

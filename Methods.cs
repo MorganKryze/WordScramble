@@ -156,6 +156,22 @@ namespace Word_Scramble
             }
             return matrix;
         }
+        public static void CompletedBoardMessage(Player player, string[] message, ConsoleColor Backcolor = Green)
+        {
+            Clear();
+            WriteLine();
+            for(int i = 0; message[0].Length - message[1].Length > 1; i++ )
+            {
+                if(i % 2 == 0)message[1] = " " + message[1];
+                else message[1] += " ";
+            }
+            CenteredWL(String.Format("{0,"+message[0].Length+"}", ""), Black, Backcolor);
+            CenteredWL(String.Format("{0,"+message[0].Length+"}", message[0]), Black, Backcolor);
+            CenteredWL(String.Format("{0,"+message[0].Length+"}", message[1]), Black, Backcolor);
+            CenteredWL(String.Format("{0,"+message[0].Length+"}", ""), Black, Backcolor);
+            WriteLine();
+            Pause();
+        }
         #endregion
 
         #region Utility Methods
