@@ -1,6 +1,9 @@
 using System.Diagnostics;
-using static System.Console;
 using Newtonsoft.Json;
+using static System.Console;
+using static Word_Scramble.Methods;
+using static Word_Scramble.Game;
+
 namespace Word_Scramble
 {
     class MainProgram
@@ -9,25 +12,27 @@ namespace Word_Scramble
         public static void Main(string[] args)
         {
             #region Config
-            Methods.ConsoleConfig();
+            ConsoleConfig();
             #endregion
 
             Main_Menu :
 
             #region Lobby
-            Game.MainMenu();
+            MainMenu();
             #endregion
-            
-            //Players_Creation :
 
             #region Setting up the players
+            Ranking ranking = new Ranking();
             Player player1 = new Player();
             Player player2 = new Player();
-            if(!Game.DefinePlayers(player1, player2))goto Main_Menu;
+            if(!DefinePlayers(player1, player2, ranking))goto Main_Menu;
             #endregion
 
             #region Game loop
-            Game.SelectWords(Methods.CsvToMatrix("dataGrills/ComplexGrill.csv"), new List<string>{"TERRE","FERME","ROCHE","ECHEC"});
+            LoadingScreen("[  Loading the game ...  ]");
+            if (!SelectWords(CsvToMatrix("dataGrills/ComplexGrill.csv"), new List<string>{"TERRE","FERME","ROCHE","ECHEC"}, player1)) goto Main_Menu;
+            if (!SelectWords(CsvToMatrix("dataGrills/ComplexGrill.csv"), new List<string>{"TERRE","ROUE","ROCHE","ECHEC"}, player2)) goto Main_Menu;
+            Pause();
             #endregion
 
             goto Main_Menu;
