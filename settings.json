@@ -6,9 +6,9 @@
         "placementsType":2, // 1, vertical horizontal , 2 tout
         "numberWords":15,
         "3-5":4,
-        "6-8":5,
-        "9-11":4,
-        "12-15":2
+        "6-8":4,
+        "9-11":3,
+        "12-15":1
     },
     "normal":
     {

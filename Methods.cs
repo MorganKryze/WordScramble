@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Newtonsoft.Json;
 using static System.Console;
 using static System.Environment;
 using static System.Threading.Thread;
@@ -13,6 +14,8 @@ namespace Word_Scramble
     /// <summary>The methods class where the core methods of the program are.</summary>
     public static class Methods
     {
+        /// <summary>The random variable, usable everywhere.</summary>
+        public static Random rnd = new Random();
 
         #region Core Methods
         /// <summary>This method is used to define the name of a player.</summary>
@@ -176,6 +179,17 @@ namespace Word_Scramble
             CenteredWL(String.Format("{0,"+message[0].Length+"}", ""), Black, Backcolor);
             WriteLine();
             Pause();
+        }
+        //create a function that take path in arg and retun a dictionnary of string that give a dictionnary of string to int
+        public static Dictionary<string, int> ConfigurationJson(string path,string difficulty)
+        {
+            string json = ReadAllText("settings.json");
+            if (json == "" || json == null) return new Dictionary<string, int>();
+            else 
+            {
+                Dictionary<string, Dictionary<string, int>> configuration = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, int>>>(json);
+                return (configuration[difficulty]);
+            }
         }
         #endregion
 

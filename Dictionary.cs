@@ -16,13 +16,14 @@ namespace Word_Scramble
         
         #region Constructor
         /// <summary>The constructor of the class.</summary>
-        public Dictionary(Dictionary<int, string[]> dictionary)
+        public Dictionary()
         {
-            DictList = dictionary.ToDictionary(x => x.Key, x => x.Value.ToList());
+            DictList = s_Dict.ToDictionary(x => x.Key, x => x.Value.ToList());
         }
         #endregion
 
         #region Methods
+        
         /// <summary>The constructor of the class.</summary>
         public static void CreateDictionary()
         {
