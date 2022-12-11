@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 namespace Word_Scramble
 {
     /// <summary>The player class.</summary>
-    public class Player
+    public class Player : IEquatable<Player>
     {
         #region Attributes 
         /// <summary>The name of the player.</summary>
         public string Name { get; set; }
         /// <summary>Wether the player has finished the game or not.</summary>
         public bool InGame { get; set; }
-
         /// <summary>The score of the player.</summary>
         public int Score { get; set; }
         /// <summary>The maximum number of words found by the player.</summary>
@@ -38,7 +37,6 @@ namespace Word_Scramble
             MaxScore = maxScore;
             Words = words;
         }
-        
         /// <summary>Initializes a new instance of the <see cref="Player"/> class.</summary>
         /// <param name="p">The player to copy.</param>
         /// <returns>A new player.</returns>
@@ -80,7 +78,6 @@ namespace Word_Scramble
             else s += " \"vide\"";
             return s;
         }
-
         #endregion
     }
 }

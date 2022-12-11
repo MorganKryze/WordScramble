@@ -38,7 +38,7 @@ namespace Word_Scramble
         {
             foreach (KeyValuePair<int, string[]> entry in s_Dict)
             {
-                Console.WriteLine("Key = {0}, Value = {1}", entry.Key, entry.Value.Length);
+                Console.WriteLine("Length = {0}, Words = {1}", entry.Key, entry.Value.Length);
             }
         }
         /// <summary> Function to redefine the dictionary to the size of the Dictionnary</summary>
