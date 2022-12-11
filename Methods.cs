@@ -177,6 +177,40 @@ namespace Word_Scramble
             WriteLine();
             Pause();
         }
+        public static List<string> PlaceWord(Board board,Dictionary dictionaryList,int difficulty, Random rdm,List<int> toPlace , List<string> placed=null)
+        {
+            if (placed == null)
+            {
+                placed = new List<string>();
+            }
+            //for i in toPlace length
+            for (int i=toPlace.Count-1;i>=0;i--)
+            {
+                WriteLine(i);
+                //get all element from dict with key i*3 to i*3+3
+                // List<List<string>> words = Dictionary.redefineDictionary(dictionaryList.DictList, (i+1) * 3, (i+1) * 3 + 2).SelectMany(x => x.Value).ToList();
+                WriteLine(i);
+                //for j in range of i
+                for (int j=0;j<toPlace[i];j++)
+                {
+                    Write(j);
+                    bool value =false;
+                    while(!value){
+                        Position position = board.RandomPosition(rdm);
+                        int n = rdm.Next((i+1) * 3, (i+1) * 3 + 3);
+                        string word=dictionaryList.DictList[n][rdm.Next(0,dictionaryList.DictList[n].Count)];
+                        WriteLine($"i:{i} j:{j}");
+                        value=board.NewWord(position,difficulty,rdm,word);
+                        if (value)
+                        {
+                            dictionaryList.DictList[n].Remove(word);
+                            placed.Add(word);
+                        }
+                    } 
+                }
+            }
+            return placed;
+        }
         #endregion
 
         #region Utility Methods

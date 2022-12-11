@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace Word_Scramble
 {
     /// <summary>The dictionnary creation class.</summary>
-    class Dictionary
+    public class Dictionary
     {
         #region Attributes
         /// <summary>The language of the dictionnary.</summary>
@@ -45,9 +45,9 @@ namespace Word_Scramble
         /// <param name="data">Dictionary to redefine</param name>
         /// <param name="size">Size of the new dictionary</param name>
         /// <returns>Dictionary with the new size</returns>
-        public static Dictionary<int, string[]> ResizeDictionary(Dictionary<int,string[]> data,int size)
+        public static Dictionary<int, string[]> ResizeDictionary(Dictionary<int,string[]> data,int sizeMin, int sizeMax)
         {
-            return data.Where(x => (x.Key<= size)).ToDictionary(x => x.Key, x => x.Value);
+            return data.Where(x => (x.Key<= sizeMax && x.Key >=sizeMin)).ToDictionary(x => x.Key, x => x.Value);
         }
         /// <summary>This method is used to check whether a word is in the dictionary or not.</summary>
         /// <param name="mot">The word to search.</param>

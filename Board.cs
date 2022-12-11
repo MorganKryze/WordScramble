@@ -32,27 +32,88 @@ namespace Word_Scramble
         {
             return( Enumerable.Range(0, this.board.GetLength(0)-1).Select(y => this.board[column, y]).ToArray());
         }
-
-
-        /// <summary> Function that return a Diagonal</summary>
-        public char[] getDiagonal1(int x,int y) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
+        public char[] getDiagonal11(int x1,int y1, List<char> dia1=null) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
         {
-            return(x+y+1<=Math.Min(board.GetLength(0),board.GetLength(1))?
-            Enumerable.Range(0, x+y+1).Select(i => this.board[x+y-i,i]).ToArray():
-            Enumerable.Range(0, board.GetLength(0)+board.GetLength(1)-x-y-1).Select(i => this.board[Math.Min(x+y, this.board.GetLength(0)-1)-i,Math.Max(x+y+1 - this.board.GetLength(0), 0)+i]).ToArray());
+            if (dia1==null)
+            {    dia1=new List<char>();
+                dia1.Add(this.board[x1,y1]);
+            }
+            
+            if (x1!=0 && y1!=board.GetLength(1)-1)
+            {
+                x1--;
+                y1++;
+                dia1.Add(this.board[x1,y1]);
+                return(getDiagonal11(x1,y1,dia1));
+            }
+            else
+            {
+                return(dia1.ToArray());
+            }
         }
 
-
-
-
-        /// <summary> Function that return a Diagonal</summary>
-        public char[] getDiagonal2(int x,int y) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
+        public char[] getDiagonal12(int x1,int y1, List<char> dia1=null) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
         {
-            int abs=Math.Abs(x-y);
-            return(x>y?
-            Enumerable.Range(0, Math.Min(this.board.GetLength(0) - Math.Abs(x-y),this.board.GetLength(1))-1).Select(i => this.board[Math.Abs(x-y)+i,+i]).ToArray():
-            Enumerable.Range(0, Math.Min(this.board.GetLength(0),this.board.GetLength(1)- Math.Abs(x-y))).Select(i => this.board[i,Math.Abs(x-y)+i]).ToArray());
+            if (dia1==null)
+            {   
+                dia1=new List<char>();
+                dia1.Add(this.board[x1,y1]);
+            }
+            
+            if (x1!=board.GetLength(0)-1 && y1!=0)
+            {
+                x1++;
+                y1--;
+
+                return(getDiagonal12(x1,y1,dia1));
+            }
+            else
+            {
+                return(dia1.ToArray());
+            }
         }
+        public char[] getDiagonal21(int x1,int y1, List<char> dia2=null) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
+        {
+            if (dia2==null)
+            {
+                dia2=new List<char>();
+                dia2.Add(this.board[x1,y1]);
+            }
+            
+            if (x1!=board.GetLength(0)-1 && y1!=board.GetLength(1)-1)
+            {
+                x1++;
+                y1++;
+                dia2.Add(this.board[x1,y1]);
+                return(getDiagonal21(x1,y1,dia2));
+            }
+            else
+            {
+                return(dia2.ToArray());
+            }
+        }
+
+        public char[] getDiagonal22(int x1,int y1, List<char> dia2=null) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
+        {
+            if (dia2==null)
+            {
+                dia2=new List<char>();
+                dia2.Add(this.board[x1,y1]);
+            }
+            
+            if (x1!=0 && y1!=0)
+            {
+                x1--;
+                y1--;
+                dia2.Add(this.board[x1,y1]);
+                return(getDiagonal22(x1,y1,dia2));
+            }
+            else
+            {
+                return(dia2.ToArray());
+            }
+        }
+
         #endregion
 
 
@@ -212,11 +273,9 @@ namespace Word_Scramble
         public bool CheckDiagonal1(int x, int y, string word, Random rnd)
         {
             //get column at position y
-            char[] diagonal = getDiagonal1(x,y);
-            //get char column that start at position x
-            char[] diagonal2 = diagonal.Where((p, i) => i >= (x<y?x:x-Math.Abs(x-y))).ToArray();
+            char[] diagonal2 = getDiagonal11(x,y);
             //get char from positio x to start
-            char[] diagonal3 = diagonal.Where((p, i) => i <= (x<y?x:x-Math.Abs(x-y))).Reverse().ToArray();
+            char[] diagonal3 = getDiagonal12(x,y);
 
             //foreach element between 1 and 2 randomly choose number
             int[] choose = Enumerable.Range(1,2).OrderBy(x => rnd.Next()).Take(2).ToArray();
@@ -229,13 +288,21 @@ namespace Word_Scramble
                 {
                     case 1:
                         if (CompareArray(diagonal2,word2)) {
-                            PasteWord(word2,x,y,x+word.Length,y-word.Length);
+                            PasteWord(word2,x,y,x-word.Length,y+word.Length);
+                            return(true);
+                        }
+                        else if (CompareArray(diagonal2,word2.Reverse().ToArray())){
+                            PasteWord(word2.Reverse().ToArray(),x,y,x-word.Length,y+word.Length);
                             return(true);
                         }
                         break;
                     case 2: 
                         if (CompareArray(diagonal3,word2)) {
-                            PasteWord(word2,x,y,x-word.Length,y+word.Length);
+                            PasteWord(word2,x,y,x+word.Length,y-word.Length);
+                            return(true);
+                        }
+                        else if(CompareArray(diagonal3,word2.Reverse().ToArray())){
+                            PasteWord(word2.Reverse().ToArray(),x,y,x+word.Length,y-word.Length);
                             return(true);
                         }
                         break;
@@ -247,11 +314,9 @@ namespace Word_Scramble
         public bool CheckDiagonal2(int x,int y, string word, Random rnd)
         {
             //get column at position y
-            char[] diagonal = getDiagonal2(x,y);
-            //get char column that start at position x
-            char[] diagonal2 = diagonal.Where((p, i) => i >= (x<y?x:x-Math.Abs(x-y))).ToArray();
+            char[] diagonal2 = getDiagonal21(x,y);
             //get char from positio x to start
-            char[] diagonal3 = diagonal.Where((p, i) => i <= (x<y?x:x-Math.Abs(x-y))).Reverse().ToArray();
+            char[] diagonal3 = getDiagonal22(x,y);
 
             //foreach element between 1 and 2 randomly choose number
             int[] choose = Enumerable.Range(1,2).OrderBy(x => rnd.Next()).Take(2).ToArray();
@@ -266,10 +331,18 @@ namespace Word_Scramble
                         if (CompareArray(diagonal2,word2)){ 
                             PasteWord(word2,x,y,x+word.Length,y+word.Length);
                             return(true);}
+                        else if(CompareArray(diagonal2,word2.Reverse().ToArray())){
+                            PasteWord(word2.Reverse().ToArray(),x,y,x+word.Length,y+word.Length);
+                            return(true);
+                        }
                         break;
                     case 2: 
                         if (CompareArray(diagonal3,word2)) {
                             PasteWord(word2,x,y,x-word.Length,y-word.Length);
+                            return(true);
+                        }
+                        else if(CompareArray(diagonal3,word2.Reverse().ToArray())){
+                            PasteWord(word2.Reverse().ToArray(),x,y,x-word.Length,y-word.Length);
                             return(true);
                         }
                         break;
@@ -277,6 +350,13 @@ namespace Word_Scramble
             }
             return(false);
         }
+        public Position RandomPosition(Random rnd)
+        {
+            int x = rnd.Next(0, this.board.GetLength(0));
+            int y = rnd.Next(0, this.board.GetLength(1));
+            return(new Position(x,y));
+        }
+        
 
         #endregion
 

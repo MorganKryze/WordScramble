@@ -11,6 +11,7 @@ namespace Word_Scramble
 
         public static void Main(string[] args)
         {
+            /*
             #region Config
             ConsoleConfig();
             #endregion
@@ -35,7 +36,34 @@ namespace Word_Scramble
             Pause();
             #endregion
 
-            goto Main_Menu;
+            goto Main_Menu;*/
+
+            Dictionary.CreateDictionary();
+            Dictionary dictionaryList = new Dictionary(Dictionary.s_Dict);
+            Dictionary<string, int> settings =Settings.Load("Settings.json","easy");
+            Random rdm=new Random();
+            //Writeline all element from dict
+            foreach (KeyValuePair<string, int> kvp in settings)
+            {
+                WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+            }
+            Board board=new Board(settings["row"],settings["column"]);
+            List<int> toPlace=new List<int>();
+            toPlace.Add(settings["3-5"]);
+            toPlace.Add(settings["6-8"]);
+            toPlace.Add(settings["9-11"]);
+            toPlace.Add(settings["12-15"]);
+            //PlaceWord(board,dictionaryList, settings["placementsType"], rdm, toPlace);
+            board.draw();
+            
+            List<string> placed =PlaceWord(board,dictionaryList, settings["placementsType"], rdm, toPlace);
+            //draw list
+            foreach (string word in placed)
+            {
+                WriteLine(word);
+            }
+
+            board.draw();
         }
     }
 }
