@@ -6,6 +6,7 @@ using static System.Threading.Thread;
 using static System.Convert;
 using static System.IO.File;
 using static System.ConsoleColor;
+using static System.ConsoleKey;
 
 namespace Word_Scramble
 {
@@ -110,28 +111,28 @@ namespace Word_Scramble
                 {
                     if (currentPosition.Equals(new Position(i, j)) && displayCursor)
                     {
-                        BackgroundColor = ConsoleColor.Green;
-                        ForegroundColor = ConsoleColor.Black;
+                        BackgroundColor = Green;
+                        ForegroundColor = Black;
                         Write(matrix[i, j]);
                     }
                     else if (correctPositions.Contains(new Position(i, j)))
                     {
 
-                        BackgroundColor = ConsoleColor.Blue;
-                        ForegroundColor = ConsoleColor.Black;
+                        BackgroundColor = Blue;
+                        ForegroundColor = Black;
                         Write(matrix[i, j]);
                     }
                     else if (selectedPositions.Contains(new Position(i, j)))
                     {
 
-                        BackgroundColor = ConsoleColor.Yellow;
-                        ForegroundColor = ConsoleColor.Black;
+                        BackgroundColor = Yellow;
+                        ForegroundColor = Black;
                         Write(matrix[i, j]);
                     }
                     else
                     {
-                        BackgroundColor = ConsoleColor.Black;
-                        ForegroundColor = ConsoleColor.White;
+                        BackgroundColor = Black;
+                        ForegroundColor = White;
                         Write(matrix[i, j]);
                     }
                     ConsoleConfig();
@@ -145,7 +146,7 @@ namespace Word_Scramble
         /// <returns>The generated matrix.</returns>
         public static char[,] CsvToMatrix(string path)
         {
-            string[] lines = File.ReadAllLines(path);
+            string[] lines = ReadAllLines(path);
             char[,] matrix = new char[lines.Length,(lines[0].Length/2)+1];
             for (int i = 0; i < lines.Length; i++)
             {
@@ -156,6 +157,10 @@ namespace Word_Scramble
             }
             return matrix;
         }
+        /// <summary>This method is used to print a message telling whether the player has won or not.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="message">The message to be displayed.</param>
+        /// <param name="Backcolor">The background color of the message.</param>
         public static void CompletedBoardMessage(Player player, string[] message, ConsoleColor Backcolor = Green)
         {
             Clear();
@@ -182,8 +187,8 @@ namespace Word_Scramble
             if (state)
             {
                 CursorVisible = false;
-                BackgroundColor = ConsoleColor.Black;
-                ForegroundColor = ConsoleColor.White;
+                BackgroundColor = Black;
+                ForegroundColor = White;
             }
             else CursorVisible = true;
         }
@@ -208,7 +213,7 @@ namespace Word_Scramble
                         if(KeyAvailable)
                         {
                             ConsoleKeyInfo keyPressed = ReadKey(true);
-                            if(keyPressed.Key == ConsoleKey.Enter||keyPressed.Key == ConsoleKey.Escape)
+                            if(keyPressed.Key == Enter||keyPressed.Key == Escape)
                             {
                                 Write(text.Substring(i+1));
                                 break;
@@ -254,10 +259,10 @@ namespace Word_Scramble
                 }
                 switch(ReadKey().Key)
                 {
-                    case ConsoleKey.UpArrow : case ConsoleKey.Z : if(position == 0)position = choices.Length-1; else if(position > 0) position--;break;
-                    case ConsoleKey.DownArrow : case ConsoleKey.S : if(position == choices.Length-1)position = 0; else if(position < choices.Length-1)position++;break;
-                    case ConsoleKey.Enter : return position;
-                    case ConsoleKey.Escape : return -1;
+                    case UpArrow : case Z : if(position == 0)position = choices.Length-1; else if(position > 0) position--;break;
+                    case DownArrow : case S : if(position == choices.Length-1)position = 0; else if(position < choices.Length-1)position++;break;
+                    case Enter : return position;
+                    case Escape : return -1;
                 }
                 recurrence++;
             }
@@ -267,7 +272,7 @@ namespace Word_Scramble
         /// <param name="path">the relative path of the file.</param>
         public static void PrintSpecialText(string path)
         {
-            string[] specialText = File.ReadAllLines(path);
+            string[] specialText = ReadAllLines(path);
             foreach(string line in specialText)WriteLine("{0," + ((WindowWidth / 2) + (line.Length / 2)) + "}", line);
             WriteLine("\n");
         }
@@ -334,7 +339,7 @@ namespace Word_Scramble
         public static void Pause()
         {
             CenteredWL("Press [ENTER] to continue...");
-            while(ReadKey(true).Key!=ConsoleKey.Enter)Sleep(5);
+            while(ReadKey(true).Key != Enter) Sleep(5);
         }
         /// <summary>This method is used to exit the game.</summary>
         public static void FinalExit()
