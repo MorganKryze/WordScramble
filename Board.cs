@@ -92,11 +92,11 @@ namespace Word_Scramble
                     {
                         Position position = RandomPosition();
                         int n = rnd.Next((i+1) * 3, (i+1) * 3 + 3);
-                        string word = dictionary.DictList[n][rnd.Next(0, dictionary.DictList[n].Count)];
+                        string word = dictionary.ListDict[n][rnd.Next(0, dictionary.ListDict[n].Count)];
                         isPlaced = TryPlaceAWord(position, difficulty, word);
                         if (isPlaced)
                         {
-                            dictionary.DictList[n].Remove(word);
+                            dictionary.ListDict[n].Remove(word);
                             successfullyPlaced.Add(word);
                         }
                     } 

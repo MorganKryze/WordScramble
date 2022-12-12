@@ -12,18 +12,18 @@ namespace Word_Scramble
     {
         #region Attributes
         /// <summary>The language of the dictionnary.</summary>
-        public static string s_Language {  get ; set ; }
+        public static string s_Language { get ; set ;}
         /// <summary>The static dictionnary.</summary>
         public static Dictionary<int, string[]> s_Dict = new Dictionary<int, string[]>();
         /// <summary>The dynamic dictionary.</summary>
-        public Dictionary<int, List<string>> DictList = new Dictionary<int, List<string>>();
+        public Dictionary<int, List<string>> ListDict = new Dictionary<int, List<string>>();
         #endregion
         
         #region Constructor
         /// <summary>The constructor of the class.</summary>
         public Dictionary()
         {
-            DictList = s_Dict.ToDictionary(x => x.Key, x => x.Value.ToList());
+            ListDict = s_Dict.ToDictionary(x => x.Key, x => x.Value.ToList());
         }
         #endregion
 
@@ -58,7 +58,7 @@ namespace Word_Scramble
         /// <summary>This method is used to check whether a word is in the dictionary or not.</summary>
         /// <param name="mot">The word to search.</param>
         /// <returns>A boolean indicating if the word is in the dictionary.</returns>
-        public static bool SearchInDictionary(string mot)
+        public static bool Search(string mot)
         {
             int size = mot.Length;
             return IsInDictionary(mot, s_Dict[size], 0, s_Dict[size].Length - 1, (s_Dict[size].Length - 1) / 2);
