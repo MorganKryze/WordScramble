@@ -116,6 +116,63 @@ namespace Word_Scramble
                     break;
            }return new Game(true);
         }
+        /// <summary>This method is used to play the game.</summary>
+        /// <param name="session">The current session.</param>
+        /// <param name="difficulty">The current difficulty.</param>
+        /// <param name="level">The list of difficulties.</param>
+        public static void Gameloop(Game session, string difficulty, string[] level)
+        {
+            if(session.Player1.InGame)
+            {
+                LoadingScreen("[  Loading the game ...  ]");
+                session.SelectWords(session.Player1);
+                InGameSwitch(session, "player2");
+                session.CurrentBoard = new Board(difficulty);
+                session.GameToCSV($"dataGames/{session.Name}.csv");
+
+                Gameloop(session, difficulty, level);
+            }
+            else if (session.Player2.InGame)
+            {
+                LoadingScreen("[  Loading the game ...  ]");
+                session.SelectWords(session.Player2);
+                InGameSwitch(session, "player1");
+                session.CurrentBoard = new Board(level[Array.IndexOf(level, difficulty) + 1]);
+                session.GameToCSV($"dataGames/{session.Name}.csv");
+
+                if (difficulty != "fifth") Gameloop(session, level[Array.IndexOf(level, difficulty) + 1], level);
+            }
+            else
+            {
+                InGameSwitch(session, "first");
+                LoadingScreen("[  Loading the game ...  ]");
+                session.CurrentBoard = new Board("first");
+                InGameSwitch(session, "player1");
+                session.GameToCSV($"dataGames/{session.Name}.csv");
+                session.SelectWords(session.Player1);
+                InGameSwitch(session, "player2");
+                session.CurrentBoard = new Board("first");
+                session.GameToCSV($"dataGames/{session.Name}.csv");
+
+                Gameloop(session, "first", level);
+            }
+        }
+        /// <summary>This method is used to switch the players turn.</summary>
+        /// <param name="session">The current session.</param>
+        /// <param name="turn">The player who's turn it is.</param>
+        public static void InGameSwitch(Game session, string turn)
+        {
+            if (turn == "player1")
+            {
+                session.Player1.InGame = true;
+                session.Player2.InGame = false;
+            }
+            else if (turn == "player2")
+            {
+                session.Player1.InGame = false;
+                session.Player2.InGame = true;
+            }
+        }
         /// <summary>This method is used to select words and check if they are in the list.</summary>
         /// <param name="Currentboard.Matrix">The grill from wich the user chooses the characters.</param>
         /// <returns>A string as the sum of the characters.</returns>
@@ -123,8 +180,10 @@ namespace Word_Scramble
         {
             List<string> wordsLeft = this.CurrentBoard.WordsToFind;
             List<Position> correctPositions = new List<Position>();
-            while(wordsLeft.Count != 0)
+            // ! Ajouter page de démarrage et chrono
+            while(wordsLeft.Count != 0) // ! ajouter condition chrono
             {
+                // ! ajouter mots restants, toutes les infos en fait
                 Position currentPosition = new Position(CurrentBoard.Matrix.GetLength(0)/2,CurrentBoard.Matrix.GetLength(1)/2);
                 Position anchor1 = new Position(-1, -1);
                 Position anchor2 = new Position(-1, -1);
