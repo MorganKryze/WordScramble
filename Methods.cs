@@ -1,21 +1,22 @@
 using System;
-using System.Diagnostics;
 using Newtonsoft.Json;
+
 using static System.Console;
 using static System.Environment;
 using static System.Threading.Thread;
-using static System.Convert;
 using static System.IO.File;
 using static System.ConsoleColor;
 using static System.ConsoleKey;
 
 namespace Word_Scramble
 {
-    /// <summary>The methods class where the core methods of the program are.</summary>
+    /// <summary>The vocation of the Methods class is to be accessible from anywhere.It contains a random variable, utility and core methods.</summary>
     public static class Methods
     {
+        #region Random
         /// <summary>The random variable, usable everywhere.</summary>
         public static Random rnd = new Random();
+        #endregion
 
         #region Core Methods
         /// <summary>This method is used to define the name of a player.</summary>
@@ -180,7 +181,10 @@ namespace Word_Scramble
             WriteLine();
             Pause();
         }
-        //create a function that take path in arg and retun a dictionnary of string that give a dictionnary of string to int
+        /// <summary>This method is used to read a json configuration file to get the configurations attributes.</summary>
+        /// <param name="path">The path of the json file.</param>
+        /// <param name="difficulty">The difficulty of the game.</param>
+        /// <returns>The dictionary containing the configurations for the defined difficulty.</returns>
         public static Dictionary<string, int> ConfigurationJson(string path,string difficulty)
         {
             string json = ReadAllText("settings.json");

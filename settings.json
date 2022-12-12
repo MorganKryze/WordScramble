@@ -1,25 +1,57 @@
 {
-    "easy":
+    "first":
+    {
+        "column":20,
+        "row":20,
+        "placementsType":2, // 2, vertical horizontal , 4 tout
+        "numberWords":7,
+        "3-5":2,
+        "6-8":3,
+        "9-11":2,
+        "12-15":0
+    },
+    "second": // à définir à partir d'ici
     {
         "column":12,
         "row":13,
-        "placementsType":2, // 1, vertical horizontal , 2 tout
+        "placementsType":1, 
         "numberWords":15,
         "3-5":4,
         "6-8":4,
         "9-11":3,
         "12-15":1
     },
-    "normal":
+    "third":
     {
-        "column":13,
-        "row":12,
-        "numberWords":20
+        "column":12,
+        "row":13,
+        "placementsType":1, 
+        "numberWords":15,
+        "3-5":4,
+        "6-8":4,
+        "9-11":3,
+        "12-15":1
     },
-    "hard":
+    "fourth":
     {
-        "column":19,
-        "row":16,
-        "numberWords":25
+        "column":12,
+        "row":13,
+        "placementsType":1,
+        "numberWords":15,
+        "3-5":4,
+        "6-8":4,
+        "9-11":3,
+        "12-15":1
+    },
+    "fifth":
+    {
+        "column":12,
+        "row":13,
+        "placementsType":1, 
+        "numberWords":15,
+        "3-5":4,
+        "6-8":4,
+        "9-11":3,
+        "12-15":1
     }
 }

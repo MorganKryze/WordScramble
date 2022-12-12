@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+
 using static System.Console;
 using static Word_Scramble.Methods;
 
@@ -59,94 +60,67 @@ namespace Word_Scramble
         //! Temporaire
 
 
-        #region get rows,column,diagonals of the board
-        public char[] getRow(int row)
+        #region get rows,column,diagonals char arrays
+        /// <summary>This method is used to get every char on a row.</summary>
+        /// <param name="pos">The position to get the char array from.</param>
+        /// <returns>The array of char on the row.</returns>
+        public char[] GetCharOnRow(Position pos) => Enumerable.Range(0, Matrix.GetLength(1)-1).Select(x => Matrix[x, pos.Y]).ToArray();
+        /// <summary>This method is used to get every char on a column.</summary>
+        /// <param name="pos">The position to get the char array from.</param>
+        /// <returns>The array of char on the column.</returns>
+        public char[] GetCharOnColumn(Position pos) => Enumerable.Range(0, Matrix.GetLength(0)-1).Select(y => Matrix[pos.X, y]).ToArray();
+        /// <summary>This method is used to get every char on a diagonal from pos to North-East.</summary>
+        /// <param name="pos">The position to get the char array from.</param>
+        /// <returns>The array of char on the diagonal.</returns>
+        public char[] GetCharDiagNE(Position pos, List<char> diagNE = null)
         {
-            return Enumerable.Range(0, Matrix.GetLength(1)-1).Select(x => Matrix[x, row]).ToArray();
+            if (diagNE == null) diagNE = new List<char>(){Matrix[pos.X, pos.Y]};
+            if (pos.X != 0 && pos.Y != Matrix.GetLength(1)-1)
+            {
+                diagNE.Add(Matrix[pos.X-1, pos.Y+1]);
+                return GetCharDiagNE(new Position(pos.X-1, pos.Y+1),diagNE);
+            }
+            else return diagNE.ToArray();
         }
-        public char[] getColumn(int column)
+        /// <summary>This method is used to get every char on a diagonal from pos to South-West.</summary>
+        /// <param name="pos">The position to get the char array from.</param>
+        /// <returns>The array of char on the diagonal.</returns>
+        public char[] GetCharDiagSW(Position pos, List<char> diagSW=null)
         {
-            return( Enumerable.Range(0, this.Matrix.GetLength(0)-1).Select(y => this.Matrix[column, y]).ToArray());
+            if (diagSW == null) diagSW = new List<char>(){Matrix[pos.X,pos.Y]};
+            if (pos.X != Matrix.GetLength(0)-1 && pos.Y != 0)
+            {
+                diagSW.Add(this.Matrix[pos.X+1, pos.Y-1]);
+                return GetCharDiagSW(new Position(pos.X+1, pos.Y-1),diagSW);
+            }
+            else return diagSW.ToArray();
         }
-        public char[] getDiagonal11(int x1,int y1, List<char> dia1=null) //diagonal beetween 0 and Max(GetLength(0),GetLength(1))
+        /// <summary>This method is used to get every char on a diagonal from pos to South-East.</summary>
+        /// <param name="pos">The position to get the char array from.</param>
+        /// <returns>The array of char on the diagonal.</returns>
+        public char[] GetCharDiagSE(Position pos, List<char> diagSE = null) 
         {
-            if (dia1==null)
-            {    dia1=new List<char>();
-                dia1.Add(this.Matrix[x1,y1]);
-            }
-            
-            if (x1!=0 && y1!=Matrix.GetLength(1)-1)
+            if (diagSE == null) diagSE = new List<char>(){Matrix[pos.X,pos.Y]};
+            if (pos.X != Matrix.GetLength(0)-1 && pos.Y != Matrix.GetLength(1)-1)
             {
-                x1--;
-                y1++;
-                dia1.Add(this.Matrix[x1,y1]);
-                return(getDiagonal11(x1,y1,dia1));
+                diagSE.Add(this.Matrix[pos.X+1, pos.Y+1]);
+                return(GetCharDiagSE(new Position(pos.X+1, pos.Y+1), diagSE));
             }
-            else return(dia1.ToArray());
+            else return diagSE.ToArray();
         }
-
-        public char[] getDiagonal12(int x1,int y1, List<char> dia1=null) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
+        /// <summary>This method is used to get every char on a diagonal from pos to North-West.</summary>
+        /// <param name="pos">The position to get the char array from.</param>
+        /// <remarks>Not working</remarks>
+        public char[] GetCharDiagNW(Position pos, List<char> diagNW=null) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
         {
-            if (dia1==null)
-            {   
-                dia1=new List<char>();
-                dia1.Add(this.Matrix[x1,y1]);
-            }
-            
-            if (x1!=Matrix.GetLength(0)-1 && y1!=0)
+            if (diagNW == null) diagNW = new List<char>(){Matrix[pos.X,pos.Y]};
+            if (pos.X != 0 && pos.Y != 0)
             {
-                x1++;
-                y1--;
-
-                return(getDiagonal12(x1,y1,dia1));
+                diagNW.Add(this.Matrix[pos.X-1,pos.Y-1]);
+                return(GetCharDiagNW(new Position(pos.X-1,pos.Y-1),diagNW));
             }
-            else
-            {
-                return(dia1.ToArray());
-            }
+            else return diagNW.ToArray();
         }
-        public char[] getDiagonal21(int x1,int y1, List<char> dia2=null) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
-        {
-            if (dia2==null)
-            {
-                dia2=new List<char>();
-                dia2.Add(this.Matrix[x1,y1]);
-            }
-            
-            if (x1!=Matrix.GetLength(0)-1 && y1!=Matrix.GetLength(1)-1)
-            {
-                x1++;
-                y1++;
-                dia2.Add(this.Matrix[x1,y1]);
-                return(getDiagonal21(x1,y1,dia2));
-            }
-            else
-            {
-                return(dia2.ToArray());
-            }
-        }
-
-        public char[] getDiagonal22(int x1,int y1, List<char> dia2=null) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
-        {
-            if (dia2==null)
-            {
-                dia2=new List<char>();
-                dia2.Add(this.Matrix[x1,y1]);
-            }
-            
-            if (x1!=0 && y1!=0)
-            {
-                x1--;
-                y1--;
-                dia2.Add(this.Matrix[x1,y1]);
-                return(getDiagonal22(x1,y1,dia2));
-            }
-            else
-            {
-                return(dia2.ToArray());
-            }
-        }
-
         #endregion
 
         /// <summary> This method is used to check if a word can fit in a specified line.</summary>
@@ -160,40 +134,21 @@ namespace Word_Scramble
             return true;
         }
 
-
-        public bool NewWord(Position position, int difficulty, string word)
+        
+        public bool NewWord(Position position, int numberOfDirections, string word)
         {
-
-            int[] choose = Enumerable.Range(1,difficulty *2).OrderBy(x => rnd.Next()).Take(difficulty*2).ToArray();
-
-            foreach (int i in choose)
+            int[] type = Enumerable.Range(1,numberOfDirections*2).OrderBy(x => rnd.Next()).Take(numberOfDirections*2).ToArray();
+            foreach (int i in type)
             {
                 switch (i)
                 {
-                    case 1:
-                        if (CheckRow(position.X, position.Y, word, rnd)) {
-                            return(true);
-                        }
-                        break;
-                    case 2: 
-                        if (CheckColumn(position.X, position.Y, word, rnd)) {
-                            return(true);
-                        }                        
-                        break;
-                    case 3: 
-                        if (CheckDiagonal1(position.X, position.Y, word, rnd)) {
-                            return(true);
-                        }
-                        break;
-                    case 4: 
-                        if (CheckDiagonal2(position.X, position.Y, word, rnd)) {
-                            return(true);
-                        }                        
-                        break;
+                    case 1 : return CheckRow(position.X, position.Y, word, rnd);
+                    case 2 : return CheckColumn(position.X, position.Y, word, rnd);
+                    case 3 : return CheckDiagonal1(position.X, position.Y, word, rnd);
+                    case 4: return CheckDiagonal2(position.X, position.Y, word, rnd);
                 }
             }
-
-            return(false);
+            return false;
         }
 
 
@@ -201,7 +156,7 @@ namespace Word_Scramble
         public bool CheckRow(int x, int y, string word, Random rnd)
         {
             //get row at position y
-            char[] row = getRow(y);
+            char[] row = GetCharOnRow(new Position(x,y));
             //get char row that start at position x
             char[] row2 = row.Skip(x).ToArray();
             //get char from positio x to start
@@ -236,7 +191,7 @@ namespace Word_Scramble
         public bool CheckColumn(int x, int y, string word, Random rnd)
         {
             //get column at position y
-            char[] column = getColumn(x);
+            char[] column = GetCharOnColumn(new Position(x,y));
             //get char column that start at position x
             char[] column2 = column.Skip(y).ToArray();
             //get char from positio x to start
@@ -271,9 +226,9 @@ namespace Word_Scramble
         public bool CheckDiagonal1(int x, int y, string word, Random rnd)
         {
             //get column at position y
-            char[] diagonal2 = getDiagonal11(x,y);
+            char[] diagonal2 = GetCharDiagNE(new Position(x,y));
             //get char from positio x to start
-            char[] diagonal3 = getDiagonal12(x,y);
+            char[] diagonal3 = GetCharDiagSW(new Position(x,y));
 
             //foreach element between 1 and 2 randomly choose number
             int[] choose = Enumerable.Range(1,2).OrderBy(x => rnd.Next()).Take(2).ToArray();
@@ -312,9 +267,9 @@ namespace Word_Scramble
         public bool CheckDiagonal2(int x,int y, string word, Random rnd)
         {
             //get column at position y
-            char[] diagonal2 = getDiagonal21(x,y);
+            char[] diagonal2 = GetCharDiagSE(new Position(x,y));
             //get char from positio x to start
-            char[] diagonal3 = getDiagonal22(x,y);
+            char[] diagonal3 = GetCharDiagNW(new Position(x,y));
 
             //foreach element between 1 and 2 randomly choose number
             int[] choose = Enumerable.Range(1,2).OrderBy(x => rnd.Next()).Take(2).ToArray();

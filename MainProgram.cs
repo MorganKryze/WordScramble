@@ -1,5 +1,6 @@
+using System;
 using System.Diagnostics;
-using Newtonsoft.Json;
+
 using static System.Console;
 using static Word_Scramble.Methods;
 using static Word_Scramble.Game;
@@ -41,7 +42,9 @@ namespace Word_Scramble
 
             Dictionary.CreateDictionary();
             
-            Board board = new Board("easy");
+            Board board = new Board("first");
+
+            Board board2 = new Board("second");
         }
     }
 }

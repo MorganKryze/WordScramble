@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System;
 
 namespace Word_Scramble
 {
@@ -27,7 +27,7 @@ namespace Word_Scramble
         /// <summary>The constructor of the class.</summary>
         public static void CreateDictionary()
         {
-            string[] lines = File.ReadAllLines("dataDictionary/MotsPossiblesFR.txt");
+            string[] lines = s_Language == "FR" ? File.ReadAllLines("dataDictionary/MotsPossiblesFR.txt") : File.ReadAllLines("dataDictionary/MotsPossiblesEN.txt");
             int[] Key = lines.Where((x, i) => i % 2 == 0).Select(x => int.Parse(x)).ToArray();
             string[][] Value = lines.Where((x, i) => i % 2 != 0).Select(x => x.Split(' ')).ToArray();
 
