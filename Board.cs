@@ -110,7 +110,7 @@ namespace Word_Scramble
         }
         /// <summary>This method is used to get every char on a diagonal from pos to North-West.</summary>
         /// <param name="pos">The position to get the char array from.</param>
-        /// <remarks>Not working</remarks>
+        /// <returns>The array of char on the diagonal.</returns>
         public char[] GetCharDiagNW(Position pos, List<char> diagNW=null) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
         {
             if (diagNW == null) diagNW = new List<char>(){Matrix[pos.X,pos.Y]};
@@ -142,10 +142,10 @@ namespace Word_Scramble
             {
                 switch (i)
                 {
-                    case 1 : return CheckRow(position.X, position.Y, word, rnd);
-                    case 2 : return CheckColumn(position.X, position.Y, word, rnd);
-                    case 3 : return CheckDiagonal1(position.X, position.Y, word, rnd);
-                    case 4: return CheckDiagonal2(position.X, position.Y, word, rnd);
+                    case 1 : return CheckRow(position.X, position.Y, word);
+                    case 2 : return CheckColumn(position.X, position.Y, word);
+                    case 3 : return CheckDiagonal1(position.X, position.Y, word);
+                    case 4: return CheckDiagonal2(position.X, position.Y, word);
                 }
             }
             return false;
@@ -153,7 +153,7 @@ namespace Word_Scramble
 
 
         #region checkDirection
-        public bool CheckRow(int x, int y, string word, Random rnd)
+        public bool CheckRow(int x, int y, string word)
         {
             //get row at position y
             char[] row = GetCharOnRow(new Position(x,y));
@@ -188,7 +188,7 @@ namespace Word_Scramble
             return(false);
         }
 
-        public bool CheckColumn(int x, int y, string word, Random rnd)
+        public bool CheckColumn(int x, int y, string word)
         {
             //get column at position y
             char[] column = GetCharOnColumn(new Position(x,y));
@@ -198,24 +198,25 @@ namespace Word_Scramble
             char[] column3 = column.Where((p, i) => i <= y).Reverse().ToArray();
 
             //foreach element between 1 and 2 randomly choose number
-            int[] choose = Enumerable.Range(1,2).OrderBy(x => rnd.Next()).Take(2).ToArray();
             char[] word2 = word.Cast<char>().ToArray();
 
-            //create switch from 1 to 4
-            foreach (int i in choose)
+            int[] choices = Enumerable.Range(1,2).OrderBy(x => rnd.Next()).Take(2).ToArray();
+            foreach (int i in choices)
             {
                 switch (i)
                 {
                     case 1:
-                        if (IsFreeToFill(column2,word2)) {
+                        if (IsFreeToFill(column2,word2)) 
+                        {
                             PasteWord(word2,x,y,x,y+word.Length);
-                            return(true);
+                            return true;
                         };
                         break;
                     case 2: 
-                        if (IsFreeToFill(column3,word2)) {
+                        if (IsFreeToFill(column3,word2)) 
+                        {
                             PasteWord(word2,x,y,x,y-word.Length);
-                            return(false);
+                            return false ;
                         }
                         break;
                 }
@@ -223,7 +224,7 @@ namespace Word_Scramble
             return(false);
         }
 
-        public bool CheckDiagonal1(int x, int y, string word, Random rnd)
+        public bool CheckDiagonal1(int x, int y, string word)
         {
             //get column at position y
             char[] diagonal2 = GetCharDiagNE(new Position(x,y));
@@ -264,7 +265,7 @@ namespace Word_Scramble
             return(false);
         }
 
-        public bool CheckDiagonal2(int x,int y, string word, Random rnd)
+        public bool CheckDiagonal2(int x,int y, string word)
         {
             //get column at position y
             char[] diagonal2 = GetCharDiagSE(new Position(x,y));
