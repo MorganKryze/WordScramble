@@ -127,7 +127,7 @@ namespace Word_Scramble
         /// <param name="line">The line to check</param>
         /// <param name="word">The word to check</param>
         /// <returns>True if the word can fit in the line, false otherwise</returns>
-        public static bool IsFreeToFill(char[] line, char[] word)
+        public static bool IsFreeToFill(char[] line, string word)
         {
             if (word.Length > line.Length) return false;
             else for (int i = 0; i < word.Length; i++) if (line[i] != word[i] && line[i] != '_') return false;
@@ -142,10 +142,10 @@ namespace Word_Scramble
             {
                 switch (i)
                 {
-                    case 1 : return CheckRow(position.X, position.Y, word);
-                    case 2 : return CheckColumn(position.X, position.Y, word);
-                    case 3 : return CheckDiagonal1(position.X, position.Y, word);
-                    case 4: return CheckDiagonal2(position.X, position.Y, word);
+                    case 1 : return TryPlaceRow(position, word);
+                    case 2 : return TryPlaceColumn(position, word);
+                    case 3 : return TryPlaceDiagonal1(position, word);
+                    case 4: return TryPlaceDiagonal2(position, word);
                 }
             }
             return false;
@@ -153,167 +153,123 @@ namespace Word_Scramble
 
 
         #region checkDirection
-        public bool CheckRow(int x, int y, string word)
+        /// <summary>This method is used to try to place a word in a row from a position.</summary>
+        /// <param name="pos">The position to start the word from.</param>
+        /// <param name="word">The word to place.</param>
+        /// <returns>True if the word has been placed, false otherwise.</returns>
+        public bool TryPlaceRow(Position pos, string word)
         {
-            //get row at position y
-            char[] row = GetCharOnRow(new Position(x,y));
+            char[] row = GetCharOnRow(pos);
             //get char row that start at position x
-            char[] row2 = row.Skip(x).ToArray();
+            char[] row2 = row.Skip(pos.X).ToArray();
             //get char from positio x to start
-            char[] row3 = row.Where((p, i) => i <= x).Reverse().ToArray();
+            char[] row3 = row.Where((p, i) => i <= pos.X).Reverse().ToArray();
 
-            //foreach element between 1 and 2 randomly choose number
-            int[] choose = Enumerable.Range(1,2).OrderBy(x => rnd.Next()).Take(2).ToArray();
-            char[] word2 = word.Cast<char>().ToArray();
-
-            //create switch from 1 to 4
-            foreach (int i in choose)
+            foreach (int i in Enumerable.Range(1, 2).OrderBy(x => rnd.Next()))
             {
                 switch (i)
                 {
-                    case 1:
-                        if (IsFreeToFill(row2,word2)) {
-                            PasteWord(word2,x,y,x+word.Length,y);
-                            return(true);
-                        }
+                    case 1 : if (IsFreeToFill(row2, word)) return FillWord(word, pos, new Position(pos.X+word.Length, pos.Y));
                         break;
-                    case 2: 
-                    if (IsFreeToFill(row3,word2)) {
-                        PasteWord(word2,x,y,x-word.Length,y);
-                        return(true);
-                    }
-                    break;
+                    case 2 : if (IsFreeToFill(row3, word)) return FillWord(word, pos, new Position(pos.X-word.Length, pos.Y));
+                        break;
                 }
             }
-            return(false);
+            return false;
         }
-
-        public bool CheckColumn(int x, int y, string word)
+        /// <summary>This method is used to try to place a word in a column from a position.</summary>
+        /// <param name="pos">The position to start the word from.</param>
+        /// <param name="word">The word to place.</param>
+        /// <returns>True if the word has been placed, false otherwise.</returns>
+        public bool TryPlaceColumn(Position pos, string word)
         {
-            //get column at position y
-            char[] column = GetCharOnColumn(new Position(x,y));
+            char[] column = GetCharOnColumn(pos);
             //get char column that start at position x
-            char[] column2 = column.Skip(y).ToArray();
+            char[] column2 = column.Skip(pos.Y).ToArray();
             //get char from positio x to start
-            char[] column3 = column.Where((p, i) => i <= y).Reverse().ToArray();
+            char[] column3 = column.Where((p, i) => i <= pos.Y).Reverse().ToArray();
 
-            //foreach element between 1 and 2 randomly choose number
-            char[] word2 = word.Cast<char>().ToArray();
-
-            int[] choices = Enumerable.Range(1,2).OrderBy(x => rnd.Next()).Take(2).ToArray();
-            foreach (int i in choices)
+            foreach (int i in Enumerable.Range(1, 2).OrderBy(x => rnd.Next()))
             {
                 switch (i)
                 {
-                    case 1:
-                        if (IsFreeToFill(column2,word2)) 
-                        {
-                            PasteWord(word2,x,y,x,y+word.Length);
-                            return true;
-                        };
+                    case 1 : if (IsFreeToFill(column2, word)) return FillWord(word, pos, new Position(pos.X, pos.Y+word.Length));
                         break;
-                    case 2: 
-                        if (IsFreeToFill(column3,word2)) 
-                        {
-                            PasteWord(word2,x,y,x,y-word.Length);
-                            return false ;
-                        }
+                    case 2 : if (IsFreeToFill(column3, word)) return FillWord(word, pos, new Position(pos.X, pos.Y-word.Length));
                         break;
                 }
             }
-            return(false);
+            return false;
         }
-
-        public bool CheckDiagonal1(int x, int y, string word)
+        /// <summary>This method is used to try to place a word in a diagonal (SW to NE) from a position.</summary>
+        /// <param name="pos">The position to start the word from.</param>
+        /// <param name="word">The word to place.</param>
+        /// <returns>True if the word has been placed, false otherwise.</returns>
+        public bool TryPlaceDiagonal1(Position pos, string word)
         {
             //get column at position y
-            char[] diagonal2 = GetCharDiagNE(new Position(x,y));
+            char[] diagonal1 = GetCharDiagNE(pos);
             //get char from positio x to start
-            char[] diagonal3 = GetCharDiagSW(new Position(x,y));
-
-            //foreach element between 1 and 2 randomly choose number
-            int[] choose = Enumerable.Range(1,2).OrderBy(x => rnd.Next()).Take(2).ToArray();
-            char[] word2 = word.Cast<char>().ToArray();
-
-            //create switch from 1 to 4
-            foreach (int i in choose)
+            char[] diagonal2 = GetCharDiagSW(pos);
+            
+            foreach (int i in Enumerable.Range(1, 2).OrderBy(x => rnd.Next()))
             {
                 switch (i)
                 {
                     case 1:
-                        if (IsFreeToFill(diagonal2,word2)) {
-                            PasteWord(word2,x,y,x-word.Length,y+word.Length);
-                            return(true);
-                        }
-                        else if (IsFreeToFill(diagonal2,word2.Reverse().ToArray())){
-                            PasteWord(word2.Reverse().ToArray(),x,y,x-word.Length,y+word.Length);
-                            return(true);
-                        }
+                        if (IsFreeToFill(diagonal1, word)) return FillWord(word, pos, new Position(pos.X-word.Length, pos.Y+word.Length));
+                        else if (IsFreeToFill(diagonal1, word.Reverse().ToString())) return FillWord(word.Reverse().ToString(), pos, new Position(pos.X-word.Length, pos.Y+word.Length));
                         break;
                     case 2: 
-                        if (IsFreeToFill(diagonal3,word2)) {
-                            PasteWord(word2,x,y,x+word.Length,y-word.Length);
-                            return(true);
-                        }
-                        else if(IsFreeToFill(diagonal3,word2.Reverse().ToArray())){
-                            PasteWord(word2.Reverse().ToArray(),x,y,x+word.Length,y-word.Length);
-                            return(true);
-                        }
+                        if (IsFreeToFill(diagonal2, word)) return FillWord(word, pos, new Position(pos.X+word.Length, pos.Y-word.Length));
+                        else if(IsFreeToFill(diagonal2, word.Reverse().ToString())) return FillWord(word.Reverse().ToString(), pos, new Position(pos.X+word.Length, pos.Y-word.Length));
                         break;
                 }
             }
-            return(false);
+            return false;
         }
-
-        public bool CheckDiagonal2(int x,int y, string word)
+        /// <summary>This method is used to try to place a word in a diagonal (NW to SE) from a position.</summary>
+        /// <param name="pos">The position to start the word from.</param>
+        /// <param name="word">The word to place.</param>
+        /// <returns>True if the word has been placed, false otherwise.</returns>
+        public bool TryPlaceDiagonal2(Position pos, string word)
         {
             //get column at position y
-            char[] diagonal2 = GetCharDiagSE(new Position(x,y));
+            char[] diagonal1 = GetCharDiagSE(pos);
             //get char from positio x to start
-            char[] diagonal3 = GetCharDiagNW(new Position(x,y));
+            char[] diagonal2 = GetCharDiagNW(pos);
 
-            //foreach element between 1 and 2 randomly choose number
-            int[] choose = Enumerable.Range(1,2).OrderBy(x => rnd.Next()).Take(2).ToArray();
-            char[] word2 = word.Cast<char>().ToArray();
-
-            //create switch from 1 to 4
-            foreach (int i in choose)
+            foreach (int i in Enumerable.Range(1, 2).OrderBy(x => rnd.Next()))
             {
                 switch (i)
                 {
                     case 1:
-                        if (IsFreeToFill(diagonal2,word2)){ 
-                            PasteWord(word2,x,y,x+word.Length,y+word.Length);
-                            return(true);}
-                        else if(IsFreeToFill(diagonal2,word2.Reverse().ToArray())){
-                            PasteWord(word2.Reverse().ToArray(),x,y,x+word.Length,y+word.Length);
-                            return(true);
-                        }
+                        if (IsFreeToFill(diagonal1, word)) return FillWord(word, pos, new Position(pos.X+word.Length, pos.Y+word.Length));
+                        else if(IsFreeToFill(diagonal1, word.Reverse().ToString())) return FillWord(word.Reverse().ToString(), pos, new Position(pos.X+word.Length, pos.Y+word.Length));
                         break;
                     case 2: 
-                        if (IsFreeToFill(diagonal3,word2)) {
-                            PasteWord(word2,x,y,x-word.Length,y-word.Length);
-                            return(true);
-                        }
-                        else if(IsFreeToFill(diagonal3,word2.Reverse().ToArray())){
-                            PasteWord(word2.Reverse().ToArray(),x,y,x-word.Length,y-word.Length);
-                            return(true);
-                        }
+                        if (IsFreeToFill(diagonal2, word)) return FillWord(word, pos, new Position(pos.X-word.Length, pos.Y-word.Length));
+                        else if(IsFreeToFill(diagonal2, word.Reverse().ToString())) return FillWord(word.Reverse().ToString(), pos, new Position(pos.X-word.Length, pos.Y-word.Length));
                         break;
                 }
             }
-            return(false);
+            return false;
         }
         public Position RandomPosition() => new Position(rnd.Next(0, Matrix.GetLength(0)), rnd.Next(0, Matrix.GetLength(1)));
         #endregion
-
-        public void PasteWord(char[] word, int x, int y, int x2, int y2)
+        /// <summary>This method is used to fill a word between two positions.</summary>
+        /// <param name="word"> The word to fill. </param>
+        /// <param name="pos1"> The first position. </param>
+        /// <param name="pos2"> The second position. </param>
+        /// <returns> True after the word has been filled. </returns>
+        public bool FillWord(string word, Position pos1, Position pos2)
         {
-            List<Position> positionsToFill = GetPositionsBetween(new Position(x,y), new Position(x2,y2));
+            List<Position> positionsToFill = GetPositionsBetween(pos1, pos2);
             for (int i = 0; i < positionsToFill.Count-1; i++)
             {
                 Matrix[positionsToFill[i].X, positionsToFill[i].Y] = word[i];
             }
+            return true;
         }
         /// <summary>This method is used to create a list of positions between two positions.</summary>
         /// <param name="pos1"> The first position. </param>
@@ -342,16 +298,12 @@ namespace Word_Scramble
             return line;
         }
 
-        public List<string> PlaceWords(Dictionary dictionaryList, int difficulty, List<int> toPlace, List<string> placed = null)
+        public List<string> PlaceWords(Dictionary dictionaryList, int difficulty, List<int> amountToPlace, List<string> successfullyPlaced = null)
         {
-            if (placed == null)
+            if (successfullyPlaced == null) successfullyPlaced = new List<string>();
+            for (int i = amountToPlace.Count-1; i >= 0; i--)
             {
-                placed = new List<string>();
-            }
-            for (int i=toPlace.Count-1;i>=0;i--)
-            {
-                //for j in range of i
-                for (int j=0;j<toPlace[i];j++)
+                for (int j = 0; j < amountToPlace[i]; j++)
                 {
                     bool value =false;
                     while(!value)
@@ -363,12 +315,12 @@ namespace Word_Scramble
                         if (value)
                         {
                             dictionaryList.DictList[n].Remove(word);
-                            placed.Add(word);
+                            successfullyPlaced.Add(word);
                         }
                     } 
                 }
             }
-            return placed;
+            return successfullyPlaced;
         }
     }
 }
