@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Microsoft.VisualBasic.FileIO;
 
 using static System.Console;
 using static System.IO.File;
@@ -23,8 +24,14 @@ namespace Word_Scramble
 
         #endregion
 
-        // TODO : Adapter le constructeur
-        #region Constructor
+        #region Constructors
+        /// <summary> The constructor of the Board class.</summary>
+        public Board()
+        {
+            Matrix = new char[0,0];
+            WordsToFind = new List<string>();
+            BoardDifficulty = "";
+        }
         /// <summary> The constructor of the Board class from a difficulty.</summary>
         /// <param name="boardDifficulty">The difficulty of the board.</param>
         public Board(string boardDifficulty)
@@ -34,16 +41,12 @@ namespace Word_Scramble
             Dictionary<string, int> config = ConfigurationJson("Settings.json",BoardDifficulty);
 
             Matrix = new char[config["row"], config["column"]];
-            for (int i = 0; i< config["row"]; i++) for (int j = 0; j< config["column"]; j++) Matrix[i,j] = '_';
-
+            FillMatrix();
+            
             List<int> amountToPlace = new List<int>(){config["3-5"],config["6-8"],config["9-11"],config["12-15"]};
             WordsToFind = PlaceRandomWords(temporaryDictionary, config["placementsType"], amountToPlace);
-            // ! DEBUG
-            WriteLine("Words to find : ");
-            foreach (string word in WordsToFind)Write(word+" ");
-            WriteLine();
-            AfficherTEMP();
-            // ! DEBUG
+            
+            FillMatrix(true);
         }
         /// <summary> The constructor of the Board class from a path.</summary>
         /// <param name="path">The path to the file.</param>
@@ -66,30 +69,9 @@ namespace Word_Scramble
 
             }
             else throw new Exception("The path is not valid.");
-            // ! DEBUG
-            WriteLine("Words to find : ");
-            foreach (string word in WordsToFind)Write(word+" ");
-            WriteLine();
-            WriteLine(BoardDifficulty);
-            AfficherTEMP();
-            // ! DEBUG
         }
         #endregion
-
-        // ! Temporaire
-        /// <summary> Function that draw the board</summary>
-        public void AfficherTEMP()
-        {
-            for (int i=0; i<this.Matrix.GetLength(0);i++)
-            {
-                for (int j=0; j<this.Matrix.GetLength(1);j++)
-                {
-                    Write(this.Matrix[i,j]== '_' ?"_ ":$"{this.Matrix[i,j]} ");
-                }
-                WriteLine($" {i} ");
-            }
-        }
-        //! Temporaire
+        
 
         #region PlaceRandomWords
         /// <summary>This method is used to place a certain amount of word, form a certain difficulty from a dictionary into the matrix.</summary>
@@ -366,21 +348,60 @@ namespace Word_Scramble
             }
             return line;
         }
+        /// <summary>This method is used to save a board into a CSV file.</summary>
+        /// <param name="path"> The path of the file. </param>
         public void SaveInCSV(string path)
         {
             using (StreamWriter sw = new StreamWriter(path))
             {
+                
                 for (int i = 0; i < Matrix.GetLength(0); i++)
                 {
                     for (int j = 0; j < Matrix.GetLength(1); j++)
                     {
-                        sw.Write(Matrix[i,j]);
+                        if (j == Matrix.GetLength(1)-1) sw.Write(Matrix[i,j]);
+                        else sw.Write(Matrix[i,j]+";");
                     }
                     sw.WriteLine();
                 }
+                for (int i = 0; i < WordsToFind.Count; i++)
+                {
+                    if (i == WordsToFind.Count-1) sw.Write(WordsToFind[i]);
+                    else sw.Write(WordsToFind[i]+",");
+                }
+                sw.WriteLine();
+                sw.Write(BoardDifficulty);
+                sw.Close();
+            }
+            
+        }
+        /// <summary>This method is used to fill the matrix with random letters or underscores.</summary>
+        public void FillMatrix(bool fillWithLetters = false)
+        {
+            if (fillWithLetters)
+            {
+                for (int i = 0; i < Matrix.GetLength(0); i++)
+                {
+                    for (int j = 0; j < Matrix.GetLength(1); j++) 
+                    {
+                        if(Matrix[i, j] == '_') Matrix[i, j] = (char)rnd.Next(65, 91);
+                    }
+                }
+            } 
+            else for (int i = 0; i < Matrix.GetLength(0); i++) for (int j = 0; j < Matrix.GetLength(1); j++) Matrix[i, j] = '_';
+        }
+        /// <summary>This method is used to diplay the matrix into the console.</summary>
+        public void DisplayMatrix()
+        {
+            for (int i = 0; i < Matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < Matrix.GetLength(1); j++)
+                {
+                    Write(Matrix[i,j]);
+                }
+                WriteLine($" {i} ");
             }
         }
         #endregion
-        
     }
 }

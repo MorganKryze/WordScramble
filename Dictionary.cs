@@ -1,5 +1,10 @@
 using System;
 
+using static System.Console;
+using static System.IO.File;
+
+using static Word_Scramble.Methods;
+
 namespace Word_Scramble
 {
     /// <summary>The dictionnary creation class.</summary>
@@ -7,8 +12,8 @@ namespace Word_Scramble
     {
         #region Attributes
         /// <summary>The language of the dictionnary.</summary>
-        public static string s_Language = "FR";
-        /// <summary>The dictionnary itself.</summary>
+        public static string s_Language {  get ; set ; }
+        /// <summary>The static dictionnary.</summary>
         public static Dictionary<int, string[]> s_Dict = new Dictionary<int, string[]>();
         /// <summary>The dynamic dictionary.</summary>
         public Dictionary<int, List<string>> DictList = new Dictionary<int, List<string>>();
@@ -23,11 +28,11 @@ namespace Word_Scramble
         #endregion
 
         #region Methods
-        
-        /// <summary>The constructor of the class.</summary>
+        /// <summary>This method is used to create a static dictionary.</summary>
         public static void CreateDictionary()
         {
-            string[] lines = s_Language == "FR" ? File.ReadAllLines("dataDictionary/MotsPossiblesFR.txt") : File.ReadAllLines("dataDictionary/MotsPossiblesEN.txt");
+            if (s_Language == null) s_Language = "FR";
+            string[] lines = s_Language == "FR" ? ReadAllLines("dataDictionary/MotsPossiblesFR.txt") : ReadAllLines("dataDictionary/MotsPossiblesEN.txt");
             int[] Key = lines.Where((x, i) => i % 2 == 0).Select(x => int.Parse(x)).ToArray();
             string[][] Value = lines.Where((x, i) => i % 2 != 0).Select(x => x.Split(' ')).ToArray();
 
@@ -39,7 +44,7 @@ namespace Word_Scramble
         {
             foreach (KeyValuePair<int, string[]> entry in s_Dict)
             {
-                Console.WriteLine("Length = {0}, Words = {1}", entry.Key, entry.Value.Length);
+                WriteLine("Length = {0}, Words = {1}", entry.Key, entry.Value.Length);
             }
         }
         /// <summary> Function to redefine the dictionary to the size of the Dictionnary</summary>

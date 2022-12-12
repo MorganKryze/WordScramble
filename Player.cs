@@ -35,7 +35,7 @@ namespace Word_Scramble
             InGame = inGame;
             Score = score;
             MaxScore = maxScore;
-            Words = words;
+            Words = new List<string>();
         }
         /// <summary>Initializes a new instance of the <see cref="Player"/> class.</summary>
         /// <param name="p">The player to copy.</param>
@@ -73,10 +73,30 @@ namespace Word_Scramble
         /// <returns>A string with every data.</returns>
         public override string ToString() 
         {
-            string s = $"Name: {Name}, InGame: {InGame}, Score: {Score}, MaxScore: {MaxScore}, Words:";
-            if (Words != null) foreach (string w in Words) s += $" {w},";
-            else s += " \"vide\"";
+            string s = $"{Name};{InGame};{Score};{MaxScore};";
+            if (Words != null && Words.Count != 0)
+            {
+                for (int i = 0; i < Words.Count; i++)
+                {
+                    s += Words[i];
+                    if (i != Words.Count - 1) s += ",";
+                }
+            }
             return s;
+        }
+        /// <summary>this method is used to convert a string to a player.</summary>
+        /// <param name="line">The string to convert.</param>
+        /// <returns>The player.</returns>
+        public static Player StringToPlayer(string line)
+        {
+            string[] data = line.Split(';');
+            Player p = new Player(data[0], bool.Parse(data[1]), int.Parse(data[2]), int.Parse(data[3]));
+            if (data[4] != null)
+            {
+                string[] words = data[4].Split(',');
+                foreach (string w in words) p.Words.Add(w);
+            }
+            return p;
         }
         #endregion
     }

@@ -23,18 +23,36 @@ namespace Word_Scramble
         /// <param name="player">The player.</param>
         /// <param name="message">The message to display.</param>
         /// <returns>The name of the player.</returns>
-        public static string TypePlayerName(Player player, string message)
+        public static string TypePlayerName(string message)
         {
+            string playerName = "";
             do 
             {
                 Title(message, "Title.txt");
                 Write("{0,"+((WindowWidth / 2) - (message.Length / 2)) + "}","");
                 Write("> ");
                 ConsoleConfig(false);
-                player.Name = ReadLine();
+                playerName = ReadLine();
                 ConsoleConfig();
-            }while(player.Name == "");
-            return player.Name;
+            }while(playerName == "");
+            return playerName;
+        }
+        /// <summary>This method is used to define the name of a game.</summary>
+        /// <param name="message">The message to display.</param>
+        /// <returns>The name of the game.</returns>
+        public static string TypeGameName(string message)
+        {
+            string gameName = "";
+            do 
+            {
+                Title(message, "Title.txt");
+                Write("{0,"+((WindowWidth / 2) - (message.Length / 2)) + "}","");
+                Write("> ");
+                ConsoleConfig(false);
+                gameName = ReadLine();
+                ConsoleConfig();
+            }while(gameName == "");
+            return gameName;
         }
         /// <summary>This method is used to find the nearest position in a direction.</summary>
         /// <param name="matrix">The grill from wich the user chooses the characters.</param>
@@ -123,7 +141,7 @@ namespace Word_Scramble
                     {
 
                         BackgroundColor = Blue;
-                        ForegroundColor = Black;
+                        ForegroundColor = White;
                         Write(matrix[i, j]);
                     }
                     else if (selectedPositions.Contains(new Position(i, j)))
@@ -144,22 +162,6 @@ namespace Word_Scramble
                 }
                 WriteLine();
             }
-        }
-        /// <summary>This method is used to convert a CSV file into a char matrix.</summary>
-        /// <param name="path">The path of the CSV file.</param>
-        /// <returns>The generated matrix.</returns>
-        public static char[,] CsvToMatrix(string path)
-        {
-            string[] lines = ReadAllLines(path);
-            char[,] matrix = new char[lines.Length,(lines[0].Length/2)+1];
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string[] s = lines[i].Split(';'); 
-                char[] c = new char[s.Length];
-                for (int j = 0; j < s.Length; j++)c[j] = s[j][0];
-                for (int j = 0; j < matrix.GetLength(1); j++)matrix[i,j] = c[j];
-            }
-            return matrix;
         }
         /// <summary>This method is used to print a message telling whether the player has won or not.</summary>
         /// <param name="player">The player.</param>
