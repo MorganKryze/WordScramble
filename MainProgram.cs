@@ -42,9 +42,10 @@ namespace Word_Scramble
 
             Dictionary.CreateDictionary();
             
-            Board board = new Board("first");
+            //Board board = new Board("first");
 
-            Board board2 = new Board("second");
+            //Board board2 = new Board("second");
+            Board board3 = new Board("dataGrills/WorkingGrill.csv",true);
         }
     }
 }

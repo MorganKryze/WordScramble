@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 using static System.Console;
+using static System.IO.File;
 using static Word_Scramble.Methods;
 
 namespace Word_Scramble
@@ -24,7 +25,8 @@ namespace Word_Scramble
 
         // TODO : Adapter le constructeur
         #region Constructor
-        /// <summary> The constructor of the Board class.</summary>
+        /// <summary> The constructor of the Board class from a difficulty.</summary>
+        /// <param name="boardDifficulty">The difficulty of the board.</param>
         public Board(string boardDifficulty)
         {
             BoardDifficulty = boardDifficulty;
@@ -40,6 +42,35 @@ namespace Word_Scramble
             WriteLine("Words to find : ");
             foreach (string word in WordsToFind)Write(word+" ");
             WriteLine();
+            AfficherTEMP();
+            // ! DEBUG
+        }
+        /// <summary> The constructor of the Board class from a path.</summary>
+        /// <param name="path">The path to the file.</param>
+        /// <param name="isValidPath">A boolean that indicates if the path is valid.</param>
+        public Board(string path, bool isValidPath)
+        {
+            if (isValidPath)
+            {
+                string[] lines = ReadAllLines(path);
+                Matrix = new char[lines.Length-2,(lines[0].Length/2)+1];
+                for (int i = 0; i < lines.Length-2; i++)
+                {
+                    string[] s = lines[i].Split(';'); 
+                    char[] c = new char[s.Length];
+                    for (int j = 0; j < s.Length; j++)c[j] = s[j][0];
+                    for (int j = 0; j < Matrix.GetLength(1); j++) Matrix[i,j] = c[j];
+                }
+                WordsToFind = lines[lines.Length-2].Split(',').ToList();
+                BoardDifficulty = lines[lines.Length-1];
+
+            }
+            else throw new Exception("The path is not valid.");
+            // ! DEBUG
+            WriteLine("Words to find : ");
+            foreach (string word in WordsToFind)Write(word+" ");
+            WriteLine();
+            WriteLine(BoardDifficulty);
             AfficherTEMP();
             // ! DEBUG
         }
@@ -59,7 +90,7 @@ namespace Word_Scramble
             }
         }
         //! Temporaire
-        
+
         #region PlaceRandomWords
         /// <summary>This method is used to place a certain amount of word, form a certain difficulty from a dictionary into the matrix.</summary>
         /// <param name="dictionary">The dictionary to use.</param>
@@ -334,6 +365,20 @@ namespace Word_Scramble
                 else if (pos1.X > pos2.X && pos1.Y > pos2.Y) for (int i = 0; i <= pos1.X-pos2.X; i++) line.Add(new Position(pos1.X-i,pos1.Y-i));
             }
             return line;
+        }
+        public void SaveInCSV(string path)
+        {
+            using (StreamWriter sw = new StreamWriter(path))
+            {
+                for (int i = 0; i < Matrix.GetLength(0); i++)
+                {
+                    for (int j = 0; j < Matrix.GetLength(1); j++)
+                    {
+                        sw.Write(Matrix[i,j]);
+                    }
+                    sw.WriteLine();
+                }
+            }
         }
         #endregion
         
