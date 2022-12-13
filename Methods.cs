@@ -136,18 +136,18 @@ namespace Word_Scramble
                         ForegroundColor = Black;
                         Write(matrix[i, j]);
                     }
-                    else if (correctPositions.Contains(new Position(i, j)))
-                    {
-
-                        BackgroundColor = Blue;
-                        ForegroundColor = White;
-                        Write(matrix[i, j]);
-                    }
                     else if (selectedPositions.Contains(new Position(i, j)))
                     {
 
                         BackgroundColor = Yellow;
                         ForegroundColor = Black;
+                        Write(matrix[i, j]);
+                    }
+                    else if (correctPositions.Contains(new Position(i, j)))
+                    {
+
+                        BackgroundColor = Blue;
+                        ForegroundColor = White;
                         Write(matrix[i, j]);
                     }
                     else

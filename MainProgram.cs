@@ -35,7 +35,6 @@ namespace Word_Scramble
             #region Game loop
             string[] level = new string [] {"first", "second", "third", "fourth", "fifth"};
             Gameloop(session, session.CurrentBoard.BoardDifficulty, level);
-            Pause();
             #endregion
 
             #region End of game
