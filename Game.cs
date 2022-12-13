@@ -30,7 +30,7 @@ namespace Word_Scramble
             Player1 = new Player(TypePlayerName("Please write the first player's name below :"));
             Player2 = new Player(TypePlayerName("Please write the second player's name below :"));
             CurrentBoard = new Board();
-            GameToCSV($"dataGames/{Name}.csv");
+            GameToCSV($"savedGames/{Name}.csv");
         }
         public Game(bool back)
         {
@@ -48,7 +48,7 @@ namespace Word_Scramble
                     Player1 = new Player(StringToPlayer(lines[1]));
                     Player2 = new Player(StringToPlayer(lines[2]));
                     CurrentBoard = new Board();
-                    if (lines.Length >= 4)
+                    if (lines.Length > 6)
                     {
                         CurrentBoard.BoardDifficulty = lines[3];
                         CurrentBoard.WordsToFind = lines[4].Split(',').ToList();
@@ -98,11 +98,11 @@ namespace Word_Scramble
            {
                case 0 : return new Game();
                case 1 : 
-                    string[] files = Directory.GetFiles("dataGames");
+                    string[] files = Directory.GetFiles("savedGames");
                     string[] fileNames = new string[files.Length];
                     for(int i = 0; i < files.Length; i++)
                     {
-                        fileNames[i] = files[i].Substring(10);
+                        fileNames[i] = files[i].Substring(11);
                         fileNames[i] = fileNames[i].Substring(0, fileNames[i].Length-4);
                     }
                     int position = ScrollingMenu("Please select a game to load :", fileNames, "Title.txt");
@@ -128,7 +128,7 @@ namespace Word_Scramble
                 session.SelectWords(session.Player1);
                 InGameSwitch(session, "player2");
                 session.CurrentBoard = new Board(difficulty);
-                session.GameToCSV($"dataGames/{session.Name}.csv");
+                session.GameToCSV($"savedGames/{session.Name}.csv");
 
                 Gameloop(session, difficulty, level);
             }
@@ -136,23 +136,32 @@ namespace Word_Scramble
             {
                 LoadingScreen("[  Loading the game ...  ]");
                 session.SelectWords(session.Player2);
-                InGameSwitch(session, "player1");
-                session.CurrentBoard = new Board(level[Array.IndexOf(level, difficulty) + 1]);
-                session.GameToCSV($"dataGames/{session.Name}.csv");
-
-                if (difficulty != "fifth") Gameloop(session, level[Array.IndexOf(level, difficulty) + 1], level);
+                
+                if (difficulty != "fifth") 
+                {
+                    InGameSwitch(session, "player1");
+                    session.CurrentBoard = new Board(level[Array.IndexOf(level, difficulty) + 1]);
+                    session.GameToCSV($"savedGames/{session.Name}.csv");
+                    Gameloop(session, level[Array.IndexOf(level, difficulty) + 1], level);
+                }
+                else 
+                {
+                    session.Player2.InGame = false;
+                    session.GameToCSV($"savedGames/{session.Name}.csv");
+                }
+                
             }
-            else
+            else if (difficulty == "first" || difficulty == "")
             {
                 InGameSwitch(session, "first");
                 LoadingScreen("[  Loading the game ...  ]");
                 session.CurrentBoard = new Board("first");
                 InGameSwitch(session, "player1");
-                session.GameToCSV($"dataGames/{session.Name}.csv");
+                session.GameToCSV($"savedGames/{session.Name}.csv");
                 session.SelectWords(session.Player1);
                 InGameSwitch(session, "player2");
                 session.CurrentBoard = new Board("first");
-                session.GameToCSV($"dataGames/{session.Name}.csv");
+                session.GameToCSV($"savedGames/{session.Name}.csv");
 
                 Gameloop(session, "first", level);
             }
@@ -272,6 +281,8 @@ namespace Word_Scramble
         #endregion
 
         #region Utility methods
+        /// <summary>This method is used to write the game on a CSV.</summary>
+        /// <param name="path">The path of the CSV file.</param>
         public void GameToCSV(string path)
         {
             using (StreamWriter sw = new StreamWriter(path))
@@ -301,6 +312,7 @@ namespace Word_Scramble
                 sw.Close();
             }
         }
+        public bool IsGameFinished() => !Player1.InGame && !Player2.InGame && CurrentBoard.BoardDifficulty == "fifth";
         #endregion
     }
 }

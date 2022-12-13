@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 
-using static System.Console;
+using static System.IO.File;
+
 using static Word_Scramble.Methods;
 using static Word_Scramble.Game;
 
@@ -34,6 +36,10 @@ namespace Word_Scramble
             string[] level = new string [] {"first", "second", "third", "fourth", "fifth"};
             Gameloop(session, session.CurrentBoard.BoardDifficulty, level);
             Pause();
+            #endregion
+
+            #region End of game
+            if (session.IsGameFinished()) Move($"savedGames/{session.Name}.csv", $"archivedGames/{session.Name}.csv");
             #endregion
 
             goto Main_Menu;

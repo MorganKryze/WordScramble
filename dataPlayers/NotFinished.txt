@@ -1,2 +1,0 @@
-player1;false;3;0;word1,word2,word3
-player2;false;4;0;word1,word2,word3,word4
