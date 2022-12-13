@@ -48,8 +48,9 @@ namespace Word_Scramble
             }
         }
         /// <summary> Function to redefine the dictionary to the size of the Dictionnary</summary>
-        /// <param name="data">Dictionary to redefine</param name>
-        /// <param name="size">Size of the new dictionary</param name>
+        /// <param name="data">The dictionary to resize</param>
+        /// <param name="sizeMin">The minimum size of the words</param>
+        /// <param name="sizeMax">The maximum size of the words</param>
         /// <returns>Dictionary with the new size</returns>
         public static Dictionary<int, string[]> ResizeDictionary(Dictionary<int,string[]> data,int sizeMin, int sizeMax)
         {

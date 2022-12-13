@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
+using System.Diagnostics;
+
 using static System.Console;
 using static System.ConsoleColor;
 using static System.ConsoleKey;
@@ -17,13 +19,18 @@ namespace Word_Scramble
     public class Game
     {
         #region Attributes
+        /// <summary>The name of the game.</summary>
         public string Name {get; set;}
+        /// <summary>The first player.</summary>
         public Player Player1 {get; set;}
+        /// <summary>The second player.</summary>
         public Player Player2 {get; set;}
+        /// <summary>The current board.</summary>
         public Board CurrentBoard {get; set;}
         #endregion
         
         #region Constructors
+        /// <summary>The default constructor of the game class.</summary>
         public Game()
         {
             Name = TypeGameName("Please write the name of the game below :");
@@ -32,6 +39,8 @@ namespace Word_Scramble
             CurrentBoard = new Board();
             GameToCSV($"savedGames/{Name}.csv");
         }
+        /// <summary>The "go back" constructor of the game class.</summary>
+        /// <param name="back">Whether the player wants to go back or not.</param>
         public Game(bool back)
         {
             Name = "Back";
@@ -39,6 +48,8 @@ namespace Word_Scramble
             Player2 = new Player();
             CurrentBoard = new Board();
         }
+        /// <summary>The path constructor of the game class.</summary>
+        /// <param name="path">The path of the game.</param>
         public Game(string path)
         {
                 string[] lines = ReadAllLines(path);
@@ -183,16 +194,18 @@ namespace Word_Scramble
             }
         }
         /// <summary>This method is used to select words and check if they are in the list.</summary>
-        /// <param name="Currentboard.Matrix">The grill from wich the user chooses the characters.</param>
+        /// <param name="player">The current player.</param>
         /// <returns>A string as the sum of the characters.</returns>
         public bool SelectWords( Player player)
         {
             List<string> wordsLeft = this.CurrentBoard.WordsToFind;
             List<Position> correctPositions = new List<Position>();
-            // ! Ajouter page de démarrage et chrono
-            while(wordsLeft.Count != 0) // ! ajouter condition chrono
+            Stopwatch chrono = new Stopwatch();
+            BoardMessage(player, new string []{$" {player.Name}, are you ready to start the {CurrentBoard.BoardDifficulty} level? "," You have a minute to complete it! "});
+            Pause();
+            chrono.Start();
+            while(wordsLeft.Count != 0 && chrono.ElapsedMilliseconds < 60000) 
             {
-                // ! ajouter mots restants, toutes les infos en fait
                 Position currentPosition = new Position(CurrentBoard.Matrix.GetLength(0)/2,CurrentBoard.Matrix.GetLength(1)/2);
                 Position anchor1 = new Position(-1, -1);
                 Position anchor2 = new Position(-1, -1);
@@ -201,9 +214,9 @@ namespace Word_Scramble
                 List<Position> possiblePositions = new List<Position>();
                 for(int i = 0; i< CurrentBoard.Matrix.GetLength(0); i++)for(int j = 0; j < CurrentBoard.Matrix.GetLength(1); j++)possiblePositions.Add(new Position(i, j));
 
-                while(anchor2.X == -1&&wordsLeft.Count != 0)
+                while(anchor2.X == -1 && wordsLeft.Count != 0 && chrono.ElapsedMilliseconds < 60000)
                 {
-                    Clear();
+                    BoardMessage(player, new string []{$" {player.Name} is playing on the {CurrentBoard.BoardDifficulty} level and has {(60000-chrono.ElapsedMilliseconds)/1000} seconds left. ", $" Your current score is : {player.Score} points. "," Words left : " + string.Join(", ", wordsLeft)+" "});
                     PrintMatrix(CurrentBoard.Matrix, selectedPositions,correctPositions, currentPosition);
                     switch(ReadKey(true).Key)
                     {
@@ -266,7 +279,8 @@ namespace Word_Scramble
                             {
                                 case 0 : break;
                                 case 1 : case -1 : 
-                                    CompletedBoardMessage(player, new string[]{$"  {player.Name}, you decided to quit the game. You cannot take back on this decision. ",$"Your current score is {player.Score} points."}, Red);
+                                    BoardMessage(player, new string[]{$"  {player.Name}, you decided to quit the game. You cannot take back on this decision. ",$"Your current score is {player.Score} points."}, Red);
+                                    Pause();
                                     return false;
                                 case 2 : MainProgram.Main(); 
                                     break;
@@ -275,7 +289,18 @@ namespace Word_Scramble
                     }
                 }
             }
-            CompletedBoardMessage(player,new string[]{$" Congratulations {player.Name} ! You found all the words ! ", $"Your current score is now : {player.Score} points !"});
+            if (wordsLeft.Count == 0) 
+            {
+                chrono.Stop();
+                player.AddBonus((int)chrono.ElapsedMilliseconds/500);
+                BoardMessage(player,new string[]{$" Congratulations {player.Name} ! You found all the words on time! ",$" Your recieved a bonus of {(int)chrono.ElapsedMilliseconds/500} point. ", $" Your current score is now : {player.Score} points ! "});
+                Pause();
+            }
+            else 
+            {
+                BoardMessage(player,new string[]{$" Time's up {player.Name} ! You didn't find all the words. ", $" Your current score is now : {player.Score} points ! "}, Red);
+                Pause();
+            }
             return true;
         }
         #endregion
@@ -312,6 +337,8 @@ namespace Word_Scramble
                 sw.Close();
             }
         }
+        /// <summary>This method is used to check if the game is finished.</summary>
+        /// <returns>True if the game is finished, false otherwise.</returns>
         public bool IsGameFinished() => !Player1.InGame && !Player2.InGame && CurrentBoard.BoardDifficulty == "fifth";
         #endregion
     }

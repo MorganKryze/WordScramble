@@ -20,7 +20,6 @@ namespace Word_Scramble
 
         #region Core Methods
         /// <summary>This method is used to define the name of a player.</summary>
-        /// <param name="player">The player.</param>
         /// <param name="message">The message to display.</param>
         /// <returns>The name of the player.</returns>
         public static string TypePlayerName(string message)
@@ -167,21 +166,31 @@ namespace Word_Scramble
         /// <param name="player">The player.</param>
         /// <param name="message">The message to be displayed.</param>
         /// <param name="Backcolor">The background color of the message.</param>
-        public static void CompletedBoardMessage(Player player, string[] message, ConsoleColor Backcolor = Green)
+        public static void BoardMessage(Player player, string[] message, ConsoleColor Backcolor = Green)
         {
             Clear();
             WriteLine();
-            for(int i = 0; message[0].Length - message[1].Length > 1; i++ )
+            string max = message[0];
+            for (int i = 0; i < message.Length; i++)
             {
-                if(i % 2 == 0)message[1] = " " + message[1];
-                else message[1] += " ";
+                if (max.Length < message[i].Length) max = message[i];
             }
-            CenteredWL(String.Format("{0,"+message[0].Length+"}", ""), Black, Backcolor);
-            CenteredWL(String.Format("{0,"+message[0].Length+"}", message[0]), Black, Backcolor);
-            CenteredWL(String.Format("{0,"+message[0].Length+"}", message[1]), Black, Backcolor);
-            CenteredWL(String.Format("{0,"+message[0].Length+"}", ""), Black, Backcolor);
+            int index = Array.IndexOf(message, max);
+            CenteredWL(String.Format("{0,"+message[index].Length+"}", ""), Black, Backcolor);
+            for (int i = 0; i < message.Length; i++)
+            {
+                if (message[index].Length > message[i].Length)
+                {
+                    for (int j = 0; message[index].Length != message[i].Length; j++ )
+                    {
+                        if(j % 2 == 0)message[i] +=" ";
+                        else message[i] = " " + message[i];
+                    }
+                }
+                CenteredWL(String.Format("{0,"+message[index].Length+"}", message[i]), Black, Backcolor);
+            }
+            CenteredWL(String.Format("{0,"+message[index].Length+"}", ""), Black, Backcolor);
             WriteLine();
-            Pause();
         }
         /// <summary>This method is used to read a json configuration file to get the configurations attributes.</summary>
         /// <param name="path">The path of the json file.</param>
@@ -248,10 +257,9 @@ namespace Word_Scramble
             
         }
         /// <summary>This method is used to display a scrolling menu.</summary>
-        /// <param name= "choices"> The choices of the menu.</param>
-        /// <param name= "text"> The content of the title.</param>
-        /// <param name= "additionalText"> The subtitle of the title.</param>
-        /// <param name= "specialText"> Special text as a font.</param>
+        /// <param name="question"> The question to be displayed.</param>
+        /// <param name="choices"> The choices to be displayed.</param>
+        /// <param name="specialText"> A special text stored in a file.</param>
         /// <returns> The position of the choice selected.</returns>
         public static int ScrollingMenu (string question, string[] choices, string specialText = "Title.txt")
         {
@@ -324,7 +332,6 @@ namespace Word_Scramble
         }   
         /// <summary>This method is used to display a loading screen.</summary>
         /// <param name="text"> The text to display. </param>
-        /// <param name="clear"> A boolean that indicates if the screen should be cleared. </param>
         public static void LoadingScreen(string text)
         {
             Clear();
@@ -334,7 +341,15 @@ namespace Word_Scramble
             int recurrence = 0;
             for (int i = 0; i <= text.Length; i++, recurrence++)
             {
-                
+                if(KeyAvailable)
+                {
+                    ConsoleKeyInfo keyPressed = ReadKey(true);
+                    if(keyPressed.Key == Enter||keyPressed.Key == Escape)
+                    {
+                        i = text.Length;
+                        break;
+                    }
+                }
                 CenteredWL(text);
                 WriteLine("\n");
                 string bar = "";

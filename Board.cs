@@ -21,7 +21,6 @@ namespace Word_Scramble
         public List<string> WordsToFind { get; set; }
         /// <summary> The difficulty of the game.</summary>
         public string BoardDifficulty { get; set; }
-
         #endregion
 
         #region Constructors
@@ -137,6 +136,7 @@ namespace Word_Scramble
         public char[] GetCharOnColumn(Position pos) => Enumerable.Range(0, Matrix.GetLength(0)-1).Select(y => Matrix[pos.X, y]).ToArray();
         /// <summary>This method is used to get every char on a diagonal from pos to North-East.</summary>
         /// <param name="pos">The position to get the char array from.</param>
+        /// <param name="diagNE">The list of char on the diagonal.</param>
         /// <returns>The array of char on the diagonal.</returns>
         public char[] GetCharDiagNE(Position pos, List<char> diagNE = null)
         {
@@ -150,6 +150,7 @@ namespace Word_Scramble
         }
         /// <summary>This method is used to get every char on a diagonal from pos to South-West.</summary>
         /// <param name="pos">The position to get the char array from.</param>
+        /// <param name="diagSW">The list of char on the diagonal.</param>
         /// <returns>The array of char on the diagonal.</returns>
         public char[] GetCharDiagSW(Position pos, List<char> diagSW=null)
         {
@@ -163,6 +164,7 @@ namespace Word_Scramble
         }
         /// <summary>This method is used to get every char on a diagonal from pos to South-East.</summary>
         /// <param name="pos">The position to get the char array from.</param>
+        /// <param name="diagSE">The list of char on the diagonal.</param>
         /// <returns>The array of char on the diagonal.</returns>
         public char[] GetCharDiagSE(Position pos, List<char> diagSE = null) 
         {
@@ -176,6 +178,7 @@ namespace Word_Scramble
         }
         /// <summary>This method is used to get every char on a diagonal from pos to North-West.</summary>
         /// <param name="pos">The position to get the char array from.</param>
+        /// <param name="diagNW">The list of char on the diagonal.</param>
         /// <returns>The array of char on the diagonal.</returns>
         public char[] GetCharDiagNW(Position pos, List<char> diagNW=null) //diagonal ceetween 0 and Max(GetLength(0),GetLength(1))
         {
