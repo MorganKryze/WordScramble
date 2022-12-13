@@ -9,9 +9,10 @@ using static Word_Scramble.Game;
 
 namespace Word_Scramble
 {
+    /// <summary>The main program class.</summary>
     class MainProgram
     {
-
+        /// <summary>The Main fonction.</summary>
         public static void Main()
         {
             
