@@ -18,15 +18,15 @@ namespace Word_Scramble
     /// <summary>This class is used to define the course of the game .</summary>
     public class Game
     {
-        #region Attributes
+        #region Fields
         /// <summary>The name of the game.</summary>
-        public string Name {get; set;}
+        public string Name;
         /// <summary>The first player.</summary>
-        public Player Player1 {get; set;}
+        public Player Player1;
         /// <summary>The second player.</summary>
-        public Player Player2 {get; set;}
+        public Player Player2;
         /// <summary>The current board.</summary>
-        public Board CurrentBoard {get; set;}
+        public Board CurrentBoard;
         #endregion
         
         #region Constructors
@@ -64,6 +64,8 @@ namespace Word_Scramble
                         CurrentBoard.BoardDifficulty = lines[3];
                         CurrentBoard.WordsToFind = lines[4].Split(',').ToList();
                         CurrentBoard.Matrix = new char[lines.Length-5,(lines[5].Length/2)+1];
+                        Dictionary<string, int> config = ConfigurationJson("Settings.json",CurrentBoard.BoardDifficulty);
+                        CurrentBoard.Timer = config["timer"];
 
                         for (int i = 5; i < lines.Length; i++)
                         {
@@ -201,10 +203,12 @@ namespace Word_Scramble
             List<string> wordsLeft = this.CurrentBoard.WordsToFind;
             List<Position> correctPositions = new List<Position>();
             Stopwatch chrono = new Stopwatch();
-            BoardMessage(player, new string []{$" {player.Name}, are you ready to start the {CurrentBoard.BoardDifficulty} level? "," You have a minute to complete it! "});
+            long minutes = CurrentBoard.Timer/60000;
+            long seconds = (CurrentBoard.Timer/1000 - minutes*60);
+            BoardMessage(player, new string []{$" {player.Name}, are you ready to start the {CurrentBoard.BoardDifficulty} level? ",$" You have {minutes} minutes {seconds}s!, good luck! "});
             Pause();
             chrono.Start();
-            while(wordsLeft.Count != 0 && chrono.ElapsedMilliseconds < 60000) 
+            while(wordsLeft.Count != 0 && chrono.ElapsedMilliseconds < CurrentBoard.Timer) 
             {
                 Position currentPosition = new Position(CurrentBoard.Matrix.GetLength(0)/2,CurrentBoard.Matrix.GetLength(1)/2);
                 Position anchor1 = new Position(-1, -1);
@@ -214,9 +218,9 @@ namespace Word_Scramble
                 List<Position> possiblePositions = new List<Position>();
                 for(int i = 0; i< CurrentBoard.Matrix.GetLength(0); i++)for(int j = 0; j < CurrentBoard.Matrix.GetLength(1); j++)possiblePositions.Add(new Position(i, j));
 
-                while(anchor2.X == -1 && wordsLeft.Count != 0 && chrono.ElapsedMilliseconds < 60000)
+                while(anchor2.X == -1 && wordsLeft.Count != 0 && chrono.ElapsedMilliseconds < CurrentBoard.Timer)
                 {
-                    BoardMessage(player, new string []{$" {player.Name} is playing on the {CurrentBoard.BoardDifficulty} level and has {(60000-chrono.ElapsedMilliseconds)/1000} seconds left. ", $" Your current score is : {player.Score} points. "," Words left : " + string.Join(", ", wordsLeft)+" "});
+                    BoardMessage(player, new string []{$" {player.Name} is playing on the {CurrentBoard.BoardDifficulty} level and has {(CurrentBoard.Timer-chrono.ElapsedMilliseconds)/1000} seconds left. ", $" Your current score is : {player.Score} points. "," Words left : " + string.Join(", ", wordsLeft)+" "});
                     PrintMatrix(CurrentBoard.Matrix, selectedPositions,correctPositions, currentPosition);
                     switch(ReadKey(true).Key)
                     {
@@ -275,14 +279,18 @@ namespace Word_Scramble
                             }
                             break;
                         case Escape :
+                            chrono.Stop();
                             switch(ScrollingMenu("Do you want to quit the game ?", new string[]{" Resume    ", " Skip turn "," Main menu "}, "Title.txt"))
                             {
-                                case 0 : break;
+                                case 0 : 
+                                    chrono.Start(); 
+                                    break;
                                 case 1 : case -1 : 
                                     BoardMessage(player, new string[]{$"  {player.Name}, you decided to quit the game. You cannot take back on this decision. ",$"Your current score is {player.Score} points."}, Red);
                                     Pause();
                                     return false;
-                                case 2 : MainProgram.Main(); 
+                                case 2 : 
+                                    MainProgram.Main(); 
                                     break;
                             }
                             break;
@@ -292,8 +300,8 @@ namespace Word_Scramble
             if (wordsLeft.Count == 0) 
             {
                 chrono.Stop();
-                player.AddBonus((int)chrono.ElapsedMilliseconds/500);
-                BoardMessage(player,new string[]{$" Congratulations {player.Name} ! You found all the words on time! ",$" Your recieved a bonus of {(int)chrono.ElapsedMilliseconds/500} point. ", $" Your current score is now : {player.Score} points ! "});
+                player.AddBonus((int)chrono.ElapsedMilliseconds/1000);
+                BoardMessage(player,new string[]{$" Congratulations {player.Name} ! You found all the words on time! ",$" Your recieved a bonus of {(int)((CurrentBoard.Timer - chrono.ElapsedMilliseconds)/1000)}s point. ", $" Your current score is now : {player.Score} points ! "});
                 Pause();
             }
             else 

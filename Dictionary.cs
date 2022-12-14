@@ -10,9 +10,9 @@ namespace Word_Scramble
     /// <summary>The dictionnary creation class.</summary>
     public class Dictionary
     {
-        #region Attributes
+        #region Fields
         /// <summary>The language of the dictionnary.</summary>
-        public static string s_Language { get ; set ;}
+        public static string s_Language;
         /// <summary>The static dictionnary.</summary>
         public static Dictionary<int, string[]> s_Dict = new Dictionary<int, string[]>();
         /// <summary>The dynamic dictionary.</summary>

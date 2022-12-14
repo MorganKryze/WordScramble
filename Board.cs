@@ -14,13 +14,15 @@ namespace Word_Scramble
     /// <summary> The board creation class.</summary>
     public class Board
     {
-        #region Attributes
+        #region Fields
         /// <summary> The matrix of the board.</summary>
-        public char[,] Matrix { get; set; }
+        public char[,] Matrix;
         /// <summary> The list of the words to find.</summary>
-        public List<string> WordsToFind { get; set; }
+        public List<string> WordsToFind;
         /// <summary> The difficulty of the game.</summary>
-        public string BoardDifficulty { get; set; }
+        public string BoardDifficulty;
+        /// <summary> The timer of the game.</summary>
+        public long Timer;
         #endregion
 
         #region Constructors
@@ -30,6 +32,7 @@ namespace Word_Scramble
             Matrix = new char[0,0];
             WordsToFind = new List<string>();
             BoardDifficulty = "";
+            Timer = 0;
         }
         /// <summary> The constructor of the Board class from a difficulty.</summary>
         /// <param name="boardDifficulty">The difficulty of the board.</param>
@@ -38,7 +41,7 @@ namespace Word_Scramble
             BoardDifficulty = boardDifficulty;
             Dictionary temporaryDictionary = new Dictionary();
             Dictionary<string, int> config = ConfigurationJson("Settings.json",BoardDifficulty);
-
+            Timer = config["timer"];
             Matrix = new char[config["row"], config["column"]];
             FillMatrix();
             
@@ -65,13 +68,14 @@ namespace Word_Scramble
                 }
                 WordsToFind = lines[lines.Length-2].Split(',').ToList();
                 BoardDifficulty = lines[lines.Length-1];
+                Dictionary<string, int> config = ConfigurationJson("Settings.json",BoardDifficulty);
+                Timer = config["timer"];
 
             }
             else throw new Exception("The path is not valid.");
         }
         #endregion
         
-
         #region PlaceRandomWords
         /// <summary>This method is used to place a certain amount of word, form a certain difficulty from a dictionary into the matrix.</summary>
         /// <param name="dictionary">The dictionary to use.</param>

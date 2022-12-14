@@ -10,9 +10,9 @@ namespace Word_Scramble
     {
         #region Attributes
         /// <summary>The x coordinate of the position.</summary>
-        public int X {get; set;}
+        public int X;
         /// <summary>The y coordinate of the position.</summary>
-        public int Y {get; set;}
+        public int Y;
         #endregion
 
         #region Constructor

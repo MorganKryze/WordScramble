@@ -8,17 +8,17 @@ namespace Word_Scramble
     /// <summary>The player class.</summary>
     public class Player : IEquatable<Player>
     {
-        #region Attributes 
+        #region Fields 
         /// <summary>The name of the player.</summary>
-        public string Name { get; set; }
+        public string Name;
         /// <summary>Wether the player has finished the game or not.</summary>
-        public bool InGame { get; set; }
+        public bool InGame;
         /// <summary>The score of the player.</summary>
-        public int Score { get; set; }
+        public int Score;
         /// <summary>The maximum number of words found by the player.</summary>
-        public int MaxScore { get; set; }
+        public int MaxScore;
         /// <summary>The words found by the player.</summary>
-        public List<string> Words { get; set; }
+        public List<string> Words;
         #endregion
 
         #region Constructor

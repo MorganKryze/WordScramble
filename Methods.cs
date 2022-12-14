@@ -13,7 +13,7 @@ namespace Word_Scramble
     /// <summary>The vocation of the Methods class is to be accessible from anywhere.It contains a random variable, utility and core methods.</summary>
     public static class Methods
     {
-        #region Random
+        #region Field
         /// <summary>The random variable, usable everywhere.</summary>
         public static Random rnd = new Random();
         #endregion
