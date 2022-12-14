@@ -163,10 +163,9 @@ namespace Word_Scramble
             }
         }
         /// <summary>This method is used to print a message telling whether the player has won or not.</summary>
-        /// <param name="player">The player.</param>
         /// <param name="message">The message to be displayed.</param>
         /// <param name="Backcolor">The background color of the message.</param>
-        public static void BoardMessage(Player player, string[] message, ConsoleColor Backcolor = Green)
+        public static void BoardMessage(string[] message, ConsoleColor Backcolor = Green)
         {
             Clear();
             WriteLine();

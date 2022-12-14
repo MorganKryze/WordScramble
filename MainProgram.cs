@@ -40,6 +40,7 @@ namespace Word_Scramble
 
             #region End of game
             if (session.IsGameFinished()) Move($"savedGames/{session.Name}.csv", $"archivedGames/{session.Name}.csv");
+            session.DisplayWinner();
             #endregion
 
             goto Main_Menu;

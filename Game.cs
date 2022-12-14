@@ -205,7 +205,7 @@ namespace Word_Scramble
             Stopwatch chrono = new Stopwatch();
             long minutes = CurrentBoard.Timer/60000;
             long seconds = (CurrentBoard.Timer/1000 - minutes*60);
-            BoardMessage(player, new string []{$" {player.Name}, are you ready to start the {CurrentBoard.BoardDifficulty} level? ",$" You have {minutes} minutes {seconds}s!, good luck! "});
+            BoardMessage(new string []{$" {player.Name}, are you ready to start the {CurrentBoard.BoardDifficulty} level? ",$" You have {minutes} minutes {seconds}s!, good luck! "});
             Pause();
             chrono.Start();
             while(wordsLeft.Count != 0 && chrono.ElapsedMilliseconds < CurrentBoard.Timer) 
@@ -220,7 +220,7 @@ namespace Word_Scramble
 
                 while(anchor2.X == -1 && wordsLeft.Count != 0 && chrono.ElapsedMilliseconds < CurrentBoard.Timer)
                 {
-                    BoardMessage(player, new string []{$" {player.Name} is playing on the {CurrentBoard.BoardDifficulty} level and has {(CurrentBoard.Timer-chrono.ElapsedMilliseconds)/1000} seconds left. ", $" Your current score is : {player.Score} points. "," Words left : " + string.Join(", ", wordsLeft)+" "});
+                    BoardMessage(new string []{$" {player.Name} is playing on the {CurrentBoard.BoardDifficulty} level and has {(CurrentBoard.Timer-chrono.ElapsedMilliseconds)/1000} seconds left. ", $" Your current score is : {player.Score} points. "," Words left : " + string.Join(", ", wordsLeft)+" "});
                     PrintMatrix(CurrentBoard.Matrix, selectedPositions,correctPositions, currentPosition);
                     switch(ReadKey(true).Key)
                     {
@@ -286,7 +286,7 @@ namespace Word_Scramble
                                     chrono.Start(); 
                                     break;
                                 case 1 : case -1 : 
-                                    BoardMessage(player, new string[]{$"  {player.Name}, you decided to quit the game. You cannot take back on this decision. ",$"Your current score is {player.Score} points."}, Red);
+                                    BoardMessage(new string[]{$"  {player.Name}, you decided to quit the game. You cannot take back on this decision. ",$"Your current score is {player.Score} points."}, Red);
                                     Pause();
                                     return false;
                                 case 2 : 
@@ -301,15 +301,31 @@ namespace Word_Scramble
             {
                 chrono.Stop();
                 player.AddBonus((int)chrono.ElapsedMilliseconds/1000);
-                BoardMessage(player,new string[]{$" Congratulations {player.Name} ! You found all the words on time! ",$" Your recieved a bonus of {(int)((CurrentBoard.Timer - chrono.ElapsedMilliseconds)/1000)}s point. ", $" Your current score is now : {player.Score} points ! "});
+                BoardMessage(new string[]{$" Congratulations {player.Name} ! You found all the words on time! ",$" Your recieved a bonus of {(int)((CurrentBoard.Timer - chrono.ElapsedMilliseconds)/1000)}s point. ", $" Your current score is now : {player.Score} points ! "});
                 Pause();
             }
             else 
             {
-                BoardMessage(player,new string[]{$" Time's up {player.Name} ! You didn't find all the words. ", $" Your current score is now : {player.Score} points ! "}, Red);
+                BoardMessage(new string[]{$" Time's up {player.Name} ! You didn't find all the words. ", $" Your current score is now : {player.Score} points ! "}, Red);
                 Pause();
             }
             return true;
+        }
+        /// <summary>This method is used to display the winner of the game.</summary>
+        public void DisplayWinner()
+        {
+            switch(Player1.Score.CompareTo(Player2.Score))
+            {
+                case 1:
+                    BoardMessage(new string[]{$"Congratulations {Player1.Name}! You won the game with a score of {Player1.Score} points!","", $"Well done {Player2.Name}! You still scored {Player2.Score} points."});
+                    break;
+                case -1:
+                    BoardMessage(new string[]{$"Congratulations {Player2.Name}! You won the game with a score of {Player2.Score} points!","", $"Well done {Player1.Name}! You still scored {Player1.Score} points."});
+                    break;
+                case 0:
+                    BoardMessage(new string[]{$"Congratulations {Player1.Name} and {Player2.Name}! You both won the game with a score of {Player1.Score} points!"});
+                    break;
+            }
         }
         #endregion
 
