@@ -11,7 +11,7 @@ namespace Word_Scramble
     /// </summary>
     public class XUnitTests
     {
-        /// <summary>The first test</summary>
+        /// <summary>Fact is a type of test that you run when you are sure of the output.</summary>
         [Fact]
         public void Test1()
         {
@@ -19,7 +19,7 @@ namespace Word_Scramble
             p.AddWord("test");
             Assert.Equal(4, p.Score);
         }
-        /// <summary>The second test</summary>
+        /// <summary>Theory is a type of test that you run when you are unsure of the output and want to test multiple inputs.</summary>
         [Theory]
         [InlineData("test")]
         [InlineData("test2")]
