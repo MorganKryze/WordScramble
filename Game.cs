@@ -33,20 +33,11 @@ namespace Word_Scramble
         /// <summary>The default constructor of the game class.</summary>
         public Game()
         {
-            Name = TypeGameName("Please write the name of the game below :");
-            Player1 = new Player(TypePlayerName("Please write the first player's name below :"));
-            Player2 = new Player(TypePlayerName("Please write the second player's name below :"));
+            Name = TypeGameName("You may write the name of the game below :");
+            Player1 = new Player(TypePlayerName("You may write the first player's name below :"));
+            Player2 = new Player(TypePlayerName("You may write the second player's name below :"));
             CurrentBoard = new Board();
             GameToCSV($"savedGames/{Name}.csv");
-        }
-        /// <summary>The "go back" constructor of the game class.</summary>
-        /// <param name="back">Whether the player wants to go back or not.</param>
-        public Game(bool back)
-        {
-            Name = "Back";
-            Player1 = new Player();
-            Player2 = new Player();
-            CurrentBoard = new Board();
         }
         /// <summary>The path constructor of the game class.</summary>
         /// <param name="path">The path of the game.</param>
@@ -86,21 +77,26 @@ namespace Word_Scramble
         {
             switch(ScrollingMenu("Welcome Adventurer! Use the arrow keys to move and press [ENTER] to confirm.", new string[]{"Play    ","Options ","Quit    "}, "Title.txt"))
             {
-                case 0 : break;  
+                case 0 : 
+                    MainProgram.jump = MainProgram.Jump.Continue; 
+                    break;
                 case 1 : 
-                    switch(ScrollingMenu("Please select a language :", new string[] { " English  ", " Français " }, "Title.txt"))
+                    switch(ScrollingMenu("You may select a language for the words to find:", new string[] { " English  ", " Français " }, "Title.txt"))
                     {
                         case 0:
-                             Dictionary.s_Language = "EN";
+                            Dictionary.s_Language = "EN";
                             break;
                         case 1:
                             Dictionary.s_Language = "FR";
                             break;
-                        case -1 : MainMenu();
+                        case -1 : 
                             break;
                     }
+                    MainProgram.jump = MainProgram.Jump.Main_Menu;
                     break;
-                case 2 : case -1: FinalExit();break;
+                case 2 : case -1: 
+                    FinalExit();
+                    break;
             }
         }
         /// <summary>This method is used to define the current session.</summary>
@@ -109,7 +105,9 @@ namespace Word_Scramble
         {
            switch(ScrollingMenu("Would you like to play a new game or load a previous one?", new string[]{" New     "," Load    "," Back    "}, "Title.txt"))
            {
-               case 0 : return new Game();
+               case 0 : 
+                    MainProgram.jump = MainProgram.Jump.Continue;
+                    return new Game();
                case 1 : 
                     string[] files = Directory.GetFiles("savedGames");
                     string[] fileNames = new string[files.Length];
@@ -117,17 +115,24 @@ namespace Word_Scramble
                     {
                         fileNames[i] = files[i].Substring(11);
                         fileNames[i] = fileNames[i].Substring(0, fileNames[i].Length-4);
+                        if(fileNames[i].Length < 15) fileNames[i] += new string(' ', 15-fileNames[i].Length);
                     }
-                    int position = ScrollingMenu("Please select a game to load :", fileNames, "Title.txt");
-                    switch(position)
+                    int position;
+                    switch(position = ScrollingMenu("You may select a game to load among those already created:", fileNames, "Title.txt"))
                     {
-                        case -1 : DefineSession(); break;
-                        default : return new Game(files[position]);
+                        case -1 : 
+                            MainProgram.jump = MainProgram.Jump.Players_Setup;
+                            break;
+                        default : 
+                            MainProgram.jump = MainProgram.Jump.Continue;  
+                            return new Game(files[position]);
                     }
                     break;
-               case 2 : case -1 : MainMenu(); 
+               case 2 : case -1 : 
+                    MainProgram.jump = MainProgram.Jump.Main_Menu; 
                     break;
-           }return new Game(true);
+           }
+           return null;
         }
         /// <summary>This method is used to play the game.</summary>
         /// <param name="session">The current session.</param>
@@ -198,7 +203,7 @@ namespace Word_Scramble
         /// <summary>This method is used to select words and check if they are in the list.</summary>
         /// <param name="player">The current player.</param>
         /// <returns>A string as the sum of the characters.</returns>
-        public bool SelectWords( Player player)
+        public void SelectWords(Player player)
         {
             List<string> wordsLeft = this.CurrentBoard.WordsToFind;
             List<Position> correctPositions = new List<Position>();
@@ -286,9 +291,9 @@ namespace Word_Scramble
                                     chrono.Start(); 
                                     break;
                                 case 1 : case -1 : 
-                                    BoardMessage(new string[]{$"  {player.Name}, you decided to quit the game. You cannot take back on this decision. ",$"Your current score is {player.Score} points."}, Red);
+                                    BoardMessage(new string[]{$"  {player.Name}, you decided to skip this turn. You cannot take back on this decision. ",$"Your current score is {player.Score} points."}, Red);
                                     Pause();
-                                    return false;
+                                    return;
                                 case 2 : 
                                     MainProgram.Main(); 
                                     break;
@@ -309,7 +314,6 @@ namespace Word_Scramble
                 BoardMessage(new string[]{$" Time's up {player.Name} ! You didn't find all the words. ", $" Your current score is now : {player.Score} points ! "}, Red);
                 Pause();
             }
-            return true;
         }
         /// <summary>This method is used to display the winner of the game.</summary>
         public void DisplayWinner()

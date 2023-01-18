@@ -30,9 +30,9 @@ namespace Word_Scramble
                 Title(message, "Title.txt");
                 Write("{0,"+((WindowWidth / 2) - (message.Length / 2)) + "}","");
                 Write("> ");
-                ConsoleConfig(false);
+                ConsoleConfiguration(false);
                 playerName = ReadLine();
-                ConsoleConfig();
+                ConsoleConfiguration();
             }while(playerName == "");
             return playerName;
         }
@@ -47,9 +47,9 @@ namespace Word_Scramble
                 Title(message, "Title.txt");
                 Write("{0,"+((WindowWidth / 2) - (message.Length / 2)) + "}","");
                 Write("> ");
-                ConsoleConfig(false);
+                ConsoleConfiguration(false);
                 gameName = ReadLine();
-                ConsoleConfig();
+                ConsoleConfiguration();
             }while(gameName == "");
             return gameName;
         }
@@ -156,7 +156,7 @@ namespace Word_Scramble
                         ForegroundColor = White;
                         Write(matrix[i, j]);
                     }
-                    ConsoleConfig();
+                    ConsoleConfiguration();
                     Write(" ");
                 }
                 WriteLine();
@@ -164,8 +164,8 @@ namespace Word_Scramble
         }
         /// <summary>This method is used to print a message telling whether the player has won or not.</summary>
         /// <param name="message">The message to be displayed.</param>
-        /// <param name="Backcolor">The background color of the message.</param>
-        public static void BoardMessage(string[] message, ConsoleColor Backcolor = Green)
+        /// <param name="backColor">The background color of the message.</param>
+        public static void BoardMessage(string[] message, ConsoleColor backColor = Green)
         {
             Clear();
             WriteLine();
@@ -175,7 +175,7 @@ namespace Word_Scramble
                 if (max.Length < message[i].Length) max = message[i];
             }
             int index = Array.IndexOf(message, max);
-            CenteredWL(String.Format("{0,"+message[index].Length+"}", ""), Black, Backcolor);
+            CenteredWL(String.Format("{0,"+message[index].Length+"}", ""), Black, backColor);
             for (int i = 0; i < message.Length; i++)
             {
                 if (message[index].Length > message[i].Length)
@@ -186,9 +186,9 @@ namespace Word_Scramble
                         else message[i] = " " + message[i];
                     }
                 }
-                CenteredWL(String.Format("{0,"+message[index].Length+"}", message[i]), Black, Backcolor);
+                CenteredWL(String.Format("{0,"+message[index].Length+"}", message[i]), Black, backColor);
             }
-            CenteredWL(String.Format("{0,"+message[index].Length+"}", ""), Black, Backcolor);
+            CenteredWL(String.Format("{0,"+message[index].Length+"}", ""), Black, backColor);
             WriteLine();
         }
         /// <summary>This method is used to read a json configuration file to get the configurations attributes.</summary>
@@ -209,10 +209,10 @@ namespace Word_Scramble
 
         #region Utility Methods
         /// <summary> This method is used to set the console configuration. </summary>
-        /// <param name="state"> Wether the config is used as the default config (true) or for the end of the program (false). </param>
-        public static void ConsoleConfig(bool state = true)
+        /// <param name="start"> Wether the config is used as the default config (true) or for the end of the program (false). </param>
+        public static void ConsoleConfiguration(bool start = true)
         {
-            if (state)
+            if (start)
             {
                 CursorVisible = false;
                 BackgroundColor = Black;
@@ -260,12 +260,11 @@ namespace Word_Scramble
         /// <param name="choices"> The choices to be displayed.</param>
         /// <param name="specialText"> A special text stored in a file.</param>
         /// <returns> The position of the choice selected.</returns>
-        public static int ScrollingMenu (string question, string[] choices, string specialText = "Title.txt")
+        public static int ScrollingMenu(string question, string[] choices, string specialText = "Title.txt")
         {
             int position = 0;
-            bool choiceMade = false;
             int recurrence = 0;
-            while (!choiceMade)
+            while(true)
             {
                 Clear();
                 Title(question,specialText,recurrence);
@@ -276,7 +275,7 @@ namespace Word_Scramble
                     {
                         currentChoice[i] = $" > {choices[i]}";
                         CenteredWL(currentChoice[i], Black, Green);
-                        ConsoleConfig();
+                        ConsoleConfiguration();
                     }
                     else 
                     {
@@ -293,7 +292,6 @@ namespace Word_Scramble
                 }
                 recurrence++;
             }
-            return position;
         }
         /// <summary>This method is used to display a special text, stored in a txt file. </summary>
         /// <param name="path">the relative path of the file.</param>
@@ -309,12 +307,12 @@ namespace Word_Scramble
         /// <param name="back"> The background color of the text. </param>
         public static void CenteredWL(string text, ConsoleColor fore = White, ConsoleColor back = Black)
         {
-            ConsoleConfig();
+            ConsoleConfiguration();
             Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
             ForegroundColor = fore;
             BackgroundColor = back;
             WriteLine(text);
-            ConsoleConfig();
+            ConsoleConfiguration();
         }
         /// <summary>This method is used to display a centered text.</summary>
         /// <param name="text"> The text to display. </param>
@@ -322,24 +320,24 @@ namespace Word_Scramble
         /// <param name="back"> The background color of the text. </param>
         public static void CenteredW(string text, ConsoleColor fore = White, ConsoleColor back = Black)
         {
-            ConsoleConfig();
+            ConsoleConfiguration();
             Write("{0,"+((WindowWidth / 2) - (text.Length / 2)) + "}","");
             ForegroundColor = fore;
             BackgroundColor = back;
             Write(text);
-            ConsoleConfig();
+            ConsoleConfiguration();
         }   
         /// <summary>This method is used to display a loading screen.</summary>
         /// <param name="text"> The text to display. </param>
         public static void LoadingScreen(string text)
         {
             Clear();
-            int t_interval = (int) 1500/text.Length;
-            char[]loadingBar = new char[text.Length];
-            for (int j = 0; j < loadingBar.Length; j++)loadingBar[j]= '█';
-            int recurrence = 0;
-            for (int i = 0; i <= text.Length; i++, recurrence++)
+            int t_interval = (int) 2000/text.Length;
+            char[] loadingBar = new char[text.Length];
+            for (int j = 0; j < loadingBar.Length; j++) loadingBar[j] = '█';
+            for (int i = 0; i <= text.Length; i++)
             {
+                Title(text, "Title.txt", 1);
                 if(KeyAvailable)
                 {
                     ConsoleKeyInfo keyPressed = ReadKey(true);
@@ -349,7 +347,6 @@ namespace Word_Scramble
                         break;
                     }
                 }
-                CenteredWL(text);
                 WriteLine("\n");
                 string bar = "";
                 for (int l = 0; l < i; l++) bar += loadingBar[l];
@@ -365,7 +362,7 @@ namespace Word_Scramble
                     Sleep(t_interval);
                 }
                 else Sleep(1000);
-                ConsoleConfig();
+                ConsoleConfiguration();
                 Clear();
             }
         }
@@ -379,7 +376,7 @@ namespace Word_Scramble
         public static void FinalExit()
         {
             LoadingScreen("[  Shutting down ...  ]");
-            ConsoleConfig(false);
+            ConsoleConfiguration(false);
             Exit(0);
         } 
         #endregion
