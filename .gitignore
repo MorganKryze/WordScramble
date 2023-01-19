@@ -1,8 +1,0 @@
-bin
-obj
-*.dib
-*.log
-.vscode
-.Ds_Store
-*.sln
-.vs
