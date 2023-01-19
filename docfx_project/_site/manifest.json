@@ -9,10 +9,10 @@
       "output": {
         ".html": {
           "relative_path": "api/Word_Scramble.Board.html",
-          "hash": "JoDEOMHVcaPCgrMbkFhfFOyqI2APG3Qbz2aK6Y2ff8o="
+          "hash": "jMGsLVO5a93SOmIaXTukdCrTZW2FD42n7T2d0DmCVe4="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -36,7 +36,7 @@
           "hash": "2+jD17/OjxHPGWrCjYDXOZCw5zMPwRDAZjcEofVQg4c="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -96,7 +96,7 @@
           "hash": "ipgXDLzGIunfo37qGjL+hQNDpY4FnakVflWAWARyInA="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -202,7 +202,7 @@
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 8,
-          "skipped_file_count": 7
+          "skipped_file_count": 8
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,

@@ -95,7 +95,7 @@ namespace Word_Scramble
                     MainProgram.jump = MainProgram.Jump.Main_Menu;
                     break;
                 case 2 : case -1: 
-                    FinalExit();
+                    MainProgram.jump = MainProgram.Jump.Exit;
                     break;
             }
         }
