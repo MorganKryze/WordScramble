@@ -328,6 +328,7 @@ namespace Word_Scramble
                     BoardMessage(new string[]{$"Congratulations {Player1.Name} and {Player2.Name}! You both won the game with a score of {Player1.Score} points!"});
                     break;
             }
+            Pause();
         }
         #endregion
 
