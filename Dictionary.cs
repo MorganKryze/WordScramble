@@ -31,7 +31,7 @@ namespace Word_Scramble
         /// <summary>This method is used to create a static dictionary.</summary>
         public static void CreateDictionary()
         {
-            if (s_Language == null) s_Language = "FR";
+            s_Language ??= "FR";
             string[] lines = s_Language == "FR" ? ReadAllLines("dataDictionary/MotsPossiblesFR.txt") : ReadAllLines("dataDictionary/MotsPossiblesEN.txt");
             int[] Key = lines.Where((x, i) => i % 2 == 0).Select(x => int.Parse(x)).ToArray();
             string[][] Value = lines.Where((x, i) => i % 2 != 0).Select(x => x.Split(' ')).ToArray();

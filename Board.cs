@@ -29,6 +29,7 @@ namespace Word_Scramble
         /// <summary>The default constructor of the Board class.</summary>
         public Board()
         {
+            
             Matrix = new char[0,0];
             WordsToFind = new List<string>();
             BoardDifficulty = "";
@@ -49,59 +50,6 @@ namespace Word_Scramble
             WordsToFind = PlaceRandomWords(temporaryDictionary, config["placementsType"], amountToPlace);
             
             FillMatrix(true);
-        }
-        #endregion
-        
-        #region PlaceRandomWords
-        /// <summary>This method is used to place a certain amount of word, form a certain difficulty from a dictionary into the matrix.</summary>
-        /// <param name="dictionary">The dictionary to use.</param>
-        /// <param name="difficulty">The difficulty of the words to place.</param>
-        /// <param name="amountToPlace">The amount of words to place.</param>
-        /// <param name="successfullyPlaced">The list of words that have been placed.</param>
-        /// <returns>The list of words that have been placed.</returns>
-        public List<string> PlaceRandomWords(Dictionary dictionary, int difficulty, List<int> amountToPlace, List<string> successfullyPlaced = null)
-        {
-            if(successfullyPlaced is null) successfullyPlaced = new List<string>();
-            for(int i = amountToPlace.Count-1; i >= 0; i--)
-            {
-                for(int j = 0; j < amountToPlace[i]; j++)
-                {
-                    bool isPlaced = false;
-                    while(!isPlaced)
-                    {
-                        Position position = RandomPosition();
-                        int n = rnd.Next((i+1) * 3, (i+1) * 3 + 3);
-                        string word = dictionary.ListDict[n][rnd.Next(0, dictionary.ListDict[n].Count)];
-                        isPlaced = TryPlaceAWord(position, difficulty, word);
-                        if(isPlaced)
-                        {
-                            dictionary.ListDict[n].Remove(word);
-                            successfullyPlaced.Add(word);
-                        }
-                    } 
-                }
-            }
-            return successfullyPlaced;
-        }
-        /// <summary>This method is used to try to place a word in a random direction from a position.</summary>
-        /// <param name="position">The position to start the word from.</param>
-        /// <param name="numberOfDirections">The number of directions to try.</param>
-        /// <param name="word">The word to try to place.</param>
-        /// <returns>True if the word has been placed, false otherwise.</returns>
-        public bool TryPlaceAWord(Position position, int numberOfDirections, string word)
-        {
-            int[] type = Enumerable.Range(1, numberOfDirections*2).OrderBy(x => rnd.Next()).Take(numberOfDirections*2).ToArray();
-            foreach(int i in type)
-            {
-                switch(i)
-                {
-                    case 1 : return TryPlaceColumn(position, word);
-                    case 2 : return TryPlaceRow(position, word);
-                    case 3 : return TryPlaceDiagonal1(position, word);
-                    case 4 : return TryPlaceDiagonal2(position, word);
-                }
-            }
-            return false;
         }
         #endregion
 
@@ -172,7 +120,31 @@ namespace Word_Scramble
         }
         #endregion
 
-        #region Methods TryPlace
+        #region TryPlaceWord methods
+        /// <summary>This method is used to check if a word can fit in a specified line.</summary>
+        /// <param name="line">The line to check</param>
+        /// <param name="word">The word to check</param>
+        /// <returns>True if the word can fit in the line, false otherwise</returns>
+        public bool IsFreeToFill(char[] line, string word)
+        {
+            if(word.Length > line.Length) return false;
+            else for(int i = 0; i < word.Length; i++) if(line[i] != word[i] && line[i] != '_') return false;
+            return true;
+        }
+        /// <summary>This method is used to fill a word between two positions.</summary>
+        /// <param name="word">The word to fill. </param>
+        /// <param name="pos1">The first position. </param>
+        /// <param name="pos2">The second position. </param>
+        /// <returns>True after the word has been filled. </returns>
+        public bool FillWord(string word, Position pos1, Position pos2)
+        {
+            List<Position> positionsToFill = GetPositionsBetween(pos1, pos2);
+            for (int i = 0; i < positionsToFill.Count-1; i++)
+            {
+                Matrix[positionsToFill[i].X, positionsToFill[i].Y] = word[i];
+            }
+            return true;
+        }
         /// <summary>This method is used to try to place a word in a row from a position.</summary>
         /// <param name="pos">The position to start the word from.</param>
         /// <param name="word">The word to place.</param>
@@ -268,29 +240,55 @@ namespace Word_Scramble
             }
             return false;
         }
-        /// <summary>This method is used to check if a word can fit in a specified line.</summary>
-        /// <param name="line">The line to check</param>
-        /// <param name="word">The word to check</param>
-        /// <returns>True if the word can fit in the line, false otherwise</returns>
-        public bool IsFreeToFill(char[] line, string word)
+        /// <summary>This method is used to try to place a word in a random direction from a position.</summary>
+        /// <param name="position">The position to start the word from.</param>
+        /// <param name="numberOfDirections">The number of directions to try.</param>
+        /// <param name="word">The word to try to place.</param>
+        /// <returns>True if the word has been placed, false otherwise.</returns>
+        public bool TryPlaceAWord(Position position, int numberOfDirections, string word)
         {
-            if(word.Length > line.Length) return false;
-            else for(int i = 0; i < word.Length; i++) if(line[i] != word[i] && line[i] != '_') return false;
-            return true;
-        }
-        /// <summary>This method is used to fill a word between two positions.</summary>
-        /// <param name="word">The word to fill. </param>
-        /// <param name="pos1">The first position. </param>
-        /// <param name="pos2">The second position. </param>
-        /// <returns>True after the word has been filled. </returns>
-        public bool FillWord(string word, Position pos1, Position pos2)
-        {
-            List<Position> positionsToFill = GetPositionsBetween(pos1, pos2);
-            for (int i = 0; i < positionsToFill.Count-1; i++)
+            int[] type = Enumerable.Range(1, numberOfDirections*2).OrderBy(x => rnd.Next()).Take(numberOfDirections*2).ToArray();
+            foreach(int i in type)
             {
-                Matrix[positionsToFill[i].X, positionsToFill[i].Y] = word[i];
+                switch(i)
+                {
+                    case 1 : return TryPlaceColumn(position, word);
+                    case 2 : return TryPlaceRow(position, word);
+                    case 3 : return TryPlaceDiagonal1(position, word);
+                    case 4 : return TryPlaceDiagonal2(position, word);
+                }
             }
-            return true;
+            return false;
+        }
+        /// <summary>This method is used to place a certain amount of word, form a certain difficulty from a dictionary into the matrix.</summary>
+        /// <param name="dictionary">The dictionary to use.</param>
+        /// <param name="difficulty">The difficulty of the words to place.</param>
+        /// <param name="amountToPlace">The amount of words to place.</param>
+        /// <param name="successfullyPlaced">The list of words that have been placed.</param>
+        /// <returns>The list of words that have been placed.</returns>
+        public List<string> PlaceRandomWords(Dictionary dictionary, int difficulty, List<int> amountToPlace, List<string> successfullyPlaced = null)
+        {
+            if(successfullyPlaced is null) successfullyPlaced = new List<string>();
+            for(int i = amountToPlace.Count-1; i >= 0; i--)
+            {
+                for(int j = 0; j < amountToPlace[i]; j++)
+                {
+                    bool isPlaced = false;
+                    while(!isPlaced)
+                    {
+                        Position position = RandomPosition();
+                        int n = rnd.Next((i+1) * 3, (i+1) * 3 + 3);
+                        string word = dictionary.ListDict[n][rnd.Next(0, dictionary.ListDict[n].Count)];
+                        isPlaced = TryPlaceAWord(position, difficulty, word);
+                        if(isPlaced)
+                        {
+                            dictionary.ListDict[n].Remove(word);
+                            successfullyPlaced.Add(word);
+                        }
+                    } 
+                }
+            }
+            return successfullyPlaced;
         }
         #endregion
         

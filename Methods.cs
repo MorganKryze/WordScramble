@@ -377,6 +377,7 @@ namespace Word_Scramble
         {
             LoadingScreen("[  Shutting down ...  ]");
             ConsoleConfiguration(false);
+            Clear();
             Exit(0);
         } 
         #endregion

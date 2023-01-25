@@ -144,6 +144,7 @@ namespace Word_Scramble
             {
                 LoadingScreen("[  Loading the game ...  ]");
                 session.SelectWords(session.Player1);
+                if (MainProgram.jump is not MainProgram.Jump.Continue) return;
                 InGameSwitch(session, "player2");
                 session.CurrentBoard = new Board(difficulty);
                 session.GameToCSV($"savedGames/{session.Name}.csv");
@@ -154,6 +155,7 @@ namespace Word_Scramble
             {
                 LoadingScreen("[  Loading the game ...  ]");
                 session.SelectWords(session.Player2);
+                if (MainProgram.jump is not MainProgram.Jump.Continue) return;
                 if(difficulty is not "fifth") 
                 {
                     InGameSwitch(session, "player1");
@@ -175,6 +177,7 @@ namespace Word_Scramble
                 InGameSwitch(session, "player1");
                 session.GameToCSV($"savedGames/{session.Name}.csv");
                 session.SelectWords(session.Player1);
+                if (MainProgram.jump is not MainProgram.Jump.Continue) return;
                 InGameSwitch(session, "player2");
                 session.CurrentBoard = new Board("first");
                 session.GameToCSV($"savedGames/{session.Name}.csv");
@@ -293,8 +296,8 @@ namespace Word_Scramble
                                     Pause();
                                     return;
                                 case 2 : 
-                                    MainProgram.Main(); 
-                                    break;
+                                    MainProgram.jump = MainProgram.Jump.Main_Menu;
+                                    return; 
                             }
                             break;
                     }

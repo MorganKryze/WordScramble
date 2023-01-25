@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
+using static System.Console;
 using static System.IO.File;
 
 using static Word_Scramble.Methods;

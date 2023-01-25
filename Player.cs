@@ -8,7 +8,7 @@ namespace Word_Scramble
     /// <summary>The player class.</summary>
     public class Player : IEquatable<Player>
     {
-        #region Fields 
+        #region Attributes 
         /// <summary>The name of the player.</summary>
         public string Name;
         /// <summary>Wether the player has finished the game or not.</summary>
@@ -21,7 +21,7 @@ namespace Word_Scramble
         public List<string> Words;
         #endregion
 
-        #region Constructor
+        #region Constructors
         /// <summary>The constructor of the player class.</summary>
         /// <param name="name">The name of the player.</param>
         /// <param name="inGame">Whether the player's game has ended or not.</param>
@@ -91,10 +91,10 @@ namespace Word_Scramble
         {
             string[] data = line.Split(';');
             Player p = new Player(data[0], bool.Parse(data[1]), int.Parse(data[2]), int.Parse(data[3]));
-            if (data[4] != null)
+            if(data[4] is not null)
             {
                 string[] words = data[4].Split(',');
-                foreach (string w in words) p.Words.Add(w);
+                foreach(string w in words) p.Words.Add(w);
             }
             return p;
         }
