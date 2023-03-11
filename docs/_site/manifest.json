@@ -1,6 +1,6 @@
 {
   "homepages": [],
-  "source_base_path": "/Users/yannvidamment/FICHIERS/PERSO/VsCode/C# programs/Projets/Word_Scramble/docfx_project",
+  "source_base_path": "/Users/yannvidamment/Documents/GitHub/Word-Scramble/docfx_project",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -9,10 +9,10 @@
       "output": {
         ".html": {
           "relative_path": "api/Word_Scramble.Board.html",
-          "hash": "jMGsLVO5a93SOmIaXTukdCrTZW2FD42n7T2d0DmCVe4="
+          "hash": "atyisC5YOTYb1i2aAmXgJB9GSX0+S9a7/m3xWw2Slz0="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Word_Scramble.Dictionary.html",
-          "hash": "nA22GLaGfM5fjgegVejQs4A3HczYDXWBSsvirN8Im5o="
+          "hash": "DPWFAjjzb1wnj+Mg/STzJZANFuEVHFmuzNNMK8a+kjY="
         }
       },
       "is_incremental": true,
@@ -33,10 +33,10 @@
       "output": {
         ".html": {
           "relative_path": "api/Word_Scramble.Game.html",
-          "hash": "2+jD17/OjxHPGWrCjYDXOZCw5zMPwRDAZjcEofVQg4c="
+          "hash": "UAXnxqACL7fbQVg3FYpZQr7iA87ePV7QicwJ5Ya4JsE="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -45,10 +45,10 @@
       "output": {
         ".html": {
           "relative_path": "api/Word_Scramble.Methods.html",
-          "hash": "kZQirVEBinQ382Nc9pe1v1i5v4/JXF9XO1uVFuRNOmE="
+          "hash": "GD/DEpJEdqEQ5iqMojqfZ9UqUc1HiPYtXAL+WxlfGUo="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -57,10 +57,10 @@
       "output": {
         ".html": {
           "relative_path": "api/Word_Scramble.Player.html",
-          "hash": "8pKlmXNe/wrvzRVDt/CaUzuDMHflW3x2PxIq8wEJppM="
+          "hash": "ErcMzl511BPPQtTa4QA8MLzSDiVKtFTACe2pNnMgbWs="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -69,10 +69,10 @@
       "output": {
         ".html": {
           "relative_path": "api/Word_Scramble.Position.html",
-          "hash": "ONZ95p18MXKYAfcL4NWoQBbepmiAJax5n/NikSpPKUE="
+          "hash": "KvFMcNBWu25pJyheKEHBAkF3ayuPK+soVaIUH9ijIAg="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -81,7 +81,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Word_Scramble.XUnitTests.html",
-          "hash": "o+5ENAXflMIlNPZaWHBIWqmZSrZjsUQOUcK0qvKaxgE="
+          "hash": "jLJx08z34F6kHF7qqUpPG5ZakICp1gdE0KZ87Yl/86s="
         }
       },
       "is_incremental": true,
@@ -93,10 +93,10 @@
       "output": {
         ".html": {
           "relative_path": "api/Word_Scramble.html",
-          "hash": "ipgXDLzGIunfo37qGjL+hQNDpY4FnakVflWAWARyInA="
+          "hash": "k1qtWN0Sa7DZd9Z69QWFSOiprGqZKjagb73dkNLyYbU="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -105,7 +105,7 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "7L7BgdUTpYohN6FptItoXNAIVskztQVrqdcDzMk3wvs="
+          "hash": "EFtIX5twzx1AbxXUDdkYvNA4uNban0kDfH8sljLF5n0="
         }
       },
       "is_incremental": true,
@@ -117,7 +117,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "3ugNU956f9BNJK5tIxP3yW9HIsI/7YbE3kQHSc605P8="
+          "hash": "RvAW9noNx1kT0GtXvaVCW41kd4PG9C0DJFiB7wo4n2g="
         }
       },
       "is_incremental": false,
@@ -129,7 +129,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/intro.html",
-          "hash": "BylsSq8s07VPLYkQfC5p0QD9LIHryogwRoCE1hO+Xng="
+          "hash": "2XYn37c8sSvIJi/JPm7+P34ixuV1or/s8zIm/4hKMUM="
         }
       },
       "is_incremental": true,
@@ -141,7 +141,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "BlPxk5mtl2kgfcZUgkEguqiSAR/EUyUTT4EdebwkQvs="
+          "hash": "+FPCLcvmNhVb9VLasYr6Tnep0PZtIA6V/UOJ0u+1RmE="
         }
       },
       "is_incremental": false,
@@ -164,7 +164,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "pyZhFhwTjLGkxKO4F8NfACGdV3YjSW18forEJ0tUaNw="
+          "hash": "C4MPVdKaCAmT4Er0HDFRrtNNsm+F/7KAE0ca4A6hLWE="
         }
       },
       "is_incremental": true,
@@ -176,7 +176,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "WSuRrYiGwKKMbtdG9z8W9fXmLoCyTnGg9AxbPKLXm2Y="
+          "hash": "aVe9U1RxWP3P5E5X/x2rL8jCuFlqix3bHKxtkjZ3zxg="
         }
       },
       "is_incremental": false,
@@ -202,7 +202,7 @@
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 8,
-          "skipped_file_count": 8
+          "skipped_file_count": 6
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,

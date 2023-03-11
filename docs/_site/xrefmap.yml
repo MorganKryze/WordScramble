@@ -77,13 +77,13 @@ references:
   isSpec: "True"
   fullName: Word_Scramble.Board.FillWord
   nameWithType: Board.FillWord
-- uid: Word_Scramble.Board.GetCharDiagNE(Word_Scramble.Position,List{System.Char})
+- uid: Word_Scramble.Board.GetCharDiagNE(Word_Scramble.Position,System.Collections.Generic.List{System.Char})
   name: GetCharDiagNE(Position, List<Char>)
-  href: api/Word_Scramble.Board.html#Word_Scramble_Board_GetCharDiagNE_Word_Scramble_Position_List_System_Char__
-  commentId: M:Word_Scramble.Board.GetCharDiagNE(Word_Scramble.Position,List{System.Char})
+  href: api/Word_Scramble.Board.html#Word_Scramble_Board_GetCharDiagNE_Word_Scramble_Position_System_Collections_Generic_List_System_Char__
+  commentId: M:Word_Scramble.Board.GetCharDiagNE(Word_Scramble.Position,System.Collections.Generic.List{System.Char})
   name.vb: GetCharDiagNE(Position, List(Of Char))
-  fullName: Word_Scramble.Board.GetCharDiagNE(Word_Scramble.Position, List<System.Char>)
-  fullName.vb: Word_Scramble.Board.GetCharDiagNE(Word_Scramble.Position, List(Of System.Char))
+  fullName: Word_Scramble.Board.GetCharDiagNE(Word_Scramble.Position, System.Collections.Generic.List<System.Char>)
+  fullName.vb: Word_Scramble.Board.GetCharDiagNE(Word_Scramble.Position, System.Collections.Generic.List(Of System.Char))
   nameWithType: Board.GetCharDiagNE(Position, List<Char>)
   nameWithType.vb: Board.GetCharDiagNE(Position, List(Of Char))
 - uid: Word_Scramble.Board.GetCharDiagNE*
@@ -93,13 +93,13 @@ references:
   isSpec: "True"
   fullName: Word_Scramble.Board.GetCharDiagNE
   nameWithType: Board.GetCharDiagNE
-- uid: Word_Scramble.Board.GetCharDiagNW(Word_Scramble.Position,List{System.Char})
+- uid: Word_Scramble.Board.GetCharDiagNW(Word_Scramble.Position,System.Collections.Generic.List{System.Char})
   name: GetCharDiagNW(Position, List<Char>)
-  href: api/Word_Scramble.Board.html#Word_Scramble_Board_GetCharDiagNW_Word_Scramble_Position_List_System_Char__
-  commentId: M:Word_Scramble.Board.GetCharDiagNW(Word_Scramble.Position,List{System.Char})
+  href: api/Word_Scramble.Board.html#Word_Scramble_Board_GetCharDiagNW_Word_Scramble_Position_System_Collections_Generic_List_System_Char__
+  commentId: M:Word_Scramble.Board.GetCharDiagNW(Word_Scramble.Position,System.Collections.Generic.List{System.Char})
   name.vb: GetCharDiagNW(Position, List(Of Char))
-  fullName: Word_Scramble.Board.GetCharDiagNW(Word_Scramble.Position, List<System.Char>)
-  fullName.vb: Word_Scramble.Board.GetCharDiagNW(Word_Scramble.Position, List(Of System.Char))
+  fullName: Word_Scramble.Board.GetCharDiagNW(Word_Scramble.Position, System.Collections.Generic.List<System.Char>)
+  fullName.vb: Word_Scramble.Board.GetCharDiagNW(Word_Scramble.Position, System.Collections.Generic.List(Of System.Char))
   nameWithType: Board.GetCharDiagNW(Position, List<Char>)
   nameWithType.vb: Board.GetCharDiagNW(Position, List(Of Char))
 - uid: Word_Scramble.Board.GetCharDiagNW*
@@ -109,13 +109,13 @@ references:
   isSpec: "True"
   fullName: Word_Scramble.Board.GetCharDiagNW
   nameWithType: Board.GetCharDiagNW
-- uid: Word_Scramble.Board.GetCharDiagSE(Word_Scramble.Position,List{System.Char})
+- uid: Word_Scramble.Board.GetCharDiagSE(Word_Scramble.Position,System.Collections.Generic.List{System.Char})
   name: GetCharDiagSE(Position, List<Char>)
-  href: api/Word_Scramble.Board.html#Word_Scramble_Board_GetCharDiagSE_Word_Scramble_Position_List_System_Char__
-  commentId: M:Word_Scramble.Board.GetCharDiagSE(Word_Scramble.Position,List{System.Char})
+  href: api/Word_Scramble.Board.html#Word_Scramble_Board_GetCharDiagSE_Word_Scramble_Position_System_Collections_Generic_List_System_Char__
+  commentId: M:Word_Scramble.Board.GetCharDiagSE(Word_Scramble.Position,System.Collections.Generic.List{System.Char})
   name.vb: GetCharDiagSE(Position, List(Of Char))
-  fullName: Word_Scramble.Board.GetCharDiagSE(Word_Scramble.Position, List<System.Char>)
-  fullName.vb: Word_Scramble.Board.GetCharDiagSE(Word_Scramble.Position, List(Of System.Char))
+  fullName: Word_Scramble.Board.GetCharDiagSE(Word_Scramble.Position, System.Collections.Generic.List<System.Char>)
+  fullName.vb: Word_Scramble.Board.GetCharDiagSE(Word_Scramble.Position, System.Collections.Generic.List(Of System.Char))
   nameWithType: Board.GetCharDiagSE(Position, List<Char>)
   nameWithType.vb: Board.GetCharDiagSE(Position, List(Of Char))
 - uid: Word_Scramble.Board.GetCharDiagSE*
@@ -125,13 +125,13 @@ references:
   isSpec: "True"
   fullName: Word_Scramble.Board.GetCharDiagSE
   nameWithType: Board.GetCharDiagSE
-- uid: Word_Scramble.Board.GetCharDiagSW(Word_Scramble.Position,List{System.Char})
+- uid: Word_Scramble.Board.GetCharDiagSW(Word_Scramble.Position,System.Collections.Generic.List{System.Char})
   name: GetCharDiagSW(Position, List<Char>)
-  href: api/Word_Scramble.Board.html#Word_Scramble_Board_GetCharDiagSW_Word_Scramble_Position_List_System_Char__
-  commentId: M:Word_Scramble.Board.GetCharDiagSW(Word_Scramble.Position,List{System.Char})
+  href: api/Word_Scramble.Board.html#Word_Scramble_Board_GetCharDiagSW_Word_Scramble_Position_System_Collections_Generic_List_System_Char__
+  commentId: M:Word_Scramble.Board.GetCharDiagSW(Word_Scramble.Position,System.Collections.Generic.List{System.Char})
   name.vb: GetCharDiagSW(Position, List(Of Char))
-  fullName: Word_Scramble.Board.GetCharDiagSW(Word_Scramble.Position, List<System.Char>)
-  fullName.vb: Word_Scramble.Board.GetCharDiagSW(Word_Scramble.Position, List(Of System.Char))
+  fullName: Word_Scramble.Board.GetCharDiagSW(Word_Scramble.Position, System.Collections.Generic.List<System.Char>)
+  fullName.vb: Word_Scramble.Board.GetCharDiagSW(Word_Scramble.Position, System.Collections.Generic.List(Of System.Char))
   nameWithType: Board.GetCharDiagSW(Position, List<Char>)
   nameWithType.vb: Board.GetCharDiagSW(Position, List(Of Char))
 - uid: Word_Scramble.Board.GetCharDiagSW*
@@ -202,13 +202,13 @@ references:
   commentId: F:Word_Scramble.Board.Matrix
   fullName: Word_Scramble.Board.Matrix
   nameWithType: Board.Matrix
-- uid: Word_Scramble.Board.PlaceRandomWords(Word_Scramble.Dictionary,System.Int32,List{System.Int32},List{System.String})
+- uid: Word_Scramble.Board.PlaceRandomWords(Word_Scramble.Dictionary,System.Int32,System.Collections.Generic.List{System.Int32},System.Collections.Generic.List{System.String})
   name: PlaceRandomWords(Dictionary, Int32, List<Int32>, List<String>)
-  href: api/Word_Scramble.Board.html#Word_Scramble_Board_PlaceRandomWords_Word_Scramble_Dictionary_System_Int32_List_System_Int32__List_System_String__
-  commentId: M:Word_Scramble.Board.PlaceRandomWords(Word_Scramble.Dictionary,System.Int32,List{System.Int32},List{System.String})
+  href: api/Word_Scramble.Board.html#Word_Scramble_Board_PlaceRandomWords_Word_Scramble_Dictionary_System_Int32_System_Collections_Generic_List_System_Int32__System_Collections_Generic_List_System_String__
+  commentId: M:Word_Scramble.Board.PlaceRandomWords(Word_Scramble.Dictionary,System.Int32,System.Collections.Generic.List{System.Int32},System.Collections.Generic.List{System.String})
   name.vb: PlaceRandomWords(Dictionary, Int32, List(Of Int32), List(Of String))
-  fullName: Word_Scramble.Board.PlaceRandomWords(Word_Scramble.Dictionary, System.Int32, List<System.Int32>, List<System.String>)
-  fullName.vb: Word_Scramble.Board.PlaceRandomWords(Word_Scramble.Dictionary, System.Int32, List(Of System.Int32), List(Of System.String))
+  fullName: Word_Scramble.Board.PlaceRandomWords(Word_Scramble.Dictionary, System.Int32, System.Collections.Generic.List<System.Int32>, System.Collections.Generic.List<System.String>)
+  fullName.vb: Word_Scramble.Board.PlaceRandomWords(Word_Scramble.Dictionary, System.Int32, System.Collections.Generic.List(Of System.Int32), System.Collections.Generic.List(Of System.String))
   nameWithType: Board.PlaceRandomWords(Dictionary, Int32, List<Int32>, List<String>)
   nameWithType.vb: Board.PlaceRandomWords(Dictionary, Int32, List(Of Int32), List(Of String))
 - uid: Word_Scramble.Board.PlaceRandomWords*
@@ -520,13 +520,13 @@ references:
   commentId: T:Word_Scramble.Methods
   fullName: Word_Scramble.Methods
   nameWithType: Methods
-- uid: Word_Scramble.Methods.BoardMessage(System.String[],ConsoleColor)
+- uid: Word_Scramble.Methods.BoardMessage(System.String[],System.ConsoleColor)
   name: BoardMessage(String[], ConsoleColor)
-  href: api/Word_Scramble.Methods.html#Word_Scramble_Methods_BoardMessage_System_String___ConsoleColor_
-  commentId: M:Word_Scramble.Methods.BoardMessage(System.String[],ConsoleColor)
+  href: api/Word_Scramble.Methods.html#Word_Scramble_Methods_BoardMessage_System_String___System_ConsoleColor_
+  commentId: M:Word_Scramble.Methods.BoardMessage(System.String[],System.ConsoleColor)
   name.vb: BoardMessage(String(), ConsoleColor)
-  fullName: Word_Scramble.Methods.BoardMessage(System.String[], ConsoleColor)
-  fullName.vb: Word_Scramble.Methods.BoardMessage(System.String(), ConsoleColor)
+  fullName: Word_Scramble.Methods.BoardMessage(System.String[], System.ConsoleColor)
+  fullName.vb: Word_Scramble.Methods.BoardMessage(System.String(), System.ConsoleColor)
   nameWithType: Methods.BoardMessage(String[], ConsoleColor)
   nameWithType.vb: Methods.BoardMessage(String(), ConsoleColor)
 - uid: Word_Scramble.Methods.BoardMessage*
@@ -536,11 +536,11 @@ references:
   isSpec: "True"
   fullName: Word_Scramble.Methods.BoardMessage
   nameWithType: Methods.BoardMessage
-- uid: Word_Scramble.Methods.CenteredW(System.String,ConsoleColor,ConsoleColor)
+- uid: Word_Scramble.Methods.CenteredW(System.String,System.ConsoleColor,System.ConsoleColor)
   name: CenteredW(String, ConsoleColor, ConsoleColor)
-  href: api/Word_Scramble.Methods.html#Word_Scramble_Methods_CenteredW_System_String_ConsoleColor_ConsoleColor_
-  commentId: M:Word_Scramble.Methods.CenteredW(System.String,ConsoleColor,ConsoleColor)
-  fullName: Word_Scramble.Methods.CenteredW(System.String, ConsoleColor, ConsoleColor)
+  href: api/Word_Scramble.Methods.html#Word_Scramble_Methods_CenteredW_System_String_System_ConsoleColor_System_ConsoleColor_
+  commentId: M:Word_Scramble.Methods.CenteredW(System.String,System.ConsoleColor,System.ConsoleColor)
+  fullName: Word_Scramble.Methods.CenteredW(System.String, System.ConsoleColor, System.ConsoleColor)
   nameWithType: Methods.CenteredW(String, ConsoleColor, ConsoleColor)
 - uid: Word_Scramble.Methods.CenteredW*
   name: CenteredW
@@ -549,11 +549,11 @@ references:
   isSpec: "True"
   fullName: Word_Scramble.Methods.CenteredW
   nameWithType: Methods.CenteredW
-- uid: Word_Scramble.Methods.CenteredWL(System.String,ConsoleColor,ConsoleColor)
+- uid: Word_Scramble.Methods.CenteredWL(System.String,System.ConsoleColor,System.ConsoleColor)
   name: CenteredWL(String, ConsoleColor, ConsoleColor)
-  href: api/Word_Scramble.Methods.html#Word_Scramble_Methods_CenteredWL_System_String_ConsoleColor_ConsoleColor_
-  commentId: M:Word_Scramble.Methods.CenteredWL(System.String,ConsoleColor,ConsoleColor)
-  fullName: Word_Scramble.Methods.CenteredWL(System.String, ConsoleColor, ConsoleColor)
+  href: api/Word_Scramble.Methods.html#Word_Scramble_Methods_CenteredWL_System_String_System_ConsoleColor_System_ConsoleColor_
+  commentId: M:Word_Scramble.Methods.CenteredWL(System.String,System.ConsoleColor,System.ConsoleColor)
+  fullName: Word_Scramble.Methods.CenteredWL(System.String, System.ConsoleColor, System.ConsoleColor)
   nameWithType: Methods.CenteredWL(String, ConsoleColor, ConsoleColor)
 - uid: Word_Scramble.Methods.CenteredWL*
   name: CenteredWL
@@ -614,13 +614,13 @@ references:
   isSpec: "True"
   fullName: Word_Scramble.Methods.LoadingScreen
   nameWithType: Methods.LoadingScreen
-- uid: Word_Scramble.Methods.NearestPosition(System.Char[0:,0:],Word_Scramble.Position,List{Word_Scramble.Position},System.String)
+- uid: Word_Scramble.Methods.NearestPosition(System.Char[0:,0:],Word_Scramble.Position,System.Collections.Generic.List{Word_Scramble.Position},System.String)
   name: NearestPosition(Char[,], Position, List<Position>, String)
-  href: api/Word_Scramble.Methods.html#Word_Scramble_Methods_NearestPosition_System_Char_0__0___Word_Scramble_Position_List_Word_Scramble_Position__System_String_
-  commentId: M:Word_Scramble.Methods.NearestPosition(System.Char[0:,0:],Word_Scramble.Position,List{Word_Scramble.Position},System.String)
+  href: api/Word_Scramble.Methods.html#Word_Scramble_Methods_NearestPosition_System_Char_0__0___Word_Scramble_Position_System_Collections_Generic_List_Word_Scramble_Position__System_String_
+  commentId: M:Word_Scramble.Methods.NearestPosition(System.Char[0:,0:],Word_Scramble.Position,System.Collections.Generic.List{Word_Scramble.Position},System.String)
   name.vb: NearestPosition(Char(,), Position, List(Of Position), String)
-  fullName: Word_Scramble.Methods.NearestPosition(System.Char[,], Word_Scramble.Position, List<Word_Scramble.Position>, System.String)
-  fullName.vb: Word_Scramble.Methods.NearestPosition(System.Char(,), Word_Scramble.Position, List(Of Word_Scramble.Position), System.String)
+  fullName: Word_Scramble.Methods.NearestPosition(System.Char[,], Word_Scramble.Position, System.Collections.Generic.List<Word_Scramble.Position>, System.String)
+  fullName.vb: Word_Scramble.Methods.NearestPosition(System.Char(,), Word_Scramble.Position, System.Collections.Generic.List(Of Word_Scramble.Position), System.String)
   nameWithType: Methods.NearestPosition(Char[,], Position, List<Position>, String)
   nameWithType.vb: Methods.NearestPosition(Char(,), Position, List(Of Position), String)
 - uid: Word_Scramble.Methods.NearestPosition*
@@ -643,13 +643,13 @@ references:
   isSpec: "True"
   fullName: Word_Scramble.Methods.Pause
   nameWithType: Methods.Pause
-- uid: Word_Scramble.Methods.PrintMatrix(System.Char[0:,0:],List{Word_Scramble.Position},List{Word_Scramble.Position},Word_Scramble.Position,System.Boolean)
+- uid: Word_Scramble.Methods.PrintMatrix(System.Char[0:,0:],System.Collections.Generic.List{Word_Scramble.Position},System.Collections.Generic.List{Word_Scramble.Position},Word_Scramble.Position,System.Boolean)
   name: PrintMatrix(Char[,], List<Position>, List<Position>, Position, Boolean)
-  href: api/Word_Scramble.Methods.html#Word_Scramble_Methods_PrintMatrix_System_Char_0__0___List_Word_Scramble_Position__List_Word_Scramble_Position__Word_Scramble_Position_System_Boolean_
-  commentId: M:Word_Scramble.Methods.PrintMatrix(System.Char[0:,0:],List{Word_Scramble.Position},List{Word_Scramble.Position},Word_Scramble.Position,System.Boolean)
+  href: api/Word_Scramble.Methods.html#Word_Scramble_Methods_PrintMatrix_System_Char_0__0___System_Collections_Generic_List_Word_Scramble_Position__System_Collections_Generic_List_Word_Scramble_Position__Word_Scramble_Position_System_Boolean_
+  commentId: M:Word_Scramble.Methods.PrintMatrix(System.Char[0:,0:],System.Collections.Generic.List{Word_Scramble.Position},System.Collections.Generic.List{Word_Scramble.Position},Word_Scramble.Position,System.Boolean)
   name.vb: PrintMatrix(Char(,), List(Of Position), List(Of Position), Position, Boolean)
-  fullName: Word_Scramble.Methods.PrintMatrix(System.Char[,], List<Word_Scramble.Position>, List<Word_Scramble.Position>, Word_Scramble.Position, System.Boolean)
-  fullName.vb: Word_Scramble.Methods.PrintMatrix(System.Char(,), List(Of Word_Scramble.Position), List(Of Word_Scramble.Position), Word_Scramble.Position, System.Boolean)
+  fullName: Word_Scramble.Methods.PrintMatrix(System.Char[,], System.Collections.Generic.List<Word_Scramble.Position>, System.Collections.Generic.List<Word_Scramble.Position>, Word_Scramble.Position, System.Boolean)
+  fullName.vb: Word_Scramble.Methods.PrintMatrix(System.Char(,), System.Collections.Generic.List(Of Word_Scramble.Position), System.Collections.Generic.List(Of Word_Scramble.Position), Word_Scramble.Position, System.Boolean)
   nameWithType: Methods.PrintMatrix(Char[,], List<Position>, List<Position>, Position, Boolean)
   nameWithType.vb: Methods.PrintMatrix(Char(,), List(Of Position), List(Of Position), Position, Boolean)
 - uid: Word_Scramble.Methods.PrintMatrix*
@@ -733,13 +733,13 @@ references:
   isSpec: "True"
   fullName: Word_Scramble.Methods.TypePlayerName
   nameWithType: Methods.TypePlayerName
-- uid: Word_Scramble.Methods.ValidPositions(System.Char[0:,0:],Word_Scramble.Position,List{Word_Scramble.Position})
+- uid: Word_Scramble.Methods.ValidPositions(System.Char[0:,0:],Word_Scramble.Position,System.Collections.Generic.List{Word_Scramble.Position})
   name: ValidPositions(Char[,], Position, List<Position>)
-  href: api/Word_Scramble.Methods.html#Word_Scramble_Methods_ValidPositions_System_Char_0__0___Word_Scramble_Position_List_Word_Scramble_Position__
-  commentId: M:Word_Scramble.Methods.ValidPositions(System.Char[0:,0:],Word_Scramble.Position,List{Word_Scramble.Position})
+  href: api/Word_Scramble.Methods.html#Word_Scramble_Methods_ValidPositions_System_Char_0__0___Word_Scramble_Position_System_Collections_Generic_List_Word_Scramble_Position__
+  commentId: M:Word_Scramble.Methods.ValidPositions(System.Char[0:,0:],Word_Scramble.Position,System.Collections.Generic.List{Word_Scramble.Position})
   name.vb: ValidPositions(Char(,), Position, List(Of Position))
-  fullName: Word_Scramble.Methods.ValidPositions(System.Char[,], Word_Scramble.Position, List<Word_Scramble.Position>)
-  fullName.vb: Word_Scramble.Methods.ValidPositions(System.Char(,), Word_Scramble.Position, List(Of Word_Scramble.Position))
+  fullName: Word_Scramble.Methods.ValidPositions(System.Char[,], Word_Scramble.Position, System.Collections.Generic.List<Word_Scramble.Position>)
+  fullName.vb: Word_Scramble.Methods.ValidPositions(System.Char(,), Word_Scramble.Position, System.Collections.Generic.List(Of Word_Scramble.Position))
   nameWithType: Methods.ValidPositions(Char[,], Position, List<Position>)
   nameWithType.vb: Methods.ValidPositions(Char(,), Position, List(Of Position))
 - uid: Word_Scramble.Methods.ValidPositions*
@@ -755,13 +755,13 @@ references:
   commentId: T:Word_Scramble.Player
   fullName: Word_Scramble.Player
   nameWithType: Player
-- uid: Word_Scramble.Player.#ctor(System.String,System.Boolean,System.Int32,System.Int32,List{System.String})
+- uid: Word_Scramble.Player.#ctor(System.String,System.Boolean,System.Int32,System.Int32,System.Collections.Generic.List{System.String})
   name: Player(String, Boolean, Int32, Int32, List<String>)
-  href: api/Word_Scramble.Player.html#Word_Scramble_Player__ctor_System_String_System_Boolean_System_Int32_System_Int32_List_System_String__
-  commentId: M:Word_Scramble.Player.#ctor(System.String,System.Boolean,System.Int32,System.Int32,List{System.String})
+  href: api/Word_Scramble.Player.html#Word_Scramble_Player__ctor_System_String_System_Boolean_System_Int32_System_Int32_System_Collections_Generic_List_System_String__
+  commentId: M:Word_Scramble.Player.#ctor(System.String,System.Boolean,System.Int32,System.Int32,System.Collections.Generic.List{System.String})
   name.vb: Player(String, Boolean, Int32, Int32, List(Of String))
-  fullName: Word_Scramble.Player.Player(System.String, System.Boolean, System.Int32, System.Int32, List<System.String>)
-  fullName.vb: Word_Scramble.Player.Player(System.String, System.Boolean, System.Int32, System.Int32, List(Of System.String))
+  fullName: Word_Scramble.Player.Player(System.String, System.Boolean, System.Int32, System.Int32, System.Collections.Generic.List<System.String>)
+  fullName.vb: Word_Scramble.Player.Player(System.String, System.Boolean, System.Int32, System.Int32, System.Collections.Generic.List(Of System.String))
   nameWithType: Player.Player(String, Boolean, Int32, Int32, List<String>)
   nameWithType.vb: Player.Player(String, Boolean, Int32, Int32, List(Of String))
 - uid: Word_Scramble.Player.#ctor(Word_Scramble.Player)
