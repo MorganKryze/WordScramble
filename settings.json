@@ -3,7 +3,7 @@
     {
         "column":9,
         "row":10,
-        "placementsType":1, // 1, vertical horizontal , 2 tout
+        "placementsType":1, 
         "numberWords":5,
         "3-5":3,
         "6-8":2,

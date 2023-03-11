@@ -1,5 +1,6 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using static System.Console;
 using static System.Environment;
@@ -201,7 +202,14 @@ namespace Word_Scramble
             if (json == "" || json == null) return new Dictionary<string, int>();
             else 
             {
-                Dictionary<string, Dictionary<string, int>> configuration = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, int>>>(json);
+                //déserialisation du fichier json en dictionnaire de dictionnaire de int
+                Dictionary<string, Dictionary<string, int>> configuration = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, int>>>(json);
+
+
+                //Dictionary<string, Dictionary<string, int>> configuration = 
+
+                //Dictionary<string, Dictionary<string, int>> configuration = 
+                //System.Text.Json.DeserializeObject<Dictionary<string, Dictionary<string, int>>>(json);
                 return (configuration[difficulty]);
             }
         }
