@@ -1,0 +1,62 @@
+{
+    "first":
+    {
+        "column":9,
+        "row":10,
+        "placementsType":1, 
+        "numberWords":5,
+        "3-5":3,
+        "6-8":2,
+        "9-11":0,
+        "12-15":0,
+        "timer": 60000
+    },
+    "second": 
+    {
+        "column":10,
+        "row":10,
+        "placementsType":1, 
+        "numberWords":6,
+        "3-5":2,
+        "6-8":3,
+        "9-11":1,
+        "12-15":0,
+        "timer": 90000
+    },
+    "third":
+    {
+        "column":11,
+        "row":11,
+        "placementsType":2, 
+        "numberWords":8,
+        "3-5":2,
+        "6-8":3,
+        "9-11":3,
+        "12-15":0,
+        "timer": 150000
+    },
+    "fourth":
+    {
+        "column":12,
+        "row":12,
+        "placementsType":2,
+        "numberWords":10,
+        "3-5":3,
+        "6-8":3,
+        "9-11":3,
+        "12-15":1,
+        "timer": 210000
+    },
+    "fifth":
+    {
+        "column":14,
+        "row":14,
+        "placementsType":2, 
+        "numberWords":14,
+        "3-5":4,
+        "6-8":3,
+        "9-11":4,
+        "12-15":3,
+        "timer": 300000
+    }
+}
